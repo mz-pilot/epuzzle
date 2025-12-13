@@ -1,0 +1,201 @@
+#
+# Original natural language description: puzzle_six_houses.txt
+#
+# TOML fromat specification: https://toml.io/en/
+# TOML Validator: https://www.toml-lint.com/
+
+epuzzle_format_version = 1
+
+# person - mandatory attribute:
+person			= ["Алекс", "Боря", "Вова", "Гоша", "Дима", "Егор"]
+
+# next attributes are optional:
+house_color		= ["красный", "синий", "желтый", "зеленый", "белый", "коричневый"]
+house_position	= ["1", "2", "3", "4", "5", "6"]
+job				= ["МВД", "ФСБ", "КГБ", "911", "ФБР", "ЦРУ"]
+car				= ["BMW", "VOLVO", "FIAT", "FORD", "AUDI", "ГАЗ"]
+CPU				= ["i486", "MMX", "PII", "PIII", "AMD", "CYRIX"]
+dish			= ["яблоко", "груша", "апельсин", "банан", "вишня", "клубника"]
+
+# сonstraints: 
+#   fact: "person" can only be the first attribute in a "fact"constraint;  second attribute value can start with '!' that means "NOT".
+#   comparison: possible relations: "immediate_left", "immediate_right", "adjacent", "before", "after".
+
+# 1) Тот, кто работает в МВД, живет в красном доме.
+[[constraints]]
+type = "fact"
+first = { job = "МВД" }
+second = { house_color = "красный" }
+
+# 2.1) В коричневом доме живет Алекс.
+[[constraints]]
+type = "fact"
+first = { person = "Алекс" }
+second = { house_color = "коричневый" }
+
+# 2.2) У Алекса AMD.
+[[constraints]]
+type = "fact"
+first = { person = "Алекс" }
+second = { CPU = "AMD" }
+
+# 3) Владелец Форда обожает апельсины.
+[[constraints]]
+type = "fact"
+first = { car = "FORD" }
+second = { dish = "апельсин" }
+
+# 4) Владелец PII имеет и ГАЗ.
+[[constraints]]
+type = "fact"
+first = { CPU = "PII" }
+second = { car = "ГАЗ" }
+
+# 5) Гоша имеет MMX.
+[[constraints]]
+type = "fact"
+first = { person = "Гоша" }
+second = { CPU = "MMX" }
+
+# 6.1) Владелец АУДИ имеет CYRIX
+[[constraints]]
+type = "fact"
+first = { car = "AUDI" }
+second = { CPU = "CYRIX" }
+
+# 6.2) Владелец АУДИ работает на ФБР
+[[constraints]]
+type = "fact"
+first = { car = "AUDI" }
+second = { job = "ФБР" }
+
+# 6.3) Владелец АУДИ живет в желтом доме.
+[[constraints]]
+type = "fact"
+first = { car = "AUDI" }
+second = { house_color = "желтый" }
+
+# 7) Служащий в КГБ работает на 486.
+[[constraints]]
+type = "fact"
+first = { job = "КГБ" }
+second = { CPU = "i486" }
+
+# TODO: or it's fact: FIAT = green house?!
+# * * * * * * * * * * * * * * * * * * * * * 
+# 8) ФИАТ ставится в гараж по соседству с зеленым домом.
+[[constraints]]
+type = "comparison"
+first = { car = "FIAT" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { house_color = "зеленый" }
+
+# 9) Егор живет по соседству с ЦРУшником.
+[[constraints]]
+type = "comparison"
+first = { person = "Егор" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { job = "ЦРУ" }
+
+# 10) Боря живет рядом с тем, у кого PIII.
+[[constraints]]
+type = "comparison"
+first = { person = "Боря" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { CPU = "PIII" }
+
+# 11) Владелец VOLVO живет рядом с любителем клубники.
+[[constraints]]
+type = "comparison"
+first = { car = "VOLVO" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { dish = "клубника" }
+
+# 12) Вова живет рядом с любителем груш.
+[[constraints]]
+type = "comparison"
+first = { person = "Вова" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { dish = "груша" }
+
+# 13) Служака из МВД - сосед любителя вишни.
+[[constraints]]
+type = "comparison"
+first = { job = "МВД" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { dish = "вишня" }
+
+# 14) У работника ФСБ по соседству находится CYRIX.
+[[constraints]]
+type = "comparison"
+first = { job = "ФСБ" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { CPU = "CYRIX" }
+
+# 15) Любители груш и яблок живут рядом.
+[[constraints]]
+type = "comparison"
+first = { dish = "груша" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { dish = "яблоко" }
+
+# 16) Рядом с белым домом живет работник службы 911.
+[[constraints]]
+type = "comparison"
+first = { house_color = "белый" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { job = "911" }
+
+# 17) В соседних домах находятся PIII и FIAT.
+[[constraints]]
+type = "comparison"
+first = { CPU = "PIII" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { car = "FIAT" }
+
+# 18) В соседних домах паркуются ГАЗ и BMW.
+[[constraints]]
+type = "comparison"
+first = { car = "ГАЗ" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { car = "BMW" }
+
+# 19) Дима живет по соседству с коричневым домом.
+[[constraints]]
+type = "comparison"
+first = { person = "Дима" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { house_color = "коричневый" }
+
+# 20) У владельца AMD по соседству желтый дом.
+[[constraints]]
+type = "comparison"
+first = { CPU = "AMD" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { house_color = "желтый" }
+
+# 21) Красный дом находится правее коричневого.
+[[constraints]]
+type = "comparison"
+first = { house_color = "красный" }
+compare_by = "house_position"
+relation = "after"
+second = { house_color = "коричневый" }
+
+# WARN! Constraints 22-23 are not supported yet! Let's see how many solutions we can get without them!
+# TODO: implement support 22-23.
+# 22) Через дом от Гоши живет КГБшник, а между ними работник МВД.
+# 23) Через дом от Димы живет ЦРУшник, но между ними нет компьютера с CYRIX.

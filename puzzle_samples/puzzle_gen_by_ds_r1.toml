@@ -1,0 +1,65 @@
+#
+# Original natural language description: puzzle_gen_by_ds_r1.txt
+#
+# TOML fromat specification: https://toml.io/en/
+# TOML Validator: https://www.toml-lint.com/
+
+epuzzle_format_version = 1
+
+# person - mandatory attribute:
+person	= ["Anya", "Katya", "Lena", "Masha"]
+
+# next attributes are optional:
+age		= ["15", "16", "17", "18"]
+color	= ["pink", "blue", "green", "violet"]
+hobby	= ["art", "sport", "music", "books"]
+
+# сonstraints: 
+#   fact: "person" can only be the first attribute in a "fact"constraint;  second attribute value can start with '!' that means "NOT".
+#   comparison: possible relations: "immediate_left", "immediate_right", "adjacent", "before", "after".
+
+# Аня не любит розовый
+[[constraints]]
+type = "fact"
+first = { person = "Anya" }
+second = { color = "!pink" }
+
+# Аня не занимается спортом
+[[constraints]]
+type = "fact"
+first = { person = "Anya" }
+second = { hobby = "!sport" }
+
+# Та, кто любит голубой, младше Кати
+[[constraints]]
+type = "comparison"
+first = { color = "blue" }
+compare_by = "age"
+relation = "before"
+second = { person = "Katya" }
+
+# Маша старше любительницы музыки
+[[constraints]]
+type = "comparison"
+first = { person = "Masha" }
+compare_by = "age"
+relation = "after"
+second = { hobby = "music" }
+
+# Лена занимается рисованием
+[[constraints]]
+type = "fact"
+first = { person = "Lena" }
+second = { hobby = "art" }
+
+# Лена не любит фиолетовый
+[[constraints]]
+type = "fact"
+first = { person = "Lena" }
+second = { color = "!violet" }
+
+# Любительница зеленого цвета не читает книги
+[[constraints]]
+type = "fact"
+first = { color = "green" }
+second = { hobby = "!books" }

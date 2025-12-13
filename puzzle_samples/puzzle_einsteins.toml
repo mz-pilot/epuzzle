@@ -1,0 +1,113 @@
+#
+# Original natural language description: puzzle_einsteins.txt
+#
+# TOML fromat specification: https://toml.io/en/
+# TOML Validator: https://www.toml-lint.com/
+
+epuzzle_format_version = 1
+
+# person - mandatory attribute:
+person          = ["Англичанин", "Испанец", "Украинец", "Норвежец", "Японец"]
+
+# next attributes are optional:
+house_color     = ["красный", "зелёный", "белый", "жёлтый", "синий"]
+house_position  = ["1", "2", "3", "4", "5"]
+pet             = ["собака", "улитки", "лиса", "лошадь", "зебра"]
+beverage        = ["кофе", "чай", "молоко", "апельсиновый сок", "вода"]
+cigarettes      = ["Old Gold", "Kool", "Chesterfield", "Lucky Strike", "Parliament"]
+
+# сonstraints: 
+#   fact: "person" can only be the first attribute in a "fact"constraint;  second attribute value can start with '!' that means "NOT".
+#   comparison: possible relations: "immediate_left", "immediate_right", "adjacent", "before", "after".
+
+# Англичанин живёт в красном доме.
+[[constraints]]
+type = "fact"
+first = { person = "Англичанин" }
+second = { house_color = "красный" }
+
+# У испанца есть собака.
+[[constraints]]
+type = "fact"
+first = { person = "Испанец" }
+second = { pet = "собака" }
+
+# В зелёном доме пьют кофе.
+[[constraints]]
+type = "fact"
+first = { house_color = "зелёный" }
+second = { beverage = "кофе" }
+
+# Украинец пьёт чай.
+[[constraints]]
+type = "fact"
+first = { person = "Украинец" }
+second = { beverage = "чай" }
+
+# Зелёный дом стоит сразу справа от белого дома.
+[[constraints]]
+type = "comparison"
+first = { house_color = "зелёный" }
+compare_by = "house_position"
+relation = "immediate_right"
+second = { house_color = "белый" }
+
+# Тот, кто курит Old Gold, разводит улиток.
+[[constraints]]
+type = "fact"
+first = { cigarettes = "Old Gold" }
+second = { pet = "улитки" }
+
+# В жёлтом доме курят Kool.
+[[constraints]]
+type = "fact"
+first = { house_color = "жёлтый" }
+second = { cigarettes = "Kool" }
+
+# В центральном доме пьют молоко.
+[[constraints]]
+type = "fact"
+first = { house_position = "3" }
+second = { beverage = "молоко" }
+
+# Норвежец живёт в первом доме.
+[[constraints]]
+type = "fact"
+first = { person = "Норвежец" }
+second = { house_position = "1" }
+
+# Сосед того, кто курит Chesterfield, держит лису.
+[[constraints]]
+type = "comparison"
+first = { cigarettes = "Chesterfield" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { pet = "лиса" }
+
+# В доме по соседству с тем, в котором держат лошадь, курят Kool.
+[[constraints]]
+type = "comparison"
+first = { pet = "лошадь" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { cigarettes = "Kool" }
+
+# Тот, кто курит Lucky Strike, пьёт апельсиновый сок.
+[[constraints]]
+type = "fact"
+first = { cigarettes = "Lucky Strike" }
+second = { beverage = "апельсиновый сок" }
+
+# Японец курит Parliament.
+[[constraints]]
+type = "fact"
+first = { person = "Японец" }
+second = { cigarettes = "Parliament" }
+
+# Норвежец живёт рядом с синим домом.
+[[constraints]]
+type = "comparison"
+first = { person = "Норвежец" }
+compare_by = "house_position"
+relation = "adjacent"
+second = { house_color = "синий" }
