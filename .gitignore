@@ -8,12 +8,18 @@
 x64/
 x86/
 CMakeFiles/
-*.cmake
 Makefile
 CMakeCache.txt
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
+
+# CPack Artifacts
+*.zip
+*.tgz
+*.deb
+*.rpm
+*.msi
 
 # Visual Studio files
 .vs
