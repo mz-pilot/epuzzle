@@ -2,6 +2,7 @@
 add_executable(epuzzle_tests)
 
 set_target_properties(epuzzle_tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tests")
+set_target_properties(epuzzle_tests PROPERTIES PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tests")
 
 target_sources(epuzzle_tests
     PRIVATE
