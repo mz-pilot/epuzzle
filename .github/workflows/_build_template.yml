@@ -72,9 +72,15 @@ jobs:
         shell: pwsh
         run: |
           $ReleaseDir = "${{ matrix.build_type }}"
-          New-Item -ItemType Directory -Force -Path symbols
-          Get-ChildItem -Path build/bin/pdb -Recurse -Filter *.pdb | Copy-Item -Destination symbols
-          Compress-Archive -Path symbols/* -DestinationPath build/debug-symbols-windows-${{ matrix.build_type }}.zip
+          $cpackFile = Get-ChildItem -Path build -Filter *.zip | Select-Object -First 1
+          if ($cpackFile -ne $null) {
+              $baseName = $cpackFile.BaseName
+              $pdbZipName = "${baseName}-debug-symbols.zip"
+              Compress-Archive -Path build/bin/pdb/*.pdb -DestinationPath "build/$pdbZipName"              
+              Write-Host "PDB symbols packaged as: $pdbZipName"
+          } else {
+              Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
+          }
 
       - name: 9. Upload Artifacts
         if: inputs.upload_artifacts
@@ -83,5 +89,5 @@ jobs:
           # Используем уникальное имя, чтобы не было конфликтов (os-buildtype)
           name: package-${{ matrix.os }}-${{ matrix.build_type }}
           path: |
-            build/*.tgz
+            build/*.tar.gz
             build/*.zip
