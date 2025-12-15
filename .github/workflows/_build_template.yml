@@ -51,21 +51,19 @@ jobs:
         id: get_version
         shell: bash
         run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            # remove prefix 'refs/tags/' or 'refs/tags/v'
-            VERSION=${GITHUB_REF#refs/tags/}
-            VERSION=${VERSION#v}
+          if [[ $GITHUB_REF == refs/tags/v*.*.* ]]; then
+            GIT_TAG=${GITHUB_REF#refs/tags/}
           else
-            VERSION="0.0.0-pr-${GITHUB_SHA::7}"
+            GIT_TAG="v0.0.0-pr-${GITHUB_SHA::7}"
           fi
-          echo "Detected version: $VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Detected tag: $GIT_TAG"
+          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
 
       - name: 5. Configure CMake
         run: |
           cmake -S . -B build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DEPUZZLE_BUILD_VERSION=${{ env.VERSION }} \
+            -DEPUZZLE_GIT_TAG=${{ env.GIT_TAG }} \
             -DEPUZZLE_BUILD_TESTS=ON \
             -DEPUZZLE_BUILD_APPS=ON
 
