@@ -1,0 +1,16 @@
+﻿name: CI Checks (PR & Push)
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main, 'feature/**' ]
+  workflow_dispatch: # manual launch
+
+jobs:
+  call-ci-build:
+    name: Call Build Template
+    uses: ./.github/workflows/_build_template.yml
+    with:
+      build_types: '["Debug", "Release"]' # JSON string; the template will unfold it into a matrix: [Debug, Release]
+      upload_artifacts: false
