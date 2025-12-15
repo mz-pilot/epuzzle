@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 3.24) # support CMP0135
 
+if (NOT EPUZZLE_GIT_TAG)
+  set(EPUZZLE_GIT_TAG "0.0.0-dev")
+endif()
+string(REGEX REPLACE "^v([0-9]+\\.[0-9]+\\.[0-9]+).*" "\\1" EPUZZLE_PROJECT_VERSION ${EPUZZLE_GIT_TAG})
+
 project(epuzzle 
     DESCRIPTION "A puzzle solver for logic puzzles (e.g., Einstein's/Zebra puzzle)"
     LANGUAGES CXX
-    VERSION 1.0.0
+    VERSION ${EPUZZLE_PROJECT_VERSION}
 )
 
 include(FetchContent)
