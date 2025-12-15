@@ -47,27 +47,42 @@ jobs:
         run: sudo apt-get install -y ninja-build
 
 
-      - name: 4. Configure CMake
+      - name: 4. Extract Version
+        id: get_version
+        shell: bash
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            # remove prefix 'refs/tags/' or 'refs/tags/v'
+            VERSION=${GITHUB_REF#refs/tags/}
+            VERSION=${VERSION#v}
+          else
+            VERSION="0.0.0-pr-${GITHUB_SHA::7}"
+          fi
+          echo "Detected version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: 5. Configure CMake
         run: |
           cmake -S . -B build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DEPUZZLE_BUILD_VERSION=${{ env.VERSION }} \
             -DEPUZZLE_BUILD_TESTS=ON \
             -DEPUZZLE_BUILD_APPS=ON
 
-      - name: 5. Build
+      - name: 6. Build
         run: cmake --build build --config ${{ matrix.build_type }}
 
-      - name: 6. Test
+      - name: 7. Test
         working-directory: ./build
         run: ctest -C ${{ matrix.build_type }} --output-on-failure --verbose
 
       
-      - name: 7. Package Application (CPack)
+      - name: 8. Package Application (CPack)
         if: inputs.upload_artifacts
         working-directory: ./build
         run: cpack -C ${{ matrix.build_type }}
 
-      - name: 8. Package Debug Symbols (PDB) - Windows
+      - name: 9. Package Debug Symbols (PDB) - Windows
         if: inputs.upload_artifacts && matrix.os == 'windows-latest'
         shell: pwsh
         run: |
@@ -82,7 +97,7 @@ jobs:
               Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
           }
 
-      - name: 9. Upload Artifacts
+      - name: 10. Upload Artifacts
         if: inputs.upload_artifacts
         uses: actions/upload-artifact@v6
         with:

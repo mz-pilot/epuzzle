@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.24) # support CMP0135
 
+set(EPUZZLE_BUILD_VERSION "0.0.0-dev")
+
 project(epuzzle 
     DESCRIPTION "A puzzle solver for logic puzzles (e.g., Einstein's/Zebra puzzle)"
     LANGUAGES CXX
-    VERSION 1.0.0
+    VERSION ${EPUZZLE_BUILD_VERSION}
 )
 
 include(FetchContent)
