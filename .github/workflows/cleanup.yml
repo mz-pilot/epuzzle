@@ -1,0 +1,14 @@
+﻿name: Cleanup merged branches
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete merged branch
+        uses: SvanBoxel/delete-merged-branch@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
