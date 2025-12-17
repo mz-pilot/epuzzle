@@ -1,3 +1,7 @@
+
+Puzzle definition file: einsteins.toml
+
+
 https://ru.wikipedia.org/wiki/Загадка_Эйнштейна
 
  1. На улице стоят пять домов.

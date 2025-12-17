@@ -37,13 +37,13 @@ namespace epuzzle::tests
 
 	TEST_P(ISolverRealPuzzleTests, DSSolutionCount128)
 	{
-		const auto solutions = solve("puzzle_gen_by_ds_r1.toml");
+		const auto solutions = solve("four_girls.toml");
 		ASSERT_EQ(solutions.size(), 128);
 	}
 
 	TEST_P(ISolverRealPuzzleTests, EinsteinsSolutionCount1Correct)
 	{
-		const auto solutions = solve("puzzle_einsteins.toml");
+		const auto solutions = solve("einsteins.toml");
 		ASSERT_EQ(solutions.size(), 1);
 		EXPECT_TRUE(personHasAttribute(solutions.front(), "Норвежец", "beverage", "вода"));
 		EXPECT_TRUE(personHasAttribute(solutions.front(), "Японец", "pet", "зебра"));
@@ -53,7 +53,7 @@ namespace epuzzle::tests
 	{
 		std::unique_ptr<ISolver> solver;
 		// Use hard puzzle with long compute (weeks)
-		ASSERT_NO_THROW(solver = ISolver::create(GetParam(), puzzleDataFromFile(test_utils::puzzlePath("puzzle_six_houses.toml"))));
+		ASSERT_NO_THROW(solver = ISolver::create(GetParam(), puzzleDataFromFile(test_utils::puzzlePath("six_houses.toml"))));
 		ASSERT_TRUE(static_cast<bool>(solver));
 		using msec = std::chrono::milliseconds;
 		utils::Stopwatch sw;

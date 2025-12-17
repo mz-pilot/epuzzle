@@ -50,7 +50,7 @@ namespace cli
 	{
 		using Method = epuzzle::SolverConfig::SolvingMethod;
 		using ExecPolicy = epuzzle::SolverConfig::BruteForce::ExecPolicy;
-		const auto appName = "epuzzle_cli";
+		const auto appName = "epuzzle";
 		cxxopts::Options optsManager(appName, "Solver of puzzles such as Einstein's puzzle (Zebra puzzle) and similar ones");
 		optsManager.set_width(110);
 		optsManager.add_options()
@@ -70,7 +70,7 @@ namespace cli
 			std::cout << "# Parallel brute force\n";
 			std::cout << appName << " --method " << EnumHelper::name(Method::BruteForce)
 				<< " --execpolicy " << EnumHelper::name(ExecPolicy::Parallel)
-				<< " --file puzzle_einsteins.toml\n\n";
+				<< " --file puzzle_examples/einsteins.toml\n\n";
 
 			std::cout << "# Disable prefilter for total sequenced brute force\n";
 			std::cout << appName << " -m " << EnumHelper::name(Method::BruteForce)

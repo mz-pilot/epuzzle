@@ -1,14 +1,14 @@
 
-add_executable(epuzzle_cli)
+add_executable(epuzzle)
 
-target_sources(epuzzle_cli
+target_sources(epuzzle 
     PRIVATE
         src/main.cpp
         src/ProgramOptions.cpp
         src/ProgramOptions.h
 )
 
-target_link_libraries(epuzzle_cli 
+target_link_libraries(epuzzle 
     PRIVATE 
         cxxopts::cxxopts
         magic_enum::magic_enum
@@ -16,17 +16,17 @@ target_link_libraries(epuzzle_cli
         epuzzle::core
 )    
 
-add_custom_command(TARGET epuzzle_cli POST_BUILD
+add_custom_command(TARGET epuzzle POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/puzzle_samples
-        $<TARGET_FILE_DIR:epuzzle_cli>/puzzle_samples
-    COMMENT "Puzzle samples copied"
+        ${CMAKE_SOURCE_DIR}/puzzle_examples
+        $<TARGET_FILE_DIR:epuzzle>/puzzle_examples
+    COMMENT "Puzzle examples copied"
 )
 
 if(WIN32)
-    install(TARGETS epuzzle_cli RUNTIME DESTINATION .)
+    install(TARGETS epuzzle RUNTIME DESTINATION .)
 else()
-    install(TARGETS epuzzle_cli RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(TARGETS epuzzle RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
 
-add_executable(epuzzle::epuzzle_cli ALIAS epuzzle_cli)
+add_executable(epuzzle::epuzzle ALIAS epuzzle)
