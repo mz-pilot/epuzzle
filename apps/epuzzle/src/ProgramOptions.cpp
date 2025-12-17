@@ -79,7 +79,7 @@ namespace
 			("h,help", "Print usage");
 
 		const auto parsedOpts = optsManager.parse(argc, argv);
-		if (parsedOpts.count("help") || parsedOpts.arguments().size() <= 1)
+		if (parsedOpts.count("help") || parsedOpts.arguments().empty())
 		{
 			std::cout << optsManager.help() << "\n";
 			std::cout << "Examples: \n";
