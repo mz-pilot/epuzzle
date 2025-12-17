@@ -1,10 +1,10 @@
 
-add_subdirectory(epuzzle_cli)
+add_subdirectory(epuzzle)
 
 if(WIN32)
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/puzzle_samples DESTINATION .)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/puzzle_examples DESTINATION .)
 else()
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/puzzle_samples DESTINATION ${CMAKE_INSTALL_DATADIR}/epuzzle)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/puzzle_examples DESTINATION ${CMAKE_INSTALL_DATADIR}/epuzzle)
 endif()
 
 #TODO: install(FILES ${CMAKE_SOURCE_DIR}/README.md DESTINATION .)

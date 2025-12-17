@@ -1,3 +1,7 @@
+
+Puzzle definition file: six_houses.toml
+
+
 https://vk.com/topic-11761047_25574255?post=350
 
 шесть домов

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24) # support CMP0135
 
 if (NOT EPUZZLE_GIT_TAG)
-  set(EPUZZLE_GIT_TAG "0.0.0-dev")
+  set(EPUZZLE_GIT_TAG "v0.0.0-dev")
 endif()
 string(REGEX REPLACE "^v([0-9]+\\.[0-9]+\\.[0-9]+).*" "\\1" EPUZZLE_PROJECT_VERSION ${EPUZZLE_GIT_TAG})
 
@@ -10,6 +10,11 @@ project(epuzzle
     LANGUAGES CXX
     VERSION ${EPUZZLE_PROJECT_VERSION}
 )
+
+configure_file(
+    "${CMAKE_SOURCE_DIR}/cmake/version.h.in"
+    "${CMAKE_BINARY_DIR}/generated/version.h"
+) # @PROJECT_VERSION@ from version.h.in will be replaced with the real version in generated/version.h
 
 include(FetchContent)
 include(GNUInstallDirs)

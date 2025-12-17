@@ -5,9 +5,11 @@
 #include <string>
 
 #include "epuzzle/SolverConfig.h"
+#include "version.h"
 
 namespace cli
 {
+
 	struct ProgramOptions
 	{
 		epuzzle::SolverConfig config;
@@ -15,4 +17,6 @@ namespace cli
 	};
 
 	std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[]); // throw std::runtime_error
+
+	void printVersion();
 }

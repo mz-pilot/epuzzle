@@ -18,7 +18,7 @@ target_sources(epuzzle_tests
 
 target_precompile_headers(epuzzle_tests PRIVATE src/pch.h)
 
-target_compile_definitions(epuzzle_tests PRIVATE EPUZZLE_TEST_SAMPLES_DIR="${CMAKE_SOURCE_DIR}/puzzle_samples")
+target_compile_definitions(epuzzle_tests PRIVATE EPUZZLE_TEST_SAMPLES_DIR="${CMAKE_SOURCE_DIR}/puzzle_examples")
 
 FetchContent_Declare(
     googletest

@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
 		if (!options)
 			return EXIT_SUCCESS;
 
+		cli::printVersion();
 		std::cout << "Config: " << options->config << "\n";
 		auto puzzleData = epuzzle::puzzleDataFromFile(options->puzzleFilePath);
 		std::cout << "Puzzle data loaded: \n" << puzzleData << "\n";

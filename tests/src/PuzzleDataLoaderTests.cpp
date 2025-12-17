@@ -7,7 +7,7 @@ namespace epuzzle::tests
 	{
 		static constexpr std::string_view text = R"(
 			#
-			# Original natural language description: puzzle_gen_by_ds_r1.txt
+			# Original natural language description: four_girls.txt
 			#
 			# TOML fromat specification: https://toml.io/en/
 			# TOML Validator: https://www.toml-lint.com/
