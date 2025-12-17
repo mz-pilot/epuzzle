@@ -53,7 +53,7 @@ namespace
 		Disabled
 	};
 
-	constexpr auto appName = "epuzzle"; // let's not fetch it from argv[0] for now
+	constexpr auto appName = epuzzle::Version::projectName;
 }
 
 	std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])
@@ -64,8 +64,10 @@ namespace
 		const std::string defaultMethod{ EnumHelper::name(Method::BruteForce) };
 		const std::string defaultBfPrefilter{ EnumHelper::name(PrefilterMode::Enabled) };
 		const std::string defaultBfExec{ EnumHelper::name(ExecPolicy::Parallel) };
-
-		cxxopts::Options optsManager(appName, "Logic puzzle solver\nSolves Einstein's/Zebra Puzzle and similar constraint satisfaction puzzles.");
+		const auto description = std::string(appName) + " - Logic puzzle solver, version " + epuzzle::Version::projectVer + "\n"
+			+ "Solves Einstein's/Zebra Puzzle and similar constraint satisfaction puzzles.";
+		
+		cxxopts::Options optsManager(appName, description);
 		optsManager.custom_help("--file <FILE> [OPTIONS]");
 		optsManager.add_options()
 			("f,file", "[required] Path to puzzle data file", cxxopts::value<std::string>())
@@ -126,7 +128,6 @@ namespace
 
 	void printVersion()
 	{
-		constexpr auto epuzzle_version = "0.0.0";
-		std::cout << appName << " version " << epuzzle_version << std::endl;
+		std::cout << epuzzle::Version::description() << std::endl;
 	}
 }

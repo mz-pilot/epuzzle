@@ -5,6 +5,7 @@
 #include <string>
 
 #include "epuzzle/SolverConfig.h"
+#include "version.h"
 
 namespace cli
 {

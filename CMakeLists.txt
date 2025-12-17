@@ -11,6 +11,11 @@ project(epuzzle
     VERSION ${EPUZZLE_PROJECT_VERSION}
 )
 
+configure_file(
+    "${CMAKE_SOURCE_DIR}/cmake/version.h.in"
+    "${CMAKE_BINARY_DIR}/generated/version.h"
+) # @PROJECT_VERSION@ from version.h.in will be replaced with the real version in generated/version.h
+
 include(FetchContent)
 include(GNUInstallDirs)
 
