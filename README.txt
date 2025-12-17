@@ -1,8 +1,9 @@
+=============================
 EPUZZLE - LOGIC PUZZLE SOLVER
 =============================
 
-A versatile command-line application designed to solve complex logic puzzles 
-(e.g., Einstein's/Zebra Puzzle, Sudoku variants, etc.).
+A versatile command-line application designed to solve Einstein's/Zebra Puzzle 
+and similar constraint satisfaction puzzles.
 
 QUICK START
 -----------

@@ -9,7 +9,8 @@
 
 namespace cli
 {
-
+namespace 
+{
 	struct EnumHelper
 	{
 		template <typename TEnum>
@@ -46,39 +47,66 @@ namespace cli
 		}
 	};
 
+	enum class PrefilterMode
+	{
+		Enabled,
+		Disabled
+	};
+
+	constexpr auto appName = "epuzzle"; // let's not fetch it from argv[0] for now
+}
+
 	std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])
 	{
 		using Method = epuzzle::SolverConfig::SolvingMethod;
 		using ExecPolicy = epuzzle::SolverConfig::BruteForce::ExecPolicy;
-		const auto appName = "epuzzle";
-		cxxopts::Options optsManager(appName, "Solver of puzzles such as Einstein's puzzle (Zebra puzzle) and similar ones");
-		optsManager.set_width(110);
+		// Note: cxxopts doesnt like string_view
+		const std::string defaultMethod{ EnumHelper::name(Method::BruteForce) };
+		const std::string defaultBfPrefilter{ EnumHelper::name(PrefilterMode::Enabled) };
+		const std::string defaultBfExec{ EnumHelper::name(ExecPolicy::Parallel) };
+
+		cxxopts::Options optsManager(appName, "Logic puzzle solver\nSolves Einstein's/Zebra Puzzle and similar constraint satisfaction puzzles.");
+		optsManager.custom_help("--file <FILE> [OPTIONS]");
 		optsManager.add_options()
-			("m,method", "[required] Solving method, where arg is: " + EnumHelper::names<Method>(), cxxopts::value<std::string>())
-			("p,prefilter", "[optional] Enable prefilter for bruteforce", cxxopts::value<bool>()->default_value("true"))
-			("e,execpolicy", "[required if BruteForce] Execution policy, where arg is: " + EnumHelper::names<ExecPolicy>(),
-				cxxopts::value<std::string>())
 			("f,file", "[required] Path to puzzle data file", cxxopts::value<std::string>())
+			("m,method", "[optional] Solving method, where arg is: " + EnumHelper::names<Method>(), 
+				cxxopts::value<std::string>()->default_value(defaultMethod))
+			("p,prefilter", "[BruteForce only] Prefilter mode, where arg is: " + EnumHelper::names<PrefilterMode>(), 
+				cxxopts::value<std::string>()->default_value(defaultBfPrefilter))
+			("e,execpolicy", "[BruteForce only] Execution policy, where arg is: " + EnumHelper::names<ExecPolicy>(),
+				cxxopts::value<std::string>()->default_value(defaultBfExec))
+			("v,version", "Print version")
 			("h,help", "Print usage");
 
 		const auto parsedOpts = optsManager.parse(argc, argv);
-		if (parsedOpts.count("help") || parsedOpts.arguments().empty())
+		if (parsedOpts.count("help") || parsedOpts.arguments().size() <= 1)
 		{
-			std::cout << "\n" << optsManager.help() << "\n";
-			std::cout << "Examples: \n\n";
+			std::cout << optsManager.help() << "\n";
+			std::cout << "Examples: \n";
 
-			std::cout << "# Parallel brute force\n";
-			std::cout << appName << " --method " << EnumHelper::name(Method::BruteForce)
-				<< " --execpolicy " << EnumHelper::name(ExecPolicy::Parallel)
-				<< " --file puzzle_examples/einsteins.toml\n\n";
-
-			std::cout << "# Disable prefilter for total sequenced brute force\n";
-			std::cout << appName << " -m " << EnumHelper::name(Method::BruteForce)
-				<< " --prefilter=false --execpolicy " << EnumHelper::name(ExecPolicy::Sequenced) << " -f test.toml\n\n";
+			std::cout << "# Quickly test the solver (default mode)\n";
+			std::cout << appName << " --file puzzle_examples/einsteins.toml\n\n";
 
 			std::cout << "# Basic usage with reasoning\n";
-			std::cout << appName << " -m " << EnumHelper::name(Method::Reasoning) << " -f \"Zebra.toml\"\n\n";
+			std::cout << appName << " -f \"My puzzle.toml\"" << " -m " << EnumHelper::name(Method::Reasoning) << "\n\n";
+
+			std::cout << "# Parallel bruteforce\n";
+			std::cout << appName << " --file Zebra.toml" 
+				<< " --method " << EnumHelper::name(Method::BruteForce)
+				<< " --execpolicy " << EnumHelper::name(ExecPolicy::Parallel) << "\n\n";
+
+			std::cout << "# Disable prefilter for Sequenced bruteforce\n";
+			std::cout << appName << " -f test.toml"
+				<< " -m " << EnumHelper::name(Method::BruteForce)
+				<< " -p " << EnumHelper::name(PrefilterMode::Disabled) 
+				<< " -e " << EnumHelper::name(ExecPolicy::Sequenced);
+			
 			std::cout << std::endl;
+			return {};
+		}
+		else if (parsedOpts.contains("version") && parsedOpts.arguments().size() == 1)
+		{
+			printVersion();
 			return {};
 		}
 
@@ -88,7 +116,7 @@ namespace cli
 		{
 			programOpts.config.bruteForce =
 			{
-				.prefilter = parsedOpts["prefilter"].as<bool>(),
+				.prefilter = (PrefilterMode::Enabled == EnumHelper::cast<PrefilterMode>(parsedOpts["prefilter"].as<std::string>())),
 				.execution = EnumHelper::cast<ExecPolicy>(parsedOpts["execpolicy"].as<std::string>())
 			};
 		}
@@ -96,4 +124,9 @@ namespace cli
 		return programOpts;
 	}
 
+	void printVersion()
+	{
+		constexpr auto epuzzle_version = "0.0.0";
+		std::cout << appName << " version " << epuzzle_version << std::endl;
+	}
 }
