@@ -9,7 +9,7 @@
 
 namespace cli
 {
-namespace 
+namespace
 {
 	struct EnumHelper
 	{
@@ -54,7 +54,7 @@ namespace
 	};
 
 	constexpr auto appName = epuzzle::Version::projectName;
-}
+} // namespace
 
 	std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])
 	{
@@ -66,14 +66,14 @@ namespace
 		const std::string defaultBfExec{ EnumHelper::name(ExecPolicy::Parallel) };
 		const auto description = std::string(appName) + " - Logic puzzle solver, version " + epuzzle::Version::projectVer + "\n"
 			+ "Solves Einstein's/Zebra Puzzle and similar constraint satisfaction puzzles.";
-		
+
 		cxxopts::Options optsManager(appName, description);
 		optsManager.custom_help("--file <FILE> [OPTIONS]");
 		optsManager.add_options()
 			("f,file", "[required] Path to puzzle data file", cxxopts::value<std::string>())
-			("m,method", "[optional] Solving method, where arg is: " + EnumHelper::names<Method>(), 
+			("m,method", "[optional] Solving method, where arg is: " + EnumHelper::names<Method>(),
 				cxxopts::value<std::string>()->default_value(defaultMethod))
-			("p,prefilter", "[BruteForce only] Prefilter mode, where arg is: " + EnumHelper::names<PrefilterMode>(), 
+			("p,prefilter", "[BruteForce only] Prefilter mode, where arg is: " + EnumHelper::names<PrefilterMode>(),
 				cxxopts::value<std::string>()->default_value(defaultBfPrefilter))
 			("e,execpolicy", "[BruteForce only] Execution policy, where arg is: " + EnumHelper::names<ExecPolicy>(),
 				cxxopts::value<std::string>()->default_value(defaultBfExec))
@@ -93,16 +93,16 @@ namespace
 			std::cout << appName << " -f \"My puzzle.toml\"" << " -m " << EnumHelper::name(Method::Reasoning) << "\n\n";
 
 			std::cout << "# Parallel bruteforce\n";
-			std::cout << appName << " --file Zebra.toml" 
+			std::cout << appName << " --file Zebra.toml"
 				<< " --method " << EnumHelper::name(Method::BruteForce)
 				<< " --execpolicy " << EnumHelper::name(ExecPolicy::Parallel) << "\n\n";
 
 			std::cout << "# Disable prefilter for Sequenced bruteforce\n";
 			std::cout << appName << " -f test.toml"
 				<< " -m " << EnumHelper::name(Method::BruteForce)
-				<< " -p " << EnumHelper::name(PrefilterMode::Disabled) 
+				<< " -p " << EnumHelper::name(PrefilterMode::Disabled)
 				<< " -e " << EnumHelper::name(ExecPolicy::Sequenced);
-			
+
 			std::cout << std::endl;
 			return {};
 		}
@@ -128,6 +128,7 @@ namespace
 
 	void printVersion()
 	{
-		std::cout << epuzzle::Version::description() << std::endl;
+		using ver = epuzzle::Version;
+		std::cout << ver::projectName << " version " << ver::projectVer << std::endl;
 	}
 }
