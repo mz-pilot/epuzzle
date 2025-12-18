@@ -38,16 +38,16 @@ jobs:
       - name: 1. Checkout code
         uses: actions/checkout@v6
 
-      - name: 2. Setup MSVC environment (Windows)
+      - name: 2. (Windows) Setup MSVC environment
         if: matrix.os == 'windows-latest'
         uses: ilammy/msvc-dev-cmd@v1 # prefpare environment for Ninja
 
-      - name: 3. Install dependencies (Linux)
+      - name: 2. (Linux) Install dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install -y ninja-build
 
 
-      - name: 4. Extract Version
+      - name: 3. Extract Version
         id: get_version
         shell: bash
         run: |
@@ -75,12 +75,12 @@ jobs:
         run: ctest -C ${{ matrix.build_type }} --output-on-failure --verbose
 
       
-      - name: 8. Package Application (CPack)
+      - name: 8 Package Application (CPack)
         if: inputs.upload_artifacts
         working-directory: ./build
         run: cpack -C ${{ matrix.build_type }}
 
-      - name: 9. Package Debug Symbols (PDB) - Windows
+      - name: 8.1 (Windows) Package Debug Symbols (PDB)
         if: inputs.upload_artifacts && matrix.os == 'windows-latest'
         shell: pwsh
         run: |
@@ -95,7 +95,7 @@ jobs:
               Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
           }
 
-      - name: 10. Upload Artifacts
+      - name: 9. Upload Artifacts
         if: inputs.upload_artifacts
         uses: actions/upload-artifact@v6
         with:

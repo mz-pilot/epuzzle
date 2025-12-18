@@ -30,8 +30,21 @@ add_custom_command(TARGET epuzzle POST_BUILD
 
 if(WIN32)
     install(TARGETS epuzzle RUNTIME DESTINATION .)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/puzzle_examples DESTINATION .)
+    install(FILES 
+        ${CMAKE_SOURCE_DIR}/LICENSE 
+        ${CMAKE_SOURCE_DIR}/README.txt 
+        DESTINATION .
+    )
+
 else()
     install(TARGETS epuzzle RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/puzzle_examples DESTINATION ${CMAKE_INSTALL_DATADIR}/epuzzle)
+    install(FILES 
+        ${CMAKE_SOURCE_DIR}/LICENSE 
+        ${CMAKE_SOURCE_DIR}/README.txt 
+        DESTINATION ${CMAKE_INSTALL_DOCDIR}/epuzzle
+    )
 endif()
 
 add_executable(epuzzle::epuzzle ALIAS epuzzle)
