@@ -102,5 +102,6 @@ jobs:
           # Используем уникальное имя, чтобы не было конфликтов (os-buildtype)
           name: package-${{ matrix.os }}-${{ matrix.build_type }}
           path: |
+            build/*.deb
             build/*.tar.gz
             build/*.zip
