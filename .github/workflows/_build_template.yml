@@ -59,7 +59,7 @@ jobs:
           echo "Detected tag: $GIT_TAG"
           echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
 
-      - name: 5. Configure CMake
+      - name: 4. Configure CMake
         run: |
           cmake -S . -B build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
@@ -67,20 +67,20 @@ jobs:
             -DEPUZZLE_BUILD_TESTS=ON \
             -DEPUZZLE_BUILD_APPS=ON
 
-      - name: 6. Build
+      - name: 5. Build
         run: cmake --build build --config ${{ matrix.build_type }}
 
-      - name: 7. Test
+      - name: 6. Test
         working-directory: ./build
         run: ctest -C ${{ matrix.build_type }} --output-on-failure --verbose
 
       
-      - name: 8 Package Application (CPack)
+      - name: 7 Package Application (CPack)
         if: inputs.upload_artifacts
         working-directory: ./build
         run: cpack -C ${{ matrix.build_type }}
 
-      - name: 8.1 (Windows) Package Debug Symbols (PDB)
+      - name: 7.1 (Windows) Package Debug Symbols (PDB)
         if: inputs.upload_artifacts && matrix.os == 'windows-latest'
         shell: pwsh
         run: |
@@ -95,7 +95,7 @@ jobs:
               Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
           }
 
-      - name: 9. Upload Artifacts
+      - name: 8. Upload Artifacts
         if: inputs.upload_artifacts
         uses: actions/upload-artifact@v6
         with:
