@@ -2,5 +2,5 @@
 
 namespace platform
 {
-	void setupConsole(); // throw std::runtime_error
+    void setupConsole(); // throw std::runtime_error
 }

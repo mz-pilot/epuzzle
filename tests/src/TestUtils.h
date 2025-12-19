@@ -2,5 +2,5 @@
 
 namespace test_utils
 {
-	std::string puzzlePath(std::string_view filename);
+    std::string puzzlePath(std::string_view filename);
 }

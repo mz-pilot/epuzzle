@@ -10,16 +10,16 @@
 // If the expression is false, throw specException constructed with the message. 
 // Usage example: ENSURE_SPEC(i < 50, my_custom_exception, "i = " << i << ". Other text/params.");
 #define ENSURE_SPEC(expression, specException, message) \
-	do { \
-		if (!(expression)) \
-		{ \
-			std::ostringstream oss; \
-			const auto loc = std::source_location::current(); \
-			oss << "ENSURE( " #expression " );\nDetails: " << message \
+    do { \
+        if (!(expression)) \
+        { \
+            std::ostringstream oss; \
+            const auto loc = std::source_location::current(); \
+            oss << "ENSURE( " #expression " );\nDetails: " << message \
                 << "\nFile: " << loc.file_name() << ", line: " << loc.line() << "\nFunction: " << loc.function_name(); \
-			throw specException(oss.str()); \
-		} \
-	} while (false)
+            throw specException(oss.str()); \
+        } \
+    } while (false)
 
 // If the expression is false, throw std::runtime_error constructed with the message. Usage example: ENSURE(i < 50, "i = " << i << ". Other text or params.");
 #define ENSURE(expression, message) \

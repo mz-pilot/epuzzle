@@ -4,13 +4,13 @@
 
 namespace epuzzle::details
 {
-	// Indexed (internal) version of puzzle solution
-	struct IndexedSolution
-	{
-		using AttributeAssignment = utils::IndexedVector<AttributeValueID, PersonID>;
-		
-		utils::IndexedVector<AttributeTypeID, AttributeAssignment> attributes;
-	};
+    // Indexed (internal) version of puzzle solution
+    struct IndexedSolution
+    {
+        using AttributeAssignment = utils::IndexedVector<AttributeValueID, PersonID>;
 
-	PuzzleSolution toPuzzleSolution(const IndexedSolution&, const IndexedPuzzleData&);
+        utils::IndexedVector<AttributeTypeID, AttributeAssignment> attributes;
+    };
+
+    PuzzleSolution toPuzzleSolution(const IndexedSolution&, const IndexedPuzzleData&);
 }

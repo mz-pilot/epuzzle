@@ -1,2 +1,62 @@
-﻿# All text files in repo store with LF eol
-* text=auto eol=lf
+﻿# Default
+* text=auto
+
+# C++ files
+*.cpp text eol=lf diff=cpp
+*.hpp text eol=lf diff=cpp
+*.c text eol=lf diff=cpp
+*.h text eol=lf diff=cpp
+*.cc text eol=lf diff=cpp
+*.hh text eol=lf diff=cpp
+*.cxx text eol=lf diff=cpp
+*.ixx text eol=lf diff=cpp
+*.inl text eol=lf diff=cpp
+
+# CMake files
+*.cmake text eol=lf
+CMakeLists.txt text eol=lf
+CMakePresets.json text eol=lf
+
+# Configs
+*.yml text eol=lf diff=yaml
+*.yaml text eol=lf diff=yaml
+*.json text eol=lf diff=json
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+
+# Batch files
+*.py text eol=lf diff=python
+*.sh text eol=lf
+*.bash text eol=lf
+Makefile text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+.editorconfig text eol=lf
+.clang-format text eol=lf
+.clang-format-ignore text eol=lf
+.clang-tidy text eol=lf
+
+# Docs
+*.md text eol=lf
+*.txt text eol=lf
+*.rst text eol=lf
+AUTHORS text eol=lf
+CHANGELOG text eol=lf
+LICENSE text eol=lf
+README* text eol=lf
+TODO text eol=lf
+
+# Windows specific files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.psd1 text eol=crlf
+*.vcxproj text eol=crlf
+*.vcxproj.filters text eol=crlf
+*.sln text eol=crlf
+*.user text eol=crlf
+
+third_party/** linguist-vendored

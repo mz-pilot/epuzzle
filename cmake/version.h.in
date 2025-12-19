@@ -4,13 +4,13 @@
 namespace epuzzle
 {
 
-	struct Version
-	{
-		static constexpr const char* projectName = "@PROJECT_NAME@";
-		static constexpr const char* projectVer = "@PROJECT_VERSION@";
-		static constexpr std::uint32_t major = @PROJECT_VERSION_MAJOR@;
-		static constexpr std::uint32_t minor = @PROJECT_VERSION_MINOR@;
-		static constexpr std::uint32_t patch = @PROJECT_VERSION_PATCH@;
-	};
+    struct Version
+    {
+        static constexpr const char* projectName = "@PROJECT_NAME@";
+        static constexpr const char* projectVer = "@PROJECT_VERSION@";
+        static constexpr std::uint32_t major = @PROJECT_VERSION_MAJOR@;
+        static constexpr std::uint32_t minor = @PROJECT_VERSION_MINOR@;
+        static constexpr std::uint32_t patch = @PROJECT_VERSION_PATCH@;
+    };
 
 }
