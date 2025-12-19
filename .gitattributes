@@ -35,6 +35,7 @@ Makefile text eol=lf
 .gitattributes text eol=lf
 .editorconfig text eol=lf
 .clang-format text eol=lf
+.clang-format-ignore text eol=lf
 .clang-tidy text eol=lf
 
 # Docs
@@ -57,3 +58,5 @@ TODO text eol=lf
 *.vcxproj.filters text eol=crlf
 *.sln text eol=crlf
 *.user text eol=crlf
+
+third_party/** linguist-vendored

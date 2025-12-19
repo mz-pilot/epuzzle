@@ -6,7 +6,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{cpp,hpp,c,h,cc,hh,cxx,ixx,inl}]
+[*.{cpp,hpp,c,h,cc,hh,cxx,ixx,inl,h.in}]
 indent_style = space
 indent_size = 4
 
@@ -35,3 +35,11 @@ end_of_line = crlf
 
 [*.md]
 trim_trailing_whitespace = false
+
+[third_party/**]
+end_of_line = unset
+indent_style = unset
+indent_size = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 4,
   "cmakeMinimumRequired": { "major": 3, "minor": 24, "patch": 0 },
   "configurePresets": [
@@ -37,15 +37,15 @@
     }
   ],
   "buildPresets": [
-    { "name": "win-debug", "configurePreset": "windows-x64", "configuration": "Debug" },
+    { "name": "win-debug",   "configurePreset": "windows-x64", "configuration": "Debug" },
     { "name": "win-release", "configurePreset": "windows-x64", "configuration": "Release" },
-    { "name": "lin-debug", "configurePreset": "linux-debug" },
+    { "name": "lin-debug",   "configurePreset": "linux-debug" },
     { "name": "lin-release", "configurePreset": "linux-release" }
   ],
   "testPresets": [
-    { "name": "test-win-debug", "configurePreset": "windows-x64", "configuration": "Debug", "output": { "outputOnFailure": true } },
+    { "name": "test-win-debug",   "configurePreset": "windows-x64", "configuration": "Debug", "output": { "outputOnFailure": true } },
     { "name": "test-win-release", "configurePreset": "windows-x64", "configuration": "Release", "output": { "outputOnFailure": true } },
-    { "name": "test-lin-debug", "configurePreset": "linux-debug", "output": { "outputOnFailure": true } },
+    { "name": "test-lin-debug",   "configurePreset": "linux-debug", "output": { "outputOnFailure": true } },
     { "name": "test-lin-release", "configurePreset": "linux-release", "output": { "outputOnFailure": true } }
   ]
 }

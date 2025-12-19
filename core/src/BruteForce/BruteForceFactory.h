@@ -4,5 +4,5 @@
 
 namespace epuzzle::details
 {
-	std::unique_ptr<ISolver> createBruteForcer(const SolverConfig::BruteForce&, IndexedPuzzleData&&);
+    std::unique_ptr<ISolver> createBruteForcer(const SolverConfig::BruteForce&, IndexedPuzzleData&&);
 }
