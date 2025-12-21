@@ -49,21 +49,17 @@ jobs:
 
       - name: 3. Extract Version
         id: get_version
-        shell: bash
         run: |
-          if [[ $GITHUB_REF == refs/tags/v*.*.* ]]; then
-            GIT_TAG=${GITHUB_REF#refs/tags/}
-          else
-            GIT_TAG="v0.0.0-pr-${GITHUB_SHA::7}"
-          fi
-          echo "Detected tag: $GIT_TAG"
-          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
+          GIT_TAG_VER=$(echo "$GITHUB_REF" | sed -nE 's|^refs/tags/v?([0-9]+\.[0-9]+\.[0-9]+).*|\1|p')
+          GIT_TAG_VER=${GIT_TAG_VER:-0.0.0} # default if empty
+          echo "Detected version: $GIT_TAG_VER"
+          echo "GIT_TAG_VER=$GIT_TAG_VER" >> $GITHUB_ENV
 
       - name: 4. Configure CMake
         run: |
           cmake -S . -B build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DEPUZZLE_GIT_TAG=${{ env.GIT_TAG }} \
+            -DEPUZZLE_VERSION=${{ env.GIT_TAG_VER }} \
             -DEPUZZLE_BUILD_TESTS=ON \
             -DEPUZZLE_BUILD_APPS=ON
 
@@ -76,11 +72,91 @@ jobs:
 
       
       - name: 7 Package Application (CPack)
-        if: inputs.upload_artifacts
+        if: matrix.build_type == 'Release' || inputs.upload_artifacts
         working-directory: ./build
         run: cpack -C ${{ matrix.build_type }}
 
-      - name: 7.1 (Windows) Package Debug Symbols (PDB)
+      - name: 7.1 (Linux) Verify Deb Package (install-launch-uninstall)
+        if: matrix.build_type == 'Release' && matrix.os == 'ubuntu-latest'
+        working-directory: ./build
+        run: |
+          DEB_FILE=$(ls *.deb | head -n 1)
+          if [ -z "$DEB_FILE" ]; then
+            echo "::error::No .deb file found to test!"
+            exit 1
+          fi
+          echo "Found package: $DEB_FILE"
+          PKG_NAME=$(dpkg-deb -f "$DEB_FILE" Package)
+          echo "Detected package name: $PKG_NAME"
+
+          echo "Installing..."
+          sudo apt-get install -y "./$DEB_FILE"
+          if ! command -v $PKG_NAME &> /dev/null; then
+             echo "::error::Binary '$PKG_NAME' not found in PATH after installation!"
+             exit 1
+          fi
+          echo "Installation verified successfully"
+
+          echo "Launch..."
+          APP_OUTPUT=$($PKG_NAME --version)
+          if [[ "$APP_OUTPUT" == *"$GIT_TAG_VER"* ]]; then
+             echo "Version check passed: '$APP_OUTPUT' contains expected '$GIT_TAG_VER'"
+          else
+             echo "::error::Version mismatch! App output: '$APP_OUTPUT', expected: '$GIT_TAG_VER'"
+             exit 1
+          fi
+          echo "Launch verified successfully"
+
+          echo "Uninstalling..."
+          sudo apt-get remove -y $PKG_NAME
+          if command -v $PKG_NAME &> /dev/null; then
+             echo "::error::Binary still exists after removal!"
+             exit 1
+          fi         
+          echo "Uninstallation verified successfully"
+
+      - name: 7.1 (Windows) Smoke Test (unzip-launch)
+        if: matrix.build_type == 'Release' && matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $zipFile = Get-ChildItem -Path build -Filter *.zip | Select-Object -First 1
+          if (-not $zipFile) {
+              Write-Error "::error::No ZIP package found for testing!"
+              exit 1
+          }
+          Write-Host "Found package: $($zipFile.FullName)."
+
+          Write-Host "Unzip..."
+          $testDir = "build/test_install"
+          New-Item -ItemType Directory -Force -Path $testDir
+          Expand-Archive -Path $zipFile.FullName -DestinationPath $testDir
+          $exeFile = "epuzzle.exe"
+          $exePath = Get-ChildItem -Path $testDir -Filter $exeFile -Recurse | Select-Object -First 1
+          if (-not $exePath) {
+              Write-Error "::error::Binary '$exeFile' not found inside the ZIP!"
+              exit 1
+          }
+          Write-Host "Executable found: $($exePath.FullName)"
+          Write-Host "Unzip verified successfully"
+
+          Write-Host "Launch ..."
+          try {
+              $OutputEncoding = [System.Text.Encoding]::UTF8
+              [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+              $appOutput = & $exePath.FullName --version | Out-String
+              if ($appOutput -like "*$env:GIT_TAG_VER*") {
+                  Write-Host "Version check passed: $appOutput contains expected $env:GIT_TAG_VER"
+              } else {
+                  Write-Error "::error::Version mismatch! Got: $appOutput, expected: $env:GIT_TAG_VER"
+                  exit 1
+              }
+          } catch {
+              Write-Error "::error::Application failed to start! Possibly missing DLLs or dependencies."
+              exit 1
+          }
+          Write-Host "Launch verified successfully"
+
+      - name: 7.2 (Windows) Package Debug Symbols (PDB)
         if: inputs.upload_artifacts && matrix.os == 'windows-latest'
         shell: pwsh
         run: |
@@ -89,7 +165,7 @@ jobs:
           if ($cpackFile -ne $null) {
               $baseName = $cpackFile.BaseName
               $pdbZipName = "${baseName}-debug-symbols.zip"
-              Compress-Archive -Path build/bin/pdb/*.pdb -DestinationPath "build/$pdbZipName"              
+              Compress-Archive -Path build/bin/pdb/*.pdb -DestinationPath "build/$pdbZipName"
               Write-Host "PDB symbols packaged as: $pdbZipName"
           } else {
               Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
@@ -99,7 +175,6 @@ jobs:
         if: inputs.upload_artifacts
         uses: actions/upload-artifact@v6
         with:
-          # Используем уникальное имя, чтобы не было конфликтов (os-buildtype)
           name: package-${{ matrix.os }}-${{ matrix.build_type }}
           path: |
             build/*.deb
