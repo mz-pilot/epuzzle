@@ -43,7 +43,7 @@ else()
     install(FILES 
         ${CMAKE_SOURCE_DIR}/LICENSE 
         ${CMAKE_SOURCE_DIR}/README.txt 
-        DESTINATION ${CMAKE_INSTALL_DOCDIR}/epuzzle
+        DESTINATION ${CMAKE_INSTALL_DOCDIR}
     )
 endif()
 
