@@ -141,7 +141,7 @@ jobs:
         run: |
           $zipFile = Get-ChildItem -Path build -Filter *.zip | Select-Object -First 1
           if (-not $zipFile) {
-              Write-Error "No ZIP package found for testing!"
+              Write-Error "::error::No ZIP package found for testing!"
               exit 1
           }
           Write-Host "Found package: $($zipFile.FullName)."
@@ -150,14 +150,16 @@ jobs:
           $testDir = "build/test_install"
           New-Item -ItemType Directory -Force -Path $testDir
           Expand-Archive -Path $zipFile.FullName -DestinationPath $testDir
-          $exePath = Get-ChildItem -Path $testDir -Filter "epuzzle.exe" -Recurse | Select-Object -First 1
+          $exeFile = "epuzzle.exe"
+          $exePath = Get-ChildItem -Path $testDir -Filter $exeFile -Recurse | Select-Object -First 1
           if (-not $exePath) {
-              Write-Error "Binary 'epuzzle.exe' not found inside the ZIP!"
+              Write-Error "::error::Binary '$exeFile' not found inside the ZIP!"
               exit 1
           }
+          Write-Host "Executable found: $($exePath.FullName)"
           Write-Host "Unzip verified successfully"
 
-          Write-Host "Launch $($exePath.FullName) ..."
+          Write-Host "Launch ..."
           $expectedVer = "unknown"
           if ("${{ env.GIT_TAG }}" -match 'v(\d+\.\d+\.\d+).*') {
               $expectedVer = $matches[1]
@@ -169,13 +171,13 @@ jobs:
               Write-Host "App output: $appOutput"
               
               if ($appOutput -like "*$expectedVer*") {
-                  Write-Host "Version check passed: $appOutput contains $expectedVer"
+                  Write-Host "Version check passed: $appOutput contains expected $expectedVer"
               } else {
-                  Write-Error "Version mismatch! Got: $appOutput, expected: $expectedVer"
+                  Write-Error "::error::Version mismatch! Got: $appOutput, expected: $expectedVer"
                   exit 1
               }
           } catch {
-              Write-Error "Application failed to start! Possibly missing DLLs or dependencies."
+              Write-Error "::error::Application failed to start! Possibly missing DLLs or dependencies."
               exit 1
           }
           Write-Host "Launch verified successfully"
