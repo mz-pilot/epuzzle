@@ -118,7 +118,7 @@ jobs:
 
           echo "Launch..."
           APP_OUTPUT=$($PKG_NAME --version)
-          EXPECTED_VER=$(echo "$GIT_TAG" | grep -oE '^v[0-9]+\.[0-9]+\.[0-9]+')
+          EXPECTED_VER=$(echo "$GIT_TAG" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
           if [[ "$APP_OUTPUT" == *"$EXPECTED_VER"* ]]; then
              echo "Version check passed: '$APP_OUTPUT' contains expected '$EXPECTED_VER'"
           else
@@ -178,7 +178,7 @@ jobs:
               Write-Error "Application failed to start! Possibly missing DLLs or dependencies."
               exit 1
           }
-          Write-Host "Launch verified successfully
+          Write-Host "Launch verified successfully"
 
       - name: 8. Upload Artifacts
         if: inputs.upload_artifacts
