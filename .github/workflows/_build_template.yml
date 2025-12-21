@@ -76,21 +76,6 @@ jobs:
         working-directory: ./build
         run: cpack -C ${{ matrix.build_type }}
 
-      - name: 7.1 (Windows) Package Debug Symbols (PDB)
-        if: inputs.upload_artifacts && matrix.os == 'windows-latest'
-        shell: pwsh
-        run: |
-          $ReleaseDir = "${{ matrix.build_type }}"
-          $cpackFile = Get-ChildItem -Path build -Filter *.zip | Select-Object -First 1
-          if ($cpackFile -ne $null) {
-              $baseName = $cpackFile.BaseName
-              $pdbZipName = "${baseName}-debug-symbols.zip"
-              Compress-Archive -Path build/bin/pdb/*.pdb -DestinationPath "build/$pdbZipName"              
-              Write-Host "PDB symbols packaged as: $pdbZipName"
-          } else {
-              Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
-          }
-
       - name: 7.1 (Linux) Verify Deb Package (install-launch-uninstall)
         if: matrix.build_type == 'Release' && matrix.os == 'ubuntu-latest'
         working-directory: ./build
@@ -130,7 +115,7 @@ jobs:
           fi         
           echo "Uninstallation verified successfully"
 
-      - name: 7.2 (Windows) Smoke Test (unzip-launch)
+      - name: 7.1 (Windows) Smoke Test (unzip-launch)
         if: matrix.build_type == 'Release' && matrix.os == 'windows-latest'
         shell: pwsh
         run: |
@@ -170,6 +155,21 @@ jobs:
               exit 1
           }
           Write-Host "Launch verified successfully"
+
+      - name: 7.2 (Windows) Package Debug Symbols (PDB)
+        if: inputs.upload_artifacts && matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $ReleaseDir = "${{ matrix.build_type }}"
+          $cpackFile = Get-ChildItem -Path build -Filter *.zip | Select-Object -First 1
+          if ($cpackFile -ne $null) {
+              $baseName = $cpackFile.BaseName
+              $pdbZipName = "${baseName}-debug-symbols.zip"
+              Compress-Archive -Path build/bin/pdb/*.pdb -DestinationPath "build/$pdbZipName"
+              Write-Host "PDB symbols packaged as: $pdbZipName"
+          } else {
+              Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
+          }
 
       - name: 8. Upload Artifacts
         if: inputs.upload_artifacts
