@@ -49,21 +49,17 @@ jobs:
 
       - name: 3. Extract Version
         id: get_version
-        shell: bash
         run: |
-          if [[ $GITHUB_REF == refs/tags/v*.*.* ]]; then
-            GIT_TAG=${GITHUB_REF#refs/tags/}
-          else
-            GIT_TAG="v0.0.0-pr-${GITHUB_SHA::7}"
-          fi
-          echo "Detected tag: $GIT_TAG"
-          echo "GIT_TAG=$GIT_TAG" >> $GITHUB_ENV
+          GIT_TAG_VER=$(echo "$GITHUB_REF" | sed -nE 's|^refs/tags/v?([0-9]+\.[0-9]+\.[0-9]+).*|\1|p')
+          GIT_TAG_VER=${GIT_TAG_VER:-0.0.0} # default if empty
+          echo "Detected version: $GIT_TAG_VER"
+          echo "GIT_TAG_VER=$GIT_TAG_VER" >> $GITHUB_ENV
 
       - name: 4. Configure CMake
         run: |
           cmake -S . -B build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DEPUZZLE_GIT_TAG=${{ env.GIT_TAG }} \
+            -DEPUZZLE_VERSION=${{ env.GIT_TAG_VER }} \
             -DEPUZZLE_BUILD_TESTS=ON \
             -DEPUZZLE_BUILD_APPS=ON
 
@@ -118,11 +114,10 @@ jobs:
 
           echo "Launch..."
           APP_OUTPUT=$($PKG_NAME --version)
-          EXPECTED_VER=$(echo "$GIT_TAG" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
-          if [[ "$APP_OUTPUT" == *"$EXPECTED_VER"* ]]; then
-             echo "Version check passed: '$APP_OUTPUT' contains expected '$EXPECTED_VER'"
+          if [[ "$APP_OUTPUT" == *"$GIT_TAG_VER"* ]]; then
+             echo "Version check passed: '$APP_OUTPUT' contains expected '$GIT_TAG_VER'"
           else
-             echo "::error::Version mismatch! App output: '$APP_OUTPUT', expected: '$EXPECTED_VER'"
+             echo "::error::Version mismatch! App output: '$APP_OUTPUT', expected: '$GIT_TAG_VER'"
              exit 1
           fi
           echo "Launch verified successfully"
@@ -160,20 +155,14 @@ jobs:
           Write-Host "Unzip verified successfully"
 
           Write-Host "Launch ..."
-          $expectedVer = "unknown"
-          if ("${{ env.GIT_TAG }}" -match 'v(\d+\.\d+\.\d+).*') {
-              $expectedVer = $matches[1]
-          }
           try {
               $OutputEncoding = [System.Text.Encoding]::UTF8
               [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
               $appOutput = & $exePath.FullName --version | Out-String
-              Write-Host "App output: $appOutput"
-              
-              if ($appOutput -like "*$expectedVer*") {
-                  Write-Host "Version check passed: $appOutput contains expected $expectedVer"
+              if ($appOutput -like "*$env:GIT_TAG_VER*") {
+                  Write-Host "Version check passed: $appOutput contains expected $env:GIT_TAG_VER"
               } else {
-                  Write-Error "::error::Version mismatch! Got: $appOutput, expected: $expectedVer"
+                  Write-Error "::error::Version mismatch! Got: $appOutput, expected: $env:GIT_TAG_VER"
                   exit 1
               }
           } catch {
