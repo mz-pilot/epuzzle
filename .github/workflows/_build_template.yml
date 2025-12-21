@@ -76,7 +76,7 @@ jobs:
 
       
       - name: 7 Package Application (CPack)
-        if: inputs.upload_artifacts
+        if: matrix.build_type == 'Release' || inputs.upload_artifacts
         working-directory: ./build
         run: cpack -C ${{ matrix.build_type }}
 
@@ -95,11 +95,95 @@ jobs:
               Write-Host "Warning: CPack ZIP file not found. Skipping PDB packaging."
           }
 
+      - name: 7.1 (Linux) Verify Deb Package (install-launch-uninstall)
+        if: matrix.build_type == 'Release' && matrix.os == 'ubuntu-latest'
+        working-directory: ./build
+        run: |
+          DEB_FILE=$(ls *.deb | head -n 1)
+          if [ -z "$DEB_FILE" ]; then
+            echo "::error::No .deb file found to test!"
+            exit 1
+          fi
+          echo "Found package: $DEB_FILE"
+          PKG_NAME=$(dpkg-deb -f "$DEB_FILE" Package)
+          echo "Detected package name: $PKG_NAME"
+
+          echo "Installing..."
+          sudo apt-get install -y "./$DEB_FILE"
+          if ! command -v $PKG_NAME &> /dev/null; then
+             echo "::error::Binary '$PKG_NAME' not found in PATH after installation!"
+             exit 1
+          fi
+          echo "Installation verified successfully"
+
+          echo "Launch..."
+          APP_OUTPUT=$($PKG_NAME --version)
+          EXPECTED_VER=$(echo "$GIT_TAG" | grep -oE '^v[0-9]+\.[0-9]+\.[0-9]+')
+          if [[ "$APP_OUTPUT" == *"$EXPECTED_VER"* ]]; then
+             echo "Version check passed: '$APP_OUTPUT' contains expected '$EXPECTED_VER'"
+          else
+             echo "::error::Version mismatch! App output: '$APP_OUTPUT', expected: '$EXPECTED_VER'"
+             exit 1
+          fi
+          echo "Launch verified successfully"
+
+          echo "Uninstalling..."
+          sudo apt-get remove -y $PKG_NAME
+          if command -v $PKG_NAME &> /dev/null; then
+             echo "::error::Binary still exists after removal!"
+             exit 1
+          fi         
+          echo "Uninstallation verified successfully"
+
+      - name: 7.2 (Windows) Smoke Test (unzip-launch)
+        if: matrix.build_type == 'Release' && matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $zipFile = Get-ChildItem -Path build -Filter *.zip | Select-Object -First 1
+          if (-not $zipFile) {
+              Write-Error "No ZIP package found for testing!"
+              exit 1
+          }
+          Write-Host "Found package: $($zipFile.FullName)."
+
+          Write-Host "Unzip..."
+          $testDir = "build/test_install"
+          New-Item -ItemType Directory -Force -Path $testDir
+          Expand-Archive -Path $zipFile.FullName -DestinationPath $testDir
+          $exePath = Get-ChildItem -Path $testDir -Filter "epuzzle.exe" -Recurse | Select-Object -First 1
+          if (-not $exePath) {
+              Write-Error "Binary 'epuzzle.exe' not found inside the ZIP!"
+              exit 1
+          }
+          Write-Host "Unzip verified successfully"
+
+          Write-Host "Launch $($exePath.FullName) ..."
+          $expectedVer = "unknown"
+          if ("${{ env.GIT_TAG }}" -match 'v(\d+\.\d+\.\d+).*') {
+              $expectedVer = $matches[1]
+          }
+          try {
+              $OutputEncoding = [System.Text.Encoding]::UTF8
+              [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+              $appOutput = & $exePath.FullName --version | Out-String
+              Write-Host "App output: $appOutput"
+              
+              if ($appOutput -like "*$expectedVer*") {
+                  Write-Host "Version check passed: $appOutput contains $expectedVer"
+              } else {
+                  Write-Error "Version mismatch! Got: $appOutput, expected: $expectedVer"
+                  exit 1
+              }
+          } catch {
+              Write-Error "Application failed to start! Possibly missing DLLs or dependencies."
+              exit 1
+          }
+          Write-Host "Launch verified successfully
+
       - name: 8. Upload Artifacts
         if: inputs.upload_artifacts
         uses: actions/upload-artifact@v6
         with:
-          # Используем уникальное имя, чтобы не было конфликтов (os-buildtype)
           name: package-${{ matrix.os }}-${{ matrix.build_type }}
           path: |
             build/*.deb
