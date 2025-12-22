@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
         std::cout << "Solutions found: " << solutions.size() << "\n";
         for (auto solNum : std::views::iota(0ul, solutions.size()))
         {
-            std::cout << "Solution #" << solNum << ":\n";
+            std::cout << "Solution #" << solNum + 1 << ":\n";
             std::cout << solutions[solNum] << "\n";
         }
     }
