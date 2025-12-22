@@ -64,7 +64,6 @@ namespace utils
                     const auto itemLength = utf8Length(row[i]);
                     if (itemLength < printer.m_columnWidths[i])
                         os << std::string(printer.m_columnWidths[i] - itemLength, ' ');
-                    // std::format("{:<{}}", row[i], printer.m_columnWidths[i]);
                 }
 
                 os << "\n";
