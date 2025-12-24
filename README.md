@@ -39,7 +39,7 @@ Modern C++20 библиотека и консольная утилита для 
 ### Производительность и многопоточность
 
 * Indexed `cache friendly` данные для `O(1)` доступа: плотная упаковка (IndexedVector + TypedIndex, data locality).
-* Prefiltering mode for brueforce.
+* Prefiltering mode for bruteforce.
 * `Parallel mode`: собственный ParallelExecutor, `chunked queue`, `graceful shutdown`, `threads exceptions handling`.
 * False Sharing Prevention: alignas `L1 Cache-line size` (в AtomicProgressTracker).
 * Lock-free элементы: `std::atomic` с `memory_order_relaxed` в уместных кейсах.
