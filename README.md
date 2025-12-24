@@ -18,89 +18,36 @@ Modern C++20 библиотека и консольная утилита для 
 
 ## Technical Highlights
 
-### Modern C++20
+### C++ 20
 
 * Concepts & Constraints: std::concepts, std::regular, std::totally_ordered (в TypedIndex) и др.
 * Concurrency & Thread Cancellation: std::jthread и std::stop_token (кооперативная отмена в ParallelExecutor).
 * Attributes: [[likely]] / [[unlikely]] (предсказания переходов в ProgressTracker и др.).
-* Other: User-defined literals, std::ranges, std::views, std::format, std::source_location, Spaceship operator и др.
+* Other core: explicit template lambdas (валидация PuzzleData), designated initialization, user-defined literals, Spaceship operator и др.
+* Standard library: std::ranges, std::views, std::format, std::source_location и др.
 
-### Производительность и многопоточность (Hardware Awareness)
+### Производительность и многопоточность
 
-* Parallel Execution: Собственный движок ParallelExecutor с балансировкой нагрузки (Chunked Queue).
-* Cache Optimization: Применение alignas с учетом размера линии L1-кэша (std::hardware_constructive_interference_size) для предотвращения False Sharing в горячих циклах.
-* False Sharing Prevention: (в AtomicProgressTracker).
-* Lock-free элементы: Использование атомиков с std::memory_order_relaxed для минимизации оверхеда синхронизации при трекинге прогресса.
-* Data Locality: Плотная упаковка данных в IndexedVector для эффективного использования кэша процессора.
+* Indexed cache friendly данные для O(1) доступа: плотная упаковка (IndexedVector + TypedIndex, data locality).
+* Prefiltering mode for brueforce.
+* Parallel mode: собственный ParallelExecutor, chunked queue, graceful shutdown, threads exceptions handling.
+* False Sharing Prevention: alignas L1 Cache-line size (в AtomicProgressTracker).
+* Lock-free элементы: std::atomic с memory_order_relaxed в достаточных кейсах.
 
+### Архитектура, паттерны, идиомы и безопасность типов
 
-* Memory Ordering: Использование std::memory_order_relaxed в атомиках.
-* Cache Friendliness: Плотная упаковка данных (структуры IndexedVector) и работа с индексами (TypedIndex) вместо указателей для улучшения локальности данных (Data Locality).
-* Cache-line aligned атомарные счетчики прогресса
-* Параллельный исполнитель с обработкой исключений из потоков
-* Chunk-based распределение работы для балансировки нагрузки
-
-
-* std::atomic с memory_order_relaxed где достаточно
-* Local progress trackers для минимизации contention атомиков
-
-    • Graceful shutdown через std::stop_token
-    • Агрегация исключений из параллельных потоков
-    • Lock-free прогресс трекинг с cache-line alignment
-    • Распределенная очередь задач с thread-safe доступом
-    • Пул потоков с work stealing через chunk-based распределение
-
-### Оптимизации:
-
-* Префильтрация пространства поиска
-* Indexed данные для O(1) доступа
-* Выравнивание структур по границам кэш-линий
-* Проект служит примером production-ready кода с акцентом на тестируемость, производительность и поддерживаемость.
-
-* Prefiltering кандидатов для сокращения пространства поиска в 100+ раз
-* Indexed данные вместо строковых сравнений (O(1) доступ)
-* Chunk-based распределение работы между потоками
-
-
-### Архитектура и безопасность типов
-
-* Чистая слоистая архитектура с четким разделением на DTO, indexed data и алгоритмы
-* 
-
-* Strong Typedefs (Phantom Types): Реализация строгих типов для индексов (TypedIndex<Tag>), что делает невозможным случайное использование, например, PersonID вместо AttributeValueID.
-* Static Polymorphism: Использование std::variant и std::visit для обработки ограничений (Constraints) вместо классического наследования, что упрощает управление памятью (Value Semantics).
-* RAII & Safety: Полное отсутствие ручного управления памятью (new/delete), использование умных указателей и строгая иерархия исключений.
-* Компиляционные и runtime проверки инвариантов
-
-
-* Strong Typedefs (Phantom Types): Реализация TypedIndex<Tag> — это защита от перепутывания индексов разных сущностей (например, нельзя передать PersonID туда, где ожидается AttributeValueID).
-* Strong typed индексы для предотвращения ошибок
-* Algebraic Data Types (ADT): Активное использование std::variant (в IndexedConstraint) для статического полиморфизма вместо классического наследования. Это современный подход (Data-Oriented Design).
-* Metaprogramming: template metaprogramming validation.
-
-
-• Strong typed индексы для предотвращения путаницы
-• Compile-time вычисления (constexpr факториал, степень)
-• Runtime валидация с информативными исключениями
-• Гарантии исключений (strong guarantee в ключевых операциях)
-• RAII для всех ресурсов (память, потоки, мьютексы)
-
-
-### Idioms & Patterns (Культура кода)
-* RAII: Повсеместное использование std::unique_ptr, std::lock_guard/std::unique_lock. Ручного управления памятью (new/delete) практически нет.
-* Error Handling: Четкая иерархия исключений, наследование конструкторов (using std::runtime_error::runtime_error), использование std::ostringstream для формирования сообщений об ошибках.
-* Dependency Injection: В BruteForceChecker зависимости передаются через конструктор.
-* Guaranteed Copy Elision: Упоминание в комментариях и использование возврата значений по значению (фабричные методы).
-
-
-* Стратегия для алгоритмов решения (ISolver)
-* Фабричные методы для создания компонентов
-* Visitor через std::variant для обработки разнотипных ограничений
-* NVI и PIMPL для скрытия деталей реализации
-
+* Чистая слоистая архитектура с разделением на DTO, indexed data и алгоритмы.
+* Опора на SOLID при проектировании.
+* Static Polymorphism: std::variant + std::visit.
+* Dynamic Polymorphism: ISolver, фабричные методы и др.
+* Strong Typing: вектор, параметризуемый фантомным типом индекса (IndexedVector + TypedIndex).
+* Проверки инвариантов: compiletime, runtime, информативные исключения.
+* Паттерны GoF: стратегия, фабричный метод, итератор и др.
+* RAII: std::unique_ptr, std::lock_guard/std::unique_lock. 
+* Guaranteed Copy Elision: сознательное использование.
 
 ### Тестирование и качество
-• Параметризованные тесты на GoogleTest для всех алгоритмов на общих данных.
+• Параметризованные тестовые наборы на GoogleTest (разные алгоритмы на общих данных).
 • Полное покрытие синтетическими задачами 2x2, 2x3, 3x2, 3x3.
 • Интеграционные тесты с реальными головоломками.
 • Тесты на отмену операции и graceful shutdown.
