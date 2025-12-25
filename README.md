@@ -97,7 +97,7 @@ Modern C++20 библиотека и консольная утилита для 
 cd C:\epuzzle
 epuzzle.exe --help
 ```
-4. **Запустите тестовый пазл**:
+4. **Запустите решение тестового пазла**:
 ```cmd
 epuzzle.exe --file puzzle_examples\einsteins.toml
 ```
@@ -113,6 +113,8 @@ epuzzle.exe --file puzzle_examples\einsteins.toml
 # Скачайте последний .deb пакет со страницы Releases
 sudo apt update
 sudo apt install ./epuzzle-*.deb
+
+# Запустите решение тестового пазла
 epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 ```
 **Вариант B — через .tar.gz архив:**
@@ -120,6 +122,8 @@ epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 # Скачайте и распакуйте архив
 tar -xzf epuzzle-*-Linux-x64.tar.gz
 cd epuzzle-*-Linux-x64
+
+# Запустите решение тестового пазла
 ./bin/epuzzle --file share/epuzzle/puzzle_examples/einsteins.toml
 # Или установите в систему вручную
 ```
