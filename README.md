@@ -636,13 +636,15 @@ ctest -V --preset=test-lin-release
 #### Отладка
 - **Visual Studio** — используйте встроенный отладчик, точки останова работают как для Windows, так и для WSL
 - **Qt Creator**, **VS Code**, **CLion** - можете использовать отладчик привычным способом
-- **Через командную строку**:
+- **Через командную строку** - перейдите в папку с собранным исполняемым файлом и запустите отладчик:
 ```bash
 # Linux
-gdb ./build/epuzzle
+cd out/build/linux-debug/bin/apps
+gdb ./epuzzle
 
 # Windows (если установлен Debugging Tools for Windows)
-cdb build\epuzzle.exe
+cd out/build/windows-x64/bin/apps/Debug
+cdb epuzzle.exe
 ```
 
 <div align="right"> 
