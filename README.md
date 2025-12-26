@@ -643,7 +643,7 @@ cd out/build/linux-debug/bin/apps
 gdb ./epuzzle
 
 # Windows (если установлен Debugging Tools for Windows)
-cd out/build/windows-x64/bin/apps/Debug
+cd out/build/windows-x64/bin/apps
 cdb epuzzle.exe
 ```
 
