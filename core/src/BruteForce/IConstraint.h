@@ -7,7 +7,7 @@ namespace epuzzle::details
     class IConstraint
     {
     public:
-        static std::unique_ptr<IConstraint> create(const IndexedConstraint&);
+        static std::unique_ptr<IConstraint> create(const ConstraintModel&);
         virtual ~IConstraint() = default;
 
         virtual size_t complexity() const = 0;

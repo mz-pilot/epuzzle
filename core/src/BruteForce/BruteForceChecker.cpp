@@ -2,26 +2,26 @@
 
 namespace epuzzle::details
 {
-    BruteForceChecker::BruteForceChecker(size_t attrTypeCount, const std::vector<IndexedConstraint>& constraintDefs, bool needPrefiltering)
+    BruteForceChecker::BruteForceChecker(size_t attrTypeCount, const std::vector<ConstraintModel>& constraints, bool needPrefiltering)
         : m_prefilters(attrTypeCount)
     {
         // reserve space for all constraints at once, it's not so much
-        m_constraints.reserve(constraintDefs.size());
-        for (const auto& constrDef : constraintDefs)
+        m_constraintCheckers.reserve(constraints.size());
+        for (const auto& constraint : constraints)
         {
-            const auto* personProperty = std::get_if<PersonProperty>(&constrDef);
+            const auto* personProperty = std::get_if<PersonProperty>(&constraint);
             if (needPrefiltering && personProperty)
             {
                 m_prefilters[personProperty->attr.typeId].push_back(*personProperty);
             }
             else
             {
-                m_constraints.push_back(IConstraint::create(constrDef));
+                m_constraintCheckers.push_back(IConstraint::create(constraint));
             }
         };
 
         // We'll check constraints from simplest to most complex
-        std::ranges::sort(m_constraints, {}, &IConstraint::complexity);
+        std::ranges::sort(m_constraintCheckers, {}, &IConstraint::complexity);
     }
 
     bool BruteForceChecker::prefilterCheck(AttributeTypeID typeId, AttributeValueID valueId, PersonID personId) const
@@ -37,9 +37,9 @@ namespace epuzzle::details
     bool BruteForceChecker::mainCheck(const ICandidateIterator& candidate) const
     {
         // Hot path!
-        for (const auto& constraint : m_constraints)
+        for (const auto& constraintChecker : m_constraintCheckers)
         {
-            if (!constraint->satisfies(candidate)) [[likely]]
+            if (!constraintChecker->satisfies(candidate)) [[likely]]
                 return false;
         }
         [[unlikely]]

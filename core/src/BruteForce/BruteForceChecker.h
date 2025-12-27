@@ -10,14 +10,14 @@ namespace epuzzle::details
     class BruteForceChecker
     {
     public:
-        BruteForceChecker(size_t attrTypeCount, const std::vector<IndexedConstraint>&, bool needPrefiltering);
+        BruteForceChecker(size_t attrTypeCount, const std::vector<ConstraintModel>&, bool needPrefiltering);
 
         bool prefilterCheck(AttributeTypeID, AttributeValueID, PersonID) const;
         bool mainCheck(const ICandidateIterator& candidate) const;
 
     private:
         utils::IndexedVector<AttributeTypeID, std::vector<PersonProperty>> m_prefilters;
-        std::vector<std::unique_ptr<IConstraint>> m_constraints;
+        std::vector<std::unique_ptr<IConstraint>> m_constraintCheckers;
     };
 
 }

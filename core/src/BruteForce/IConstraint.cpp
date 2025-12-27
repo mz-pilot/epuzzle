@@ -61,7 +61,7 @@ namespace
 
 } // namespace
 
-    std::unique_ptr<IConstraint> IConstraint::create(const IndexedConstraint& constrDef)
+    std::unique_ptr<IConstraint> IConstraint::create(const ConstraintModel& constraint)
     {
         return std::visit(
             [](const auto& arg) -> std::unique_ptr<IConstraint>
@@ -69,7 +69,7 @@ namespace
                 using T = std::decay_t<decltype(arg)>;
                 return std::make_unique<ConstraintImpl<T>>(arg);
             },
-            constrDef);
+            constraint);
     }
 
 }

@@ -38,9 +38,9 @@ namespace epuzzle::details
                 return Attribute{ typeId, attrValueID(typeId, attr.value) };
             };
 
-        // Prepare indexed constraints definitions (m_indexedConstraints)
+        // Prepare PuzzleModel::m_constraints (indexed) from PuzzleDefinition::constraints (DTO)
 
-        m_indexedConstraints.reserve(m_definition.constraints.size());
+        m_constraints.reserve(m_definition.constraints.size());
         for (const auto& constr : m_definition.constraints)
         {
             std::visit(utils::overloaded
@@ -50,18 +50,18 @@ namespace epuzzle::details
                         auto indexedFactFirst = indexedAttr(fact.first);
                         if (AttributeTypeID_person == indexedFactFirst.typeId)
                         {
-                            m_indexedConstraints.emplace_back(std::in_place_type<PersonProperty>,
+                            m_constraints.emplace_back(std::in_place_type<PersonProperty>,
                                 PersonID{indexedFactFirst.valueId.value()}, indexedAttr(fact.second), fact.secondNegate);
                         }
                         else
                         {
-                            m_indexedConstraints.emplace_back(std::in_place_type<SameOwner>,
+                            m_constraints.emplace_back(std::in_place_type<SameOwner>,
                                 std::move(indexedFactFirst), indexedAttr(fact.second), fact.secondNegate);
                         }
                     },
                     [this, indexedAttr, attrTypeID](const PuzzleDefinition::Comparison& comp)
                     {
-                        m_indexedConstraints.emplace_back(std::in_place_type<PositionComparison>,
+                        m_constraints.emplace_back(std::in_place_type<PositionComparison>,
                             indexedAttr(comp.first), indexedAttr(comp.second), attrTypeID(comp.compareBy), comp.relation);
                     },
                 }, constr);
@@ -78,9 +78,9 @@ namespace epuzzle::details
         return m_definition.attributes.size();
     }
 
-    const std::vector<IndexedConstraint>& PuzzleModel::constraintDefs() const
+    const std::vector<ConstraintModel>& PuzzleModel::constraints() const
     {
-        return m_indexedConstraints;
+        return m_constraints;
     }
 
     std::string_view PuzzleModel::personName(PersonID id) const

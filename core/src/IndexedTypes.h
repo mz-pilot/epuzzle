@@ -42,5 +42,5 @@ namespace epuzzle::details
         Relation relation;
     };
 
-    using IndexedConstraint = std::variant<PersonProperty, SameOwner, PositionComparison>;
+    using ConstraintModel = std::variant<PersonProperty, SameOwner, PositionComparison>;
 }

@@ -11,7 +11,7 @@ namespace epuzzle::details
     public:
         BruteForceContext(PuzzleModel&& puzzleModel, bool usePrefiltering)
             : m_model(std::move(puzzleModel))
-            , m_checker(m_model.attrTypeCount(), m_model.constraintDefs(), usePrefiltering)
+            , m_checker(m_model.attrTypeCount(), m_model.constraints(), usePrefiltering)
         {
             using namespace std::placeholders;
             // see BruteForceChecker class description

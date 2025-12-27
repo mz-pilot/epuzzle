@@ -11,7 +11,7 @@ namespace epuzzle::details
 
         size_t personCount() const;
         size_t attrTypeCount() const;
-        const std::vector<IndexedConstraint>& constraintDefs() const;
+        const std::vector<ConstraintModel>& constraints() const;
 
         std::string_view personName(PersonID) const;
         std::string_view attrTypeName(AttributeTypeID) const;
@@ -19,6 +19,6 @@ namespace epuzzle::details
 
     private:
         const PuzzleDefinition m_definition;
-        std::vector<IndexedConstraint> m_indexedConstraints;
+        std::vector<ConstraintModel> m_constraints;
     };
 }
