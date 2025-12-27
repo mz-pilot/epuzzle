@@ -6,7 +6,7 @@
 
 #include "epuzzle/PuzzleDataLoader.h"
 #include "epuzzle/Exceptions.h"
-#include "epuzzle/ISolver.h"
+#include "epuzzle/Solver.h"
 
 #include "ProgramOptions.h"
 
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         auto puzzleData = epuzzle::puzzleDataFromFile(options->puzzleFilePath);
         std::cout << "Puzzle data loaded: \n" << puzzleData << "\n";
         std::cout << "Preparing ... \n";
-        auto solver = epuzzle::ISolver::create(std::move(options->config), std::move(puzzleData));
+        auto solver = epuzzle::Solver::create(std::move(options->config), std::move(puzzleData));
         std::cout << "Preparing done.\n";
 
         using namespace utils;

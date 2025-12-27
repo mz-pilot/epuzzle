@@ -1,4 +1,4 @@
-#include "epuzzle/ISolver.h"
+#include "epuzzle/Solver.h"
 
 namespace epuzzle::tests
 {
@@ -13,7 +13,7 @@ namespace epuzzle::tests
         using ConstraintDefs = std::vector<std::variant<PuzzleData::Fact, PuzzleData::Comparison>>;
     }
 
-    class ISolverTests : public testing::TestWithParam<SolverConfig>
+    class SolverTests : public testing::TestWithParam<SolverConfig>
     {
     public:
 
@@ -82,9 +82,9 @@ namespace epuzzle::tests
         auto solve(PuzzleData&& data, ConstraintDefs&& constraints)
         {
             data.constraints = std::move(constraints);
-            std::unique_ptr<ISolver> solver;
+            std::unique_ptr<Solver> solver;
             std::vector<PuzzleSolution> solutions;
-            EXPECT_NO_THROW(solver = ISolver::create(GetParam(), std::move(data)));
+            EXPECT_NO_THROW(solver = Solver::create(GetParam(), std::move(data)));
             if (solver)
             {
                 EXPECT_NO_THROW(solutions = solver->solve({}));
@@ -132,7 +132,7 @@ namespace epuzzle::tests
 
     };
 
-    TEST_P(ISolverTests, puzzle2x2SolutionCount0)
+    TEST_P(SolverTests, puzzle2x2SolutionCount0)
     {
         EXPECT_TRUE(noSolutionFor(puzzle_2x2(),
             {
@@ -249,7 +249,7 @@ namespace epuzzle::tests
             }));
     }
 
-    TEST_P(ISolverTests, Puzzle2x2SolutionCount1)
+    TEST_P(SolverTests, Puzzle2x2SolutionCount1)
     {
         EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
             {
@@ -397,7 +397,7 @@ namespace epuzzle::tests
             }));
     }
 
-    TEST_P(ISolverTests, Puzzle2x2SolutionCount2)
+    TEST_P(SolverTests, Puzzle2x2SolutionCount2)
     {
         EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
             {
@@ -439,7 +439,7 @@ namespace epuzzle::tests
             }));
     }
 
-    TEST_P(ISolverTests, Puzzle2x3SolutionCount1)
+    TEST_P(SolverTests, Puzzle2x3SolutionCount1)
     {
         EXPECT_TRUE(hasSolutionSet(puzzle_2x3(),
             {
@@ -458,7 +458,7 @@ namespace epuzzle::tests
             }));
     }
 
-    TEST_P(ISolverTests, Puzzle3x2SolutionCount2)
+    TEST_P(SolverTests, Puzzle3x2SolutionCount2)
     {
         EXPECT_TRUE(hasSolutionSet(puzzle_3x2(),
             {
@@ -482,7 +482,7 @@ namespace epuzzle::tests
             }));
     }
 
-    TEST_P(ISolverTests, Puzzle3x2SolutionCount4)
+    TEST_P(SolverTests, Puzzle3x2SolutionCount4)
     {
         EXPECT_TRUE(hasSolutionSet(puzzle_3x2(),
             {
@@ -517,7 +517,7 @@ namespace epuzzle::tests
             }));
     }
 
-    TEST_P(ISolverTests, Puzzle3x3SolutionCount0)
+    TEST_P(SolverTests, Puzzle3x3SolutionCount0)
     {
         EXPECT_TRUE(noSolutionFor(puzzle_3x3(),
             {
@@ -550,17 +550,17 @@ namespace epuzzle::tests
 
 
     INSTANTIATE_TEST_SUITE_P(
-        ISolverBruteForce,
-        ISolverTests,
+        SolverBruteForce,
+        SolverTests,
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = false, .execution = ExecPolicy::Sequenced} }));
 
     INSTANTIATE_TEST_SUITE_P(
-        ISolverBruteForcePrefilter,
-        ISolverTests,
+        SolverBruteForcePrefilter,
+        SolverTests,
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequenced} }));
 
     INSTANTIATE_TEST_SUITE_P(
-        ISolverReasoning,
-        ISolverTests,
+        SolverReasoning,
+        SolverTests,
         testing::Values(SolverConfig{ Method::Reasoning, {} }));
 }

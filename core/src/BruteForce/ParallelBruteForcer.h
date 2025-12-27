@@ -1,11 +1,11 @@
 #pragma once
-#include "epuzzle/ISolver.h"
+#include "epuzzle/Solver.h"
 #include "BruteForceContext.h"
 
 namespace epuzzle::details
 {
     // Parallel (multithreaded) version of BruteForcer
-    class ParallelBruteForcer final : public ISolver
+    class ParallelBruteForcer final : public Solver
     {
     public:
         explicit ParallelBruteForcer(BruteForceContext&&);

@@ -12,11 +12,11 @@ namespace epuzzle
 {
 
     // Solver. The main interface for client code.
-    class ISolver
+    class Solver
     {
     public:
-        static std::unique_ptr<ISolver> create(SolverConfig, PuzzleData);
-        virtual ~ISolver() = default;
+        static std::unique_ptr<Solver> create(SolverConfig, PuzzleData);
+        virtual ~Solver() = default;
 
         // Parameter object. The callback executes in solve()'s calling thread. Return false to cancel the operation.
         struct SolveOptions

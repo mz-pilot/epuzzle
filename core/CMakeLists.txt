@@ -4,7 +4,7 @@ add_library(epuzzle_core STATIC)
 target_sources(epuzzle_core
     PUBLIC
         include/epuzzle/Exceptions.h
-        include/epuzzle/ISolver.h
+        include/epuzzle/Solver.h
         include/epuzzle/PuzzleData.h
         include/epuzzle/PuzzleDataLoader.h
         include/epuzzle/PuzzleSolution.h
@@ -32,7 +32,7 @@ target_sources(epuzzle_core
         src/IndexedSolution.cpp
         src/IndexedSolution.h
         src/IndexedTypes.h
-        src/ISolver.cpp
+        src/Solver.cpp
         src/pch.h
         src/PuzzleData.cpp
         src/PuzzleDataLoader.cpp

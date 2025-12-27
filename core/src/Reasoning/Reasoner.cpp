@@ -10,7 +10,7 @@ namespace epuzzle::details
 
     std::vector<PuzzleSolution> Reasoner::solve(SolveOptions)
     {
-        // TODO: Implement it! And don't forget remove GTEST_SKIP() from ISolverTests::SetUp() and ISolverRealPuzzleTests::SetUp()!
+        // TODO: Implement it! And don't forget remove GTEST_SKIP() from SolverTests::SetUp() and SolverRealPuzzleTests::SetUp()!
         throw std::logic_error("Reasoning method not implemented yet! Coming soon!");
     }
 

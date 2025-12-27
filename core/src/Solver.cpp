@@ -4,7 +4,7 @@
 namespace epuzzle
 {
 
-    std::unique_ptr<ISolver> ISolver::create(SolverConfig cfg, PuzzleData data)
+    std::unique_ptr<Solver> Solver::create(SolverConfig cfg, PuzzleData data)
     {
         validate(cfg);
 

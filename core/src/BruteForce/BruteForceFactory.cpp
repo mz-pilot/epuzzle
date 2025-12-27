@@ -4,7 +4,7 @@
 
 namespace epuzzle::details
 {
-    std::unique_ptr<ISolver> createBruteForcer(const SolverConfig::BruteForce& bfConfig, IndexedPuzzleData&& indexedData)
+    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForce& bfConfig, IndexedPuzzleData&& indexedData)
     {
         BruteForceContext context{ std::move(indexedData), bfConfig.prefilter };
 

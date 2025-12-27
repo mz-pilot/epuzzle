@@ -1,12 +1,12 @@
 #pragma once
-#include "epuzzle/ISolver.h"
+#include "epuzzle/Solver.h"
 #include "BruteForceContext.h"
 
 
 namespace epuzzle::details
 {
     // Checks all specified configurations against constraints.
-    class BruteForcer final : public ISolver
+    class BruteForcer final : public Solver
     {
     public:
         explicit BruteForcer(BruteForceContext&&);

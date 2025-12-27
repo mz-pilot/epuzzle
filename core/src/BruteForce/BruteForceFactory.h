@@ -1,8 +1,8 @@
 #pragma once
-#include "epuzzle/ISolver.h"
+#include "epuzzle/Solver.h"
 #include "IndexedPuzzleData.h"
 
 namespace epuzzle::details
 {
-    std::unique_ptr<ISolver> createBruteForcer(const SolverConfig::BruteForce&, IndexedPuzzleData&&);
+    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForce&, IndexedPuzzleData&&);
 }

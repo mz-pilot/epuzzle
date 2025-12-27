@@ -1,11 +1,11 @@
 #pragma once
-#include "epuzzle/ISolver.h"
+#include "epuzzle/Solver.h"
 #include "IndexedPuzzleData.h"
 
 namespace epuzzle::details
 {
     // Deductive reasoner (human-like thinking)
-    class Reasoner final : public ISolver
+    class Reasoner final : public Solver
     {
     public:
         explicit Reasoner(IndexedPuzzleData&&);

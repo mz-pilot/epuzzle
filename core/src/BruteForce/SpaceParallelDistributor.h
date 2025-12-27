@@ -1,5 +1,4 @@
 #pragma once
-#include "epuzzle/SolverConfig.h"
 #include "ICandidatesSpace.h"
 
 namespace epuzzle::details

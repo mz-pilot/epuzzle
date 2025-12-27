@@ -7,8 +7,8 @@ set_target_properties(epuzzle_tests PROPERTIES PDB_OUTPUT_DIRECTORY "${CMAKE_BIN
 target_sources(epuzzle_tests
     PRIVATE
         src/BruteForceTests.cpp
-        src/ISolverRealPuzzleTests.cpp
-        src/ISolverTests.cpp
+        src/SolverRealPuzzleTests.cpp
+        src/SolverTests.cpp
         src/pch.h
         src/PuzzleDataLoaderTests.cpp
         src/PuzzleDataTests.cpp
