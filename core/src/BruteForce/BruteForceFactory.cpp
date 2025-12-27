@@ -4,11 +4,11 @@
 
 namespace epuzzle::details
 {
-    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForce& bfConfig, IndexedPuzzleData&& indexedData)
+    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForceConfig& config, IndexedPuzzleData&& indexedData)
     {
-        BruteForceContext context{ std::move(indexedData), bfConfig.prefilter };
+        BruteForceContext context{ std::move(indexedData), config.prefilter };
 
-        if (bfConfig.execution == SolverConfig::BruteForce::ExecPolicy::Parallel)
+        if (config.execution == SolverConfig::BruteForceConfig::ExecPolicy::Parallel)
         {
             return std::make_unique<ParallelBruteForcer>(std::move(context));
         }

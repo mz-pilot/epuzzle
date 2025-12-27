@@ -59,7 +59,7 @@ namespace
     std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])
     {
         using Method = epuzzle::SolverConfig::SolvingMethod;
-        using ExecPolicy = epuzzle::SolverConfig::BruteForce::ExecPolicy;
+        using ExecPolicy = epuzzle::SolverConfig::BruteForceConfig::ExecPolicy;
         // Note: cxxopts doesnt like string_view
         const std::string defaultMethod{ EnumHelper::name(Method::BruteForce) };
         const std::string defaultBfPrefilter{ EnumHelper::name(PrefilterMode::Enabled) };

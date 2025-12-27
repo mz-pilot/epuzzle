@@ -13,7 +13,7 @@ namespace epuzzle
             Reasoning
         };
 
-        struct BruteForce
+        struct BruteForceConfig
         {
             enum class ExecPolicy
             {
@@ -26,7 +26,7 @@ namespace epuzzle
         };
 
         SolvingMethod solvingMethod = SolvingMethod::BruteForce;
-        std::optional<BruteForce> bruteForce; // YAGNI: if Reasoning will have config - change to std::variant<BruteForce, Reasoning>
+        std::optional<BruteForceConfig> bruteForce;
     };
 
     void validate(const SolverConfig&); // throw SolverConfigError

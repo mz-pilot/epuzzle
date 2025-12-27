@@ -4,9 +4,9 @@ namespace epuzzle::tests
 {
     namespace
     {
-        using BFConfig = SolverConfig::BruteForce;
+        using BFConfig = SolverConfig::BruteForceConfig;
         using Method = SolverConfig::SolvingMethod;
-        using ExecPolicy = SolverConfig::BruteForce::ExecPolicy;
+        using ExecPolicy = SolverConfig::BruteForceConfig::ExecPolicy;
         using Fact = PuzzleData::Fact;
         using Comparison = PuzzleData::Comparison;
         using Relation = PuzzleData::Comparison::Relation;

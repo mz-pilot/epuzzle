@@ -10,7 +10,7 @@ namespace epuzzle
     namespace
     {
         using Method = SolverConfig::SolvingMethod;
-        using ExecPolicy = SolverConfig::BruteForce::ExecPolicy;
+        using ExecPolicy = SolverConfig::BruteForceConfig::ExecPolicy;
     }
 
     void validate(const SolverConfig& cfg)

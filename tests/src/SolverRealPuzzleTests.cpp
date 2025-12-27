@@ -30,9 +30,9 @@ namespace epuzzle::tests
 
     namespace
     {
-        using BFConfig = SolverConfig::BruteForce;
+        using BFConfig = SolverConfig::BruteForceConfig;
         using Method = SolverConfig::SolvingMethod;
-        using ExecPolicy = SolverConfig::BruteForce::ExecPolicy;
+        using ExecPolicy = SolverConfig::BruteForceConfig::ExecPolicy;
     }
 
     TEST_P(SolverRealPuzzleTests, DSSolutionCount128)
