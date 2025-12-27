@@ -1,8 +1,8 @@
-#include "IndexedSolution.h"
+#include "SolutionModel.h"
 
 namespace epuzzle::details
 {
-    PuzzleSolution toPuzzleSolution(const IndexedSolution& indexedSolution, const PuzzleModel& puzzleModel)
+    PuzzleSolution toPuzzleSolution(const SolutionModel& solutionModel, const PuzzleModel& puzzleModel)
     {
         PuzzleSolution puzzleSolution;
         // The first attribute type is "person".
@@ -22,7 +22,7 @@ namespace epuzzle::details
             std::vector<std::string> values(personCount);
             for (auto valueId = AttributeValueID{ 0 }; valueId < AttributeValueID{ personCount }; ++valueId)
             {
-                const auto personId = indexedSolution.attributes[typeId][valueId];
+                const auto personId = solutionModel.attributes[typeId][valueId];
                 values[personId.value()] = puzzleModel.attrValueName(typeId, valueId);
             }
             std::string typeName(puzzleModel.attrTypeName(typeId));

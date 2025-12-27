@@ -58,9 +58,9 @@ namespace
             return std::ranges::find(assignment, personId) - assignment.cbegin();
         }
 
-        IndexedSolution getIndexedSolution() const override
+        SolutionModel getSolutionModel() const override
         {
-            IndexedSolution solution;
+            SolutionModel solution;
             solution.attributes.reserve(m_attributes.size());
 
             for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ m_attributes.size() }; ++typeId)
