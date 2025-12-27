@@ -40,7 +40,7 @@ namespace
                 const size_t pos1 = candidate.personPosition(owner1, m_params.compareByType);
                 const size_t pos2 = candidate.personPosition(owner2, m_params.compareByType);
 
-                using Relation = PuzzleData::Comparison::Relation;
+                using Relation = PuzzleDefinition::Comparison::Relation;
                 switch (m_params.relation)
                 {
                 case Relation::ImmediateLeft:   return pos1 < pos2 && (pos2 - pos1 == 1);
@@ -48,7 +48,7 @@ namespace
                 case Relation::Adjacent:        return std::max(pos1, pos2) - std::min(pos1, pos2) == 1;
                 case Relation::Before:          return pos1 < pos2;
                 case Relation::After:           return pos1 > pos2;
-                default: ENSURE(false, "Unexpected PuzzleData::ComparisonParams::Relation: (int)" << static_cast<int>(m_params.relation));
+                default: ENSURE(false, "Unexpected PuzzleDefinition::ComparisonParams::Relation: (int)" << static_cast<int>(m_params.relation));
                 };
             }
             else

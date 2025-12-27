@@ -4,13 +4,13 @@
 namespace epuzzle
 {
 
-    std::unique_ptr<Solver> Solver::create(SolverConfig cfg, PuzzleData data)
+    std::unique_ptr<Solver> Solver::create(SolverConfig cfg, PuzzleDefinition puzzle)
     {
         validate(cfg);
 
-        normalize(data);
-        validate(data);
-        details::IndexedPuzzleData indexedData{ std::move(data) };
+        normalize(puzzle);
+        validate(puzzle);
+        details::IndexedPuzzleData indexedData{ std::move(puzzle) };
 
         if (cfg.solvingMethod == SolverConfig::SolvingMethod::BruteForce)
         {

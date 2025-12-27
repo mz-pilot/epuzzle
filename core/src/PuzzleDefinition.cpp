@@ -1,36 +1,36 @@
 #include "epuzzle/Exceptions.h"
-#include "epuzzle/PuzzleData.h"
+#include "epuzzle/PuzzleDefinition.h"
 
 namespace epuzzle
 {
     namespace
     {
-        using Relation = PuzzleData::Comparison::Relation;
+        using Relation = PuzzleDefinition::Comparison::Relation;
     }
 
-    void normalize(PuzzleData& data)
+    void normalize(PuzzleDefinition& data)
     {
         for (auto& constr : data.constraints)
         {
-            if (auto* fact = std::get_if<PuzzleData::Fact>(&constr))
+            if (auto* fact = std::get_if<PuzzleDefinition::Fact>(&constr))
             {
-                if (fact->second.type == PuzzleData::personTypeName && fact->first.type != PuzzleData::personTypeName)
+                if (fact->second.type == PuzzleDefinition::personTypeName && fact->first.type != PuzzleDefinition::personTypeName)
                     std::swap(fact->first, fact->second);
             }
         }
     }
 
 #define ENSURE_VALID_EX(expression, message) \
-        ENSURE_SPEC(expression, PuzzleDataLogicError, "Please, fix the original content of epuzzle::PuzzleData! " << message)
+        ENSURE_SPEC(expression, PuzzleDataLogicError, "Please, fix the original content of epuzzle::PuzzleDefinition! " << message)
 
 #define ENSURE_VALID(expression) \
         ENSURE_VALID_EX(expression, "")
 
-    void validate(const PuzzleData& data)
+    void validate(const PuzzleDefinition& data)
     {
         // The dataView copy - view with persons added as one of attributes array. Not so pretty, but very practical for check!
-        PuzzleData dataView = data;
-        dataView.attributes.emplace_back(PuzzleData::personTypeName, dataView.persons);
+        PuzzleDefinition dataView = data;
+        dataView.attributes.emplace_back(PuzzleDefinition::personTypeName, dataView.persons);
 
         auto validateAllUniqueNonEmpty = []<typename Range, typename Proj = std::identity>(const Range & range, Proj projection = {})
         {
@@ -45,13 +45,13 @@ namespace epuzzle
                 projection);
         };
 
-        auto findAttrDescr = [&dataView](const auto& type) -> const PuzzleData::AttributeDescription*
+        auto findAttrDescr = [&dataView](const auto& type) -> const PuzzleDefinition::AttributeDescription*
             {
-                auto cit = std::ranges::find(dataView.attributes, type, &PuzzleData::AttributeDescription::type);
+                auto cit = std::ranges::find(dataView.attributes, type, &PuzzleDefinition::AttributeDescription::type);
                 return cit != dataView.attributes.cend() ? &(*cit) : nullptr;
             };
 
-        auto validateAttribute = [findAttrDescr](const PuzzleData::Attribute& attr)
+        auto validateAttribute = [findAttrDescr](const PuzzleDefinition::Attribute& attr)
             {
                 ENSURE_VALID(!attr.type.empty());
                 ENSURE_VALID(!attr.value.empty());
@@ -69,7 +69,7 @@ namespace epuzzle
         // Validate attributes
 
         ENSURE_VALID(dataView.attributes.size() >= 2);
-        validateAllUniqueNonEmpty(dataView.attributes, &PuzzleData::AttributeDescription::type);
+        validateAllUniqueNonEmpty(dataView.attributes, &PuzzleDefinition::AttributeDescription::type);
         for (const auto& attr : dataView.attributes)
         {
             ENSURE_VALID(attr.values.size() == dataView.persons.size());
@@ -83,15 +83,15 @@ namespace epuzzle
         {
             std::visit(utils::overloaded
                 {
-                    [validateAttribute](const PuzzleData::Fact& fact)
+                    [validateAttribute](const PuzzleDefinition::Fact& fact)
                     {
                     // Validate Facts
                     validateAttribute(fact.first);
                     validateAttribute(fact.second);
                     ENSURE_VALID(fact.first.type != fact.second.type);
-                    ENSURE_VALID(fact.second.type != PuzzleData::personTypeName);
+                    ENSURE_VALID(fact.second.type != PuzzleDefinition::personTypeName);
                 },
-                [validateAttribute, findAttrDescr](const PuzzleData::Comparison& comp)
+                [validateAttribute, findAttrDescr](const PuzzleDefinition::Comparison& comp)
                 {
                     // Validate Comparisons
                     validateAttribute(comp.first);
@@ -121,7 +121,7 @@ namespace epuzzle
         }
     }
 
-    std::ostream& operator<<(std::ostream& os, const PuzzleData& data)
+    std::ostream& operator<<(std::ostream& os, const PuzzleDefinition& data)
     {
         utils::StringTablePrinter tablePrinter{ "  ", "  " };
         tablePrinter.reserve(1 + data.attributes.size());
@@ -136,13 +136,13 @@ namespace epuzzle
         {
             std::visit(utils::overloaded
                 {
-                    [&os](const PuzzleData::Fact& fact)
+                    [&os](const PuzzleDefinition::Fact& fact)
                     {
                         os << "  fact:       ";
                         os << "first<" << fact.first.type << ":" << fact.first.value;
                         os << ">, second<" << fact.second.type << (fact.secondNegate ? ": NOT " : ":") << fact.second.value << ">\n";
                     },
-                    [&os](const PuzzleData::Comparison& comp)
+                    [&os](const PuzzleDefinition::Comparison& comp)
                     {
                         os << "  comparison: ";
                         os << "first<" << comp.first.type << ":" << comp.first.value;

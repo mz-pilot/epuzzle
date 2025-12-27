@@ -3,11 +3,11 @@
 
 namespace epuzzle::details
 {
-    // Stores original PuzzleData, indexing it for best performance.
+    // Stores original PuzzleDefinition, indexing it for best performance.
     class IndexedPuzzleData
     {
     public:
-        explicit IndexedPuzzleData(PuzzleData);
+        explicit IndexedPuzzleData(PuzzleDefinition);
 
         size_t personCount() const;
         size_t attrTypeCount() const;
@@ -18,7 +18,7 @@ namespace epuzzle::details
         std::string_view attrValueName(AttributeTypeID, AttributeValueID) const;
 
     private:
-        const PuzzleData m_data;
+        const PuzzleDefinition m_definition;
         std::vector<IndexedConstraint> m_indexedConstraints;
     };
 }

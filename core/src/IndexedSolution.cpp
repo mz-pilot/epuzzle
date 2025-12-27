@@ -15,7 +15,7 @@ namespace epuzzle::details
         {
             persons.emplace_back(data.personName(PersonID{ personIndex }));
         }
-        puzzleSolution.attributes.emplace_back(PuzzleData::personTypeName, std::move(persons));
+        puzzleSolution.attributes.emplace_back(PuzzleDefinition::personTypeName, std::move(persons));
 
         for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ data.attrTypeCount() }; ++typeId)
         {

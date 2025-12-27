@@ -10,8 +10,8 @@ target_sources(epuzzle_tests
         src/SolverRealPuzzleTests.cpp
         src/SolverTests.cpp
         src/pch.h
-        src/PuzzleDataLoaderTests.cpp
-        src/PuzzleDataTests.cpp
+        src/PuzzleParserTests.cpp
+        src/PuzzleDefinitionTests.cpp
         src/TestUtils.cpp
         src/TestUtils.h
 )

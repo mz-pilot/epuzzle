@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "SolverConfig.h"
-#include "PuzzleData.h"
+#include "PuzzleDefinition.h"
 #include "PuzzleSolution.h"
 
 namespace epuzzle
@@ -15,7 +15,7 @@ namespace epuzzle
     class Solver
     {
     public:
-        static std::unique_ptr<Solver> create(SolverConfig, PuzzleData);
+        static std::unique_ptr<Solver> create(SolverConfig, PuzzleDefinition);
         virtual ~Solver() = default;
 
         // Parameter object. The callback executes in solve()'s calling thread. Return false to cancel the operation.

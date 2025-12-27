@@ -7,10 +7,10 @@ namespace epuzzle::tests
         using BFConfig = SolverConfig::BruteForceConfig;
         using Method = SolverConfig::SolvingMethod;
         using ExecPolicy = SolverConfig::BruteForceConfig::ExecPolicy;
-        using Fact = PuzzleData::Fact;
-        using Comparison = PuzzleData::Comparison;
-        using Relation = PuzzleData::Comparison::Relation;
-        using ConstraintDefs = std::vector<std::variant<PuzzleData::Fact, PuzzleData::Comparison>>;
+        using Fact = PuzzleDefinition::Fact;
+        using Comparison = PuzzleDefinition::Comparison;
+        using Relation = PuzzleDefinition::Comparison::Relation;
+        using ConstraintDefs = std::vector<std::variant<PuzzleDefinition::Fact, PuzzleDefinition::Comparison>>;
     }
 
     class SolverTests : public testing::TestWithParam<SolverConfig>
@@ -25,9 +25,9 @@ namespace epuzzle::tests
                 GTEST_SKIP() << "Reasoner implementation coming in next version!";
         }
 
-        static constexpr PuzzleData puzzle_2x2()
+        static constexpr PuzzleDefinition puzzle_2x2()
         {
-            return PuzzleData
+            return PuzzleDefinition
             {
                 { "NameA", "NameB" },
                 {
@@ -38,9 +38,9 @@ namespace epuzzle::tests
             };
         }
 
-        static constexpr PuzzleData puzzle_2x3()
+        static constexpr PuzzleDefinition puzzle_2x3()
         {
-            return PuzzleData
+            return PuzzleDefinition
             {
                 { "NameA", "NameB" },
                 {
@@ -52,9 +52,9 @@ namespace epuzzle::tests
             };
         }
 
-        static constexpr PuzzleData puzzle_3x2()
+        static constexpr PuzzleDefinition puzzle_3x2()
         {
-            return PuzzleData
+            return PuzzleDefinition
             {
                 { "NameA", "NameB", "NameC" },
                 {
@@ -65,9 +65,9 @@ namespace epuzzle::tests
             };
         }
 
-        static constexpr PuzzleData puzzle_3x3()
+        static constexpr PuzzleDefinition puzzle_3x3()
         {
-            return PuzzleData
+            return PuzzleDefinition
             {
                 { "NameA", "NameB", "NameC"},
                 {
@@ -79,12 +79,12 @@ namespace epuzzle::tests
             };
         }
 
-        auto solve(PuzzleData&& data, ConstraintDefs&& constraints)
+        auto solve(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints)
         {
-            data.constraints = std::move(constraints);
+            puzzle.constraints = std::move(constraints);
             std::unique_ptr<Solver> solver;
             std::vector<PuzzleSolution> solutions;
-            EXPECT_NO_THROW(solver = Solver::create(GetParam(), std::move(data)));
+            EXPECT_NO_THROW(solver = Solver::create(GetParam(), std::move(puzzle)));
             if (solver)
             {
                 EXPECT_NO_THROW(solutions = solver->solve({}));
@@ -92,14 +92,14 @@ namespace epuzzle::tests
             return solutions;
         }
 
-        bool noSolutionFor(PuzzleData&& data, ConstraintDefs&& constraints)
+        bool noSolutionFor(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints)
         {
-            return solve(std::move(data), std::move(constraints)).empty();
+            return solve(std::move(puzzle), std::move(constraints)).empty();
         }
 
-        bool hasSolutionSet(PuzzleData&& data, ConstraintDefs&& constraints, std::vector<PuzzleSolution>&& expectedSolutions)
+        bool hasSolutionSet(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints, std::vector<PuzzleSolution>&& expectedSolutions)
         {
-            auto solutions = solve(std::move(data), std::move(constraints));
+            auto solutions = solve(std::move(puzzle), std::move(constraints));
             EXPECT_EQ(solutions.size(), expectedSolutions.size());
 
             auto compareSolutions = [](const PuzzleSolution& l, const PuzzleSolution& r)

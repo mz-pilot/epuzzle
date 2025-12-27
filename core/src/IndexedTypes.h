@@ -1,5 +1,5 @@
 #pragma once
-#include "epuzzle/PuzzleData.h"
+#include "epuzzle/PuzzleDefinition.h"
 
 namespace epuzzle::details
 {
@@ -12,7 +12,7 @@ namespace epuzzle::details
     // Note: person - special attribute type (not so pretty, but very practical)
     static constexpr auto AttributeTypeID_person = AttributeTypeID{ std::numeric_limits<size_t>::max() };
 
-    using Relation = PuzzleData::Comparison::Relation;
+    using Relation = PuzzleDefinition::Comparison::Relation;
 
     struct Attribute
     {

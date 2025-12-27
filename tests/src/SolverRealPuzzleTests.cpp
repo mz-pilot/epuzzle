@@ -1,5 +1,5 @@
 #include "epuzzle/Solver.h"
-#include "epuzzle/PuzzleDataLoader.h"
+#include "epuzzle/PuzzleParser.h"
 #include "TestUtils.h"
 
 namespace epuzzle::tests
@@ -19,7 +19,7 @@ namespace epuzzle::tests
         {
             std::unique_ptr<Solver> solver;
             std::vector<PuzzleSolution> solutions;
-            EXPECT_NO_THROW(solver = Solver::create(GetParam(), puzzleDataFromFile(test_utils::puzzlePath(fileName))));
+            EXPECT_NO_THROW(solver = Solver::create(GetParam(), parseFile(test_utils::puzzlePath(fileName))));
             if (solver)
             {
                 EXPECT_NO_THROW(solutions = solver->solve({}));
@@ -53,7 +53,7 @@ namespace epuzzle::tests
     {
         std::unique_ptr<Solver> solver;
         // Use hard puzzle with long compute (weeks)
-        ASSERT_NO_THROW(solver = Solver::create(GetParam(), puzzleDataFromFile(test_utils::puzzlePath("six_houses.toml"))));
+        ASSERT_NO_THROW(solver = Solver::create(GetParam(), parseFile(test_utils::puzzlePath("six_houses.toml"))));
         ASSERT_TRUE(static_cast<bool>(solver));
         using msec = std::chrono::milliseconds;
         utils::Stopwatch sw;

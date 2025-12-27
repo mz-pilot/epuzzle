@@ -1,9 +1,9 @@
-#include "epuzzle/PuzzleDataLoader.h"
+#include "epuzzle/PuzzleParser.h"
 
 namespace epuzzle::tests
 {
 
-    TEST(PuzzleDataLoaderTests, LoadFromTextOk)
+    TEST(PuzzleParserTests, LoadFromTextOk)
     {
         static constexpr std::string_view text = R"(
             #
@@ -73,15 +73,15 @@ namespace epuzzle::tests
             second = { hobby = "!books" }
         )";
 
-        using Fact = PuzzleData::Fact;
-        using Comparison = PuzzleData::Comparison;
-        using Relation = PuzzleData::Comparison::Relation;
+        using Fact = PuzzleDefinition::Fact;
+        using Comparison = PuzzleDefinition::Comparison;
+        using Relation = PuzzleDefinition::Comparison::Relation;
 
-        PuzzleData parsedData;
-        ASSERT_NO_THROW(parsedData = puzzleDataFromText(text));
+        PuzzleDefinition parsedData;
+        ASSERT_NO_THROW(parsedData = parseText(text));
 
         constexpr bool negate = true;
-        const PuzzleData etalonData =
+        const PuzzleDefinition etalonData =
         {
             { "Anya", "Katya", "Lena", "Masha" },
             {

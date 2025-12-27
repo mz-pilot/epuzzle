@@ -1,7 +1,7 @@
 #include <tomlplusplus/toml.hpp>
 
 #include "epuzzle/Exceptions.h"
-#include "epuzzle/PuzzleDataLoader.h"
+#include "epuzzle/PuzzleParser.h"
 
 #define ENSURE_PARSE(expression, message) \
         ENSURE_SPEC(expression, PuzzleDataParseError, message)
@@ -21,11 +21,11 @@ namespace
             "': " << version << "! minSupportedVersion = " << minSupportedVersion << ", maxSupportedVersion = " << maxSupportedVersion);
     }
 
-    PuzzleData parseTomlRoot(const toml::table& root)
+    PuzzleDefinition parseTomlRoot(const toml::table& root)
     {
         checkFormatVersion(root);
 
-        PuzzleData data;
+        PuzzleDefinition data;
         using namespace std::string_view_literals;
         root.for_each([&data](const toml::key& key, const toml::array& arr)
             {
@@ -45,9 +45,9 @@ namespace
                 {
                     arr.for_each([&data](const toml::table& constraintTable)
                         {
-                            auto readAttr = [&constraintTable](std::string_view name) -> PuzzleData::Attribute
+                            auto readAttr = [&constraintTable](std::string_view name) -> PuzzleDefinition::Attribute
                                 {
-                                    PuzzleData::Attribute attr;
+                                    PuzzleDefinition::Attribute attr;
                                     const auto inlineTable = constraintTable[name].as_table();
                                     if (inlineTable && inlineTable->size() == 1)
                                     {
@@ -60,7 +60,7 @@ namespace
                             const auto type = constraintTable["type"].value_or(""sv);
                             if (type == "fact")
                             {
-                                PuzzleData::Fact fact{ readAttr("first"), readAttr("second") };
+                                PuzzleDefinition::Fact fact{ readAttr("first"), readAttr("second") };
                                 if (fact.second.value.length() > 0 && fact.second.value[0] == '!')
                                 {
                                     fact.secondNegate = true;
@@ -75,7 +75,7 @@ namespace
                                     "'compare_by' parameter is abscent for constraint type 'comparison'! table source: " << constraintTable.source());
 
                                 const auto relStr = constraintTable["relation"].value_or(""sv);
-                                using Relation = PuzzleData::Comparison::Relation;
+                                using Relation = PuzzleDefinition::Comparison::Relation;
                                 Relation rel;
                                 if (relStr == "immediate_left")    rel = Relation::ImmediateLeft;
                                 else if (relStr == "immediate_right")   rel = Relation::ImmediateRight;
@@ -84,7 +84,7 @@ namespace
                                 else if (relStr == "after")             rel = Relation::After;
                                 else ENSURE_PARSE(false, "Unsupported relation type: " << relStr << ", table source: " << constraintTable.source());
 
-                                data.constraints.emplace_back(std::in_place_type<PuzzleData::Comparison>,
+                                data.constraints.emplace_back(std::in_place_type<PuzzleDefinition::Comparison>,
                                     readAttr("first"), readAttr("second"), std::string(compareBy), rel);
                             }
                             else
@@ -102,7 +102,7 @@ namespace
 
 } // namespace
 
-    PuzzleData puzzleDataFromText(std::string_view text)
+    PuzzleDefinition parseText(std::string_view text)
     {
         try
         {
@@ -118,7 +118,7 @@ namespace
         }
     }
 
-    PuzzleData puzzleDataFromFile(std::string_view filePath)
+    PuzzleDefinition parseFile(std::string_view filePath)
     {
         try
         {

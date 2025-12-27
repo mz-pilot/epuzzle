@@ -8,7 +8,7 @@ namespace epuzzle
 {
 
     // Data Transfer Object (DTO) - input configuration: attributes descriptions, possible values and configurations constraints.
-    struct PuzzleData
+    struct PuzzleDefinition
     {
         // Example: type = "color", values = "pink", "blue", "green", "violet" (all possible)
         struct AttributeDescription
@@ -63,8 +63,8 @@ namespace epuzzle
         std::vector<std::variant<Fact, Comparison>> constraints;
     };
 
-    void normalize(PuzzleData&);
-    void validate(const PuzzleData&); // throw PuzzleDataLogicError
+    void normalize(PuzzleDefinition&);
+    void validate(const PuzzleDefinition&); // throw PuzzleDataLogicError
 
-    std::ostream& operator<<(std::ostream&, const PuzzleData&);
+    std::ostream& operator<<(std::ostream&, const PuzzleDefinition&);
 }

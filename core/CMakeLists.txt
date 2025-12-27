@@ -5,8 +5,8 @@ target_sources(epuzzle_core
     PUBLIC
         include/epuzzle/Exceptions.h
         include/epuzzle/Solver.h
-        include/epuzzle/PuzzleData.h
-        include/epuzzle/PuzzleDataLoader.h
+        include/epuzzle/PuzzleDefinition.h
+        include/epuzzle/PuzzleParser.h
         include/epuzzle/PuzzleSolution.h
         include/epuzzle/SolverConfig.h
     PRIVATE
@@ -34,8 +34,8 @@ target_sources(epuzzle_core
         src/IndexedTypes.h
         src/Solver.cpp
         src/pch.h
-        src/PuzzleData.cpp
-        src/PuzzleDataLoader.cpp
+        src/PuzzleDefinition.cpp
+        src/PuzzleParser.cpp
         src/PuzzleSolution.cpp
         src/SolverConfig.cpp
 )
