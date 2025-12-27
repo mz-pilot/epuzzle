@@ -1,5 +1,5 @@
 #pragma once
-#include "IndexedPuzzleData.h"
+#include "PuzzleModel.h"
 #include "BruteForceChecker.h"
 #include "ICandidatesSpace.h"
 
@@ -9,22 +9,22 @@ namespace epuzzle::details
     class BruteForceContext
     {
     public:
-        BruteForceContext(IndexedPuzzleData&& indexedData, bool usePrefiltering)
-            : m_data(std::move(indexedData))
-            , m_checker(m_data.attrTypeCount(), m_data.constraintDefs(), usePrefiltering)
+        BruteForceContext(PuzzleModel&& puzzleModel, bool usePrefiltering)
+            : m_model(std::move(puzzleModel))
+            , m_checker(m_model.attrTypeCount(), m_model.constraintDefs(), usePrefiltering)
         {
             using namespace std::placeholders;
             // see BruteForceChecker class description
-            m_space = ICandidatesSpace::create(m_data.personCount(), m_data.attrTypeCount(),
+            m_space = ICandidatesSpace::create(m_model.personCount(), m_model.attrTypeCount(),
                 std::bind(&BruteForceChecker::prefilterCheck, &m_checker, _1, _2, _3));
         }
 
-        const IndexedPuzzleData& indexedData() const { return m_data; }
+        const PuzzleModel& puzzleModel() const { return m_model; }
         const BruteForceChecker& checker() const { return m_checker; }
         const ICandidatesSpace& space() const { return *m_space; }
 
     private:
-        IndexedPuzzleData m_data;
+        PuzzleModel m_model;
         BruteForceChecker m_checker;
         std::unique_ptr<ICandidatesSpace> m_space;
     };

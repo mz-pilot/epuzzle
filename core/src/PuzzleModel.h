@@ -4,10 +4,10 @@
 namespace epuzzle::details
 {
     // Stores original PuzzleDefinition, indexing it for best performance.
-    class IndexedPuzzleData
+    class PuzzleModel
     {
     public:
-        explicit IndexedPuzzleData(PuzzleDefinition);
+        explicit PuzzleModel(PuzzleDefinition);
 
         size_t personCount() const;
         size_t attrTypeCount() const;

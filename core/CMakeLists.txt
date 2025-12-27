@@ -4,10 +4,10 @@ add_library(epuzzle_core STATIC)
 target_sources(epuzzle_core
     PUBLIC
         include/epuzzle/Exceptions.h
-        include/epuzzle/Solver.h
         include/epuzzle/PuzzleDefinition.h
         include/epuzzle/PuzzleParser.h
         include/epuzzle/PuzzleSolution.h
+        include/epuzzle/Solver.h
         include/epuzzle/SolverConfig.h
     PRIVATE
         src/BruteForce/BruteForceChecker.cpp
@@ -25,18 +25,18 @@ target_sources(epuzzle_core
         src/BruteForce/ParallelBruteForcer.cpp
         src/BruteForce/ParallelBruteForcer.h
         src/BruteForce/SpaceParallelDistributor.h
-        src/Reasoning/Reasoner.cpp
-        src/Reasoning/Reasoner.h
-        src/IndexedPuzzleData.cpp
-        src/IndexedPuzzleData.h
         src/IndexedSolution.cpp
         src/IndexedSolution.h
         src/IndexedTypes.h
-        src/Solver.cpp
         src/pch.h
         src/PuzzleDefinition.cpp
+        src/PuzzleModel.cpp
+        src/PuzzleModel.h
         src/PuzzleParser.cpp
         src/PuzzleSolution.cpp
+        src/Reasoning/Reasoner.cpp
+        src/Reasoning/Reasoner.h
+        src/Solver.cpp
         src/SolverConfig.cpp
 )
 

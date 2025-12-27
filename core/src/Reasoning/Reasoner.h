@@ -1,6 +1,6 @@
 #pragma once
 #include "epuzzle/Solver.h"
-#include "IndexedPuzzleData.h"
+#include "PuzzleModel.h"
 
 namespace epuzzle::details
 {
@@ -8,12 +8,12 @@ namespace epuzzle::details
     class Reasoner final : public Solver
     {
     public:
-        explicit Reasoner(IndexedPuzzleData&&);
+        explicit Reasoner(PuzzleModel&&);
 
         std::vector<PuzzleSolution> solve(SolveOptions) override;
 
     private:
-        const IndexedPuzzleData m_data;
+        const PuzzleModel m_puzzleModel;
     };
 
 }

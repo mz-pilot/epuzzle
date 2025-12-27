@@ -3,8 +3,8 @@
 namespace epuzzle::details
 {
 
-    Reasoner::Reasoner(IndexedPuzzleData&& data)
-        : m_data(std::move(data))
+    Reasoner::Reasoner(PuzzleModel&& puzzleModel)
+        : m_puzzleModel(std::move(puzzleModel))
     {
     }
 

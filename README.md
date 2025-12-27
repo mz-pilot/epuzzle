@@ -397,7 +397,7 @@ namespace epuzzle::details
     class Reasoner final : public Solver
     {
     public:
-        explicit Reasoner(IndexedPuzzleData&&);
+        explicit Reasoner(PuzzleModel&&);
         std::vector<PuzzleSolution> solve(SolveOptions) override;
     };
 }

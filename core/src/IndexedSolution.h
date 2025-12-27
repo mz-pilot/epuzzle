@@ -1,6 +1,6 @@
 #pragma once
 #include "epuzzle/PuzzleSolution.h"
-#include "IndexedPuzzleData.h"
+#include "PuzzleModel.h"
 
 namespace epuzzle::details
 {
@@ -12,5 +12,5 @@ namespace epuzzle::details
         utils::IndexedVector<AttributeTypeID, AttributeAssignment> attributes;
     };
 
-    PuzzleSolution toPuzzleSolution(const IndexedSolution&, const IndexedPuzzleData&);
+    PuzzleSolution toPuzzleSolution(const IndexedSolution&, const PuzzleModel&);
 }

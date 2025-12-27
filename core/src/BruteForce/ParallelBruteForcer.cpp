@@ -39,7 +39,7 @@ namespace epuzzle::details
                         // Hot cycle!
                         if (checker.mainCheck(*itCandidate)) [[unlikely]]
                         {
-                            threadResult.push_back(toPuzzleSolution(itCandidate->getIndexedSolution(), m_ctx.indexedData()));
+                            threadResult.push_back(toPuzzleSolution(itCandidate->getIndexedSolution(), m_ctx.puzzleModel()));
                         }
                         localTracker.update();
                     } while (itCandidate->next());

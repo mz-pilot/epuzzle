@@ -4,9 +4,9 @@
 
 namespace epuzzle::details
 {
-    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForceConfig& config, IndexedPuzzleData&& indexedData)
+    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForceConfig& config, PuzzleModel&& puzzleModel)
     {
-        BruteForceContext context{ std::move(indexedData), config.prefilter };
+        BruteForceContext context{ std::move(puzzleModel), config.prefilter };
 
         if (config.execution == SolverConfig::BruteForceConfig::ExecPolicy::Parallel)
         {

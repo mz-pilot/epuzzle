@@ -22,7 +22,7 @@ namespace epuzzle::details
                 // Hot cycle!
                 if (m_ctx.checker().mainCheck(*itCandidate)) [[unlikely]]
                 {
-                    solutions.push_back(toPuzzleSolution(itCandidate->getIndexedSolution(), m_ctx.indexedData()));
+                    solutions.push_back(toPuzzleSolution(itCandidate->getIndexedSolution(), m_ctx.puzzleModel()));
                 }
                 if (!tracker.update()) [[unlikely]] // user canceled
                     return solutions;

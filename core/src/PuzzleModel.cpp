@@ -1,9 +1,9 @@
-#include "IndexedPuzzleData.h"
+#include "PuzzleModel.h"
 
 namespace epuzzle::details
 {
-    IndexedPuzzleData::IndexedPuzzleData(PuzzleDefinition data)
-        : m_definition(std::move(data))
+    PuzzleModel::PuzzleModel(PuzzleDefinition definition)
+        : m_definition(std::move(definition))
     {
         // helper lambdas
 
@@ -68,32 +68,32 @@ namespace epuzzle::details
         }
     }
 
-    size_t IndexedPuzzleData::personCount() const
+    size_t PuzzleModel::personCount() const
     {
         return m_definition.persons.size();
     }
 
-    size_t IndexedPuzzleData::attrTypeCount() const
+    size_t PuzzleModel::attrTypeCount() const
     {
         return m_definition.attributes.size();
     }
 
-    const std::vector<IndexedConstraint>& IndexedPuzzleData::constraintDefs() const
+    const std::vector<IndexedConstraint>& PuzzleModel::constraintDefs() const
     {
         return m_indexedConstraints;
     }
 
-    std::string_view IndexedPuzzleData::personName(PersonID id) const
+    std::string_view PuzzleModel::personName(PersonID id) const
     {
         return m_definition.persons[id.value()];
     }
 
-    std::string_view IndexedPuzzleData::attrTypeName(AttributeTypeID typeId) const
+    std::string_view PuzzleModel::attrTypeName(AttributeTypeID typeId) const
     {
         return m_definition.attributes[typeId.value()].type;
     }
 
-    std::string_view IndexedPuzzleData::attrValueName(AttributeTypeID typeId, AttributeValueID valueId) const
+    std::string_view PuzzleModel::attrValueName(AttributeTypeID typeId, AttributeValueID valueId) const
     {
         return m_definition.attributes[typeId.value()].values[valueId.value()];
     }
