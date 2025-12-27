@@ -11,7 +11,7 @@ namespace epuzzle::details
 
     std::vector<PuzzleSolution> ParallelBruteForcer::solve(SolveOptions opts)
     {
-        const auto totalCandidates = m_ctx.space().candidatesCount();
+        const auto totalCandidates = m_ctx.searchSpace().candidatesCount();
         if (totalCandidates == 0)
             return handleNoCandidates(opts);
 
@@ -29,15 +29,15 @@ namespace epuzzle::details
                 ThreadResult threadResult;
                 auto localTracker = atomicTracker.getLocalTracker();
 
-                const auto& checker = m_ctx.checker();
-                while (auto itCandidate = spaceDistributor.take(m_ctx.space()))
+                const auto& validator = m_ctx.validator();
+                while (auto itCandidate = spaceDistributor.take(m_ctx.searchSpace()))
                 {
                     if (st.stop_requested()) [[unlikely]]
                         return threadResult;
                     do
                     {
                         // Hot cycle!
-                        if (checker.mainCheck(*itCandidate)) [[unlikely]]
+                        if (validator.isSolutionCandidateValid(*itCandidate)) [[unlikely]]
                         {
                             threadResult.push_back(toPuzzleSolution(itCandidate->getSolutionModel(), m_ctx.puzzleModel()));
                         }
@@ -72,7 +72,7 @@ namespace epuzzle::details
 
     void ParallelBruteForcer::handleProgressFinish(const SolveOptions& opts, std::uint64_t progressResult) const
     {
-        const auto totalCandidates = m_ctx.space().candidatesCount();
+        const auto totalCandidates = m_ctx.searchSpace().candidatesCount();
         opts.progressCallback(totalCandidates, totalCandidates);
 
         ENSURE(totalCandidates == progressResult, "All workers are finished but progress is not completed!" <<

@@ -3,7 +3,7 @@
 
 namespace epuzzle::details
 {
-    // Navigates through the candidate space, tracking progress, and provides access to the current candidate
+    // Navigates through the SearchSpace and provides access to the current "solution candidate"
     class ICandidateIterator
     {
     public:

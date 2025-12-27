@@ -10,13 +10,13 @@ target_sources(epuzzle_core
         include/epuzzle/Solver.h
         include/epuzzle/SolverConfig.h
     PRIVATE
-        src/BruteForce/BruteForceChecker.cpp
-        src/BruteForce/BruteForceChecker.h
         src/BruteForce/BruteForceContext.h
         src/BruteForce/BruteForceFactory.cpp
         src/BruteForce/BruteForceFactory.h
         src/BruteForce/BruteForcer.cpp
         src/BruteForce/BruteForcer.h
+        src/BruteForce/Validator.cpp
+        src/BruteForce/Validator.h
         src/BruteForce/ICandidateIterator.h
         src/BruteForce/ICandidatesSpace.cpp
         src/BruteForce/ICandidatesSpace.h

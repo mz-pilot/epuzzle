@@ -1,8 +1,8 @@
-#include "BruteForceChecker.h"
+#include "Validator.h"
 
 namespace epuzzle::details
 {
-    BruteForceChecker::BruteForceChecker(size_t attrTypeCount, const std::vector<ConstraintModel>& constraints, bool needPrefiltering)
+    Validator::Validator(size_t attrTypeCount, const std::vector<ConstraintModel>& constraints, bool needPrefiltering)
         : m_prefilters(attrTypeCount)
     {
         // reserve space for all constraints at once, it's not so much
@@ -24,7 +24,7 @@ namespace epuzzle::details
         std::ranges::sort(m_constraintCheckers, {}, &IConstraint::complexity);
     }
 
-    bool BruteForceChecker::prefilterCheck(AttributeTypeID typeId, AttributeValueID valueId, PersonID personId) const
+    bool Validator::isAssignmentValid(AttributeTypeID typeId, AttributeValueID valueId, PersonID personId) const
     {
         for (const auto& property : m_prefilters[typeId])
         {
@@ -34,12 +34,12 @@ namespace epuzzle::details
         return true;
     }
 
-    bool BruteForceChecker::mainCheck(const ICandidateIterator& candidate) const
+    bool Validator::isSolutionCandidateValid(const ICandidateIterator& solutionCandidate) const
     {
         // Hot path!
         for (const auto& constraintChecker : m_constraintCheckers)
         {
-            if (!constraintChecker->satisfies(candidate)) [[likely]]
+            if (!constraintChecker->satisfies(solutionCandidate)) [[likely]]
                 return false;
         }
         [[unlikely]]
