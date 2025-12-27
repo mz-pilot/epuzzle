@@ -10,21 +10,23 @@ target_sources(epuzzle_core
         include/epuzzle/Solver.h
         include/epuzzle/SolverConfig.h
     PRIVATE
-        src/BruteForce/BruteForceContext.h
-        src/BruteForce/BruteForceFactory.cpp
-        src/BruteForce/BruteForceFactory.h
-        src/BruteForce/BruteForcer.cpp
-        src/BruteForce/BruteForcer.h
-        src/BruteForce/Validator.cpp
-        src/BruteForce/Validator.h
-        src/BruteForce/ICandidateIterator.h
-        src/BruteForce/ICandidatesSpace.cpp
-        src/BruteForce/ICandidatesSpace.h
-        src/BruteForce/IConstraint.cpp
-        src/BruteForce/IConstraint.h
-        src/BruteForce/ParallelBruteForcer.cpp
-        src/BruteForce/ParallelBruteForcer.h
-        src/BruteForce/SpaceParallelDistributor.h
+        src/bruteforce/BruteForceContext.h
+        src/bruteforce/BruteForceFactory.cpp
+        src/bruteforce/BruteForceFactory.h
+        src/bruteforce/BruteForcer.cpp
+        src/bruteforce/BruteForcer.h
+        src/bruteforce/Validator.cpp
+        src/bruteforce/Validator.h
+        src/bruteforce/ICandidateIterator.h
+        src/bruteforce/ICandidatesSpace.cpp
+        src/bruteforce/ICandidatesSpace.h
+        src/bruteforce/IConstraint.cpp
+        src/bruteforce/IConstraint.h
+        src/bruteforce/ParallelBruteForcer.cpp
+        src/bruteforce/ParallelBruteForcer.h
+        src/bruteforce/SpaceParallelDistributor.h
+        src/deductive/Reasoner.cpp
+        src/deductive/Reasoner.h
         src/IndexedTypes.h
         src/pch.h
         src/PuzzleDefinition.cpp
@@ -32,8 +34,6 @@ target_sources(epuzzle_core
         src/PuzzleModel.h
         src/PuzzleParser.cpp
         src/PuzzleSolution.cpp
-        src/Reasoning/Reasoner.cpp
-        src/Reasoning/Reasoner.h
         src/SolutionModel.cpp
         src/SolutionModel.h
         src/Solver.cpp

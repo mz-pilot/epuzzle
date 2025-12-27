@@ -1,4 +1,4 @@
-#include "BruteForce/SpaceParallelDistributor.h"
+#include "bruteforce/SpaceParallelDistributor.h"
 
 namespace epuzzle::tests
 {

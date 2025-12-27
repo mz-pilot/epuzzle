@@ -1,5 +1,5 @@
-#include "BruteForce/BruteForceFactory.h"
-#include "Reasoning/Reasoner.h"
+#include "bruteforce/BruteForceFactory.h"
+#include "deductive/Reasoner.h"
 
 namespace epuzzle
 {
