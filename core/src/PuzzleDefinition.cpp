@@ -21,7 +21,7 @@ namespace epuzzle
     }
 
 #define ENSURE_VALID_EX(expression, message) \
-        ENSURE_SPEC(expression, PuzzleDataLogicError, "Please, fix the original content of epuzzle::PuzzleDefinition! " << message)
+        ENSURE_SPEC(expression, PuzzleLogicError, "Please, fix the original content of epuzzle::PuzzleDefinition! " << message)
 
 #define ENSURE_VALID(expression) \
         ENSURE_VALID_EX(expression, "")

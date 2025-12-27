@@ -7,8 +7,8 @@ namespace epuzzle
 
     class SolverConfigError final : public std::runtime_error { using std::runtime_error::runtime_error; };
 
-    class PuzzleDataParseError final : public std::runtime_error { using std::runtime_error::runtime_error; };
+    class PuzzleSyntaxError final : public std::runtime_error { using std::runtime_error::runtime_error; };
 
-    class PuzzleDataLogicError final : public std::logic_error { using std::logic_error::logic_error; };
+    class PuzzleLogicError final : public std::logic_error { using std::logic_error::logic_error; };
 
 }

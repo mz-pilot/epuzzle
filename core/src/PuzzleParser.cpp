@@ -4,7 +4,7 @@
 #include "epuzzle/PuzzleParser.h"
 
 #define ENSURE_PARSE(expression, message) \
-        ENSURE_SPEC(expression, PuzzleDataParseError, message)
+        ENSURE_SPEC(expression, PuzzleSyntaxError, message)
 
 namespace epuzzle
 {
@@ -114,7 +114,7 @@ namespace
         }
         catch (const std::exception& e)
         {
-            throw PuzzleDataParseError(e.what());
+            throw PuzzleSyntaxError(e.what());
         }
     }
 
@@ -130,7 +130,7 @@ namespace
         }
         catch (const std::exception& e)
         {
-            throw PuzzleDataParseError(std::format("{}; filePath = {}", e.what(), filePath));
+            throw PuzzleSyntaxError(std::format("{}; filePath = {}", e.what(), filePath));
         }
 
     }

@@ -64,7 +64,7 @@ namespace epuzzle
     };
 
     void normalize(PuzzleDefinition&);
-    void validate(const PuzzleDefinition&); // throw PuzzleDataLogicError
+    void validate(const PuzzleDefinition&); // throw PuzzleLogicError
 
     std::ostream& operator<<(std::ostream&, const PuzzleDefinition&);
 }

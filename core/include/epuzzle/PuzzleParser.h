@@ -5,7 +5,7 @@
 
 namespace epuzzle
 {
-    PuzzleDefinition parseText(std::string_view text); // throw PuzzleDataParseError
+    PuzzleDefinition parseText(std::string_view text); // throw PuzzleSyntaxError
 
-    PuzzleDefinition parseFile(std::string_view filePath); // throw PuzzleDataParseError
+    PuzzleDefinition parseFile(std::string_view filePath); // throw PuzzleSyntaxError
 }
