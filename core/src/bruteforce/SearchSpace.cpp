@@ -1,5 +1,5 @@
 #include "epuzzle/Exceptions.h"
-#include "ICandidatesSpace.h"
+#include "SearchSpace.h"
 
 namespace epuzzle::details::bruteforce
 {
@@ -90,7 +90,7 @@ namespace
 
     // -------------------------------- helper functions for class CandidatesSpaceImpl  --------------------------------------
 
-    AttributeSpace makeAttributeSpace(size_t personCount, size_t attrTypeCount, ICandidatesSpace::AllowFilter filter)
+    AttributeSpace makeAttributeSpace(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter filter)
     {
         auto makeAttrPermutations = [&filter, personCount](AttributeTypeID typeId)
             {
@@ -143,7 +143,7 @@ namespace
 
     // -------------------------------- class CandidatesSpaceImpl  ------------------------------------------------
 
-    class CandidatesSpaceImpl final : public ICandidatesSpace
+    class CandidatesSpaceImpl final : public SearchSpace
     {
     public:
         explicit CandidatesSpaceImpl(AttributeSpace&& attributes)
@@ -172,9 +172,9 @@ namespace
 
 } // namespace
 
-        // -------------------------------- class ICandidatesSpace ------------------------------------------------
+        // -------------------------------- class SearchSpace ------------------------------------------------
 
-    std::unique_ptr<ICandidatesSpace> ICandidatesSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
+    std::unique_ptr<SearchSpace> SearchSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
     {
         return std::make_unique<CandidatesSpaceImpl>(makeAttributeSpace(personCount, attrTypeCount, std::move(filter)));
     }

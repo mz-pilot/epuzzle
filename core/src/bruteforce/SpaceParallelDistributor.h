@@ -1,5 +1,5 @@
 #pragma once
-#include "ICandidatesSpace.h"
+#include "SearchSpace.h"
 
 namespace epuzzle::details::bruteforce
 {
@@ -11,7 +11,7 @@ namespace epuzzle::details::bruteforce
         {
         }
 
-        std::unique_ptr<ICandidateIterator> take(const ICandidatesSpace& space)
+        std::unique_ptr<ICandidateIterator> take(const SearchSpace& space)
         {
             std::uint64_t first = 0;
             std::uint64_t count = 0;

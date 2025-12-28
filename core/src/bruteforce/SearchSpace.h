@@ -4,14 +4,14 @@
 namespace epuzzle::details::bruteforce
 {
     // Space of potential solution candidates
-    class ICandidatesSpace
+    class SearchSpace
     {
     public:
         // AllowFilter can exclude obviously invalid combinations of parameters (should return false in that case)
         using AllowFilter = std::function<bool(AttributeTypeID, AttributeValueID, PersonID)>;
 
-        static std::unique_ptr<ICandidatesSpace> create(size_t personCount, size_t attrTypeCount, AllowFilter);
-        virtual ~ICandidatesSpace() = default;
+        static std::unique_ptr<SearchSpace> create(size_t personCount, size_t attrTypeCount, AllowFilter);
+        virtual ~SearchSpace() = default;
 
         virtual std::uint64_t candidatesCount() const = 0;
         // empty unique_ptr if no candidates
