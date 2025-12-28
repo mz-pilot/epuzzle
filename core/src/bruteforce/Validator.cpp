@@ -34,7 +34,7 @@ namespace epuzzle::details::bruteforce
         return true;
     }
 
-    bool Validator::isSolutionCandidateValid(const ICandidateIterator& solutionCandidate) const
+    bool Validator::isSolutionCandidateValid(const SearchSpaceCursor& solutionCandidate) const
     {
         // Hot path!
         for (const auto& constraintChecker : m_constraintCheckers)

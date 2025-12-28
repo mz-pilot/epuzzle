@@ -8,14 +8,14 @@ namespace
 {
     using AttributeSpace = utils::IndexedVector<AttributeTypeID, std::vector<Assignment>>; // All attributes actual permutations
 
-    // -------------------------------- class IteratorImpl ------------------------------------------------
+    // -------------------------------- class CursorImpl ------------------------------------------------
 
-    class IteratorImpl final : public ICandidateIterator
+    class CursorImpl final : public SearchSpaceCursor
     {
     public:
-        IteratorImpl(const AttributeSpace& attrs, std::uint64_t firstCandidate, std::uint64_t count)
+        CursorImpl(const AttributeSpace& attrs, std::uint64_t firstCandidate, std::uint64_t count)
             : m_attributes(attrs)
-            , m_remainingCandidates(count) // parameters checked in CandidatesSpaceImpl::createIterator
+            , m_remainingCandidates(count) // parameters checked in SearchSpaceImpl::createCursor
         {
             m_context.reserve(m_attributes.size());
 
@@ -88,7 +88,7 @@ namespace
         std::uint64_t m_remainingCandidates = 0;
     };
 
-    // -------------------------------- helper functions for class CandidatesSpaceImpl  --------------------------------------
+    // -------------------------------- helper functions for class SearchSpaceImpl  --------------------------------------
 
     AttributeSpace makeAttributeSpace(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter filter)
     {
@@ -141,28 +141,28 @@ namespace
         return totalCandidates;
     }
 
-    // -------------------------------- class CandidatesSpaceImpl  ------------------------------------------------
+    // -------------------------------- class SearchSpaceImpl  ------------------------------------------------
 
-    class CandidatesSpaceImpl final : public SearchSpace
+    class SearchSpaceImpl final : public SearchSpace
     {
     public:
-        explicit CandidatesSpaceImpl(AttributeSpace&& attributes)
+        explicit SearchSpaceImpl(AttributeSpace&& attributes)
             : m_attributes(std::move(attributes))
             , m_totalCandidates(calcTotalCandidates(m_attributes))
         {
         }
 
-        std::uint64_t candidatesCount() const override
+        std::uint64_t totalCandidates() const override
         {
             return m_totalCandidates;
         }
 
-        std::unique_ptr<ICandidateIterator> createIterator(std::uint64_t firstCandidate, std::uint64_t count) const override
+        std::unique_ptr<SearchSpaceCursor> createCursor(std::uint64_t offset, std::uint64_t count) const override
         {
-            if (m_totalCandidates == 0 || count == 0 || m_totalCandidates < firstCandidate || m_totalCandidates - firstCandidate < count)
+            if (m_totalCandidates == 0 || count == 0 || m_totalCandidates < offset || m_totalCandidates - offset < count)
                 return {};
 
-            return std::make_unique<IteratorImpl>(m_attributes, firstCandidate, count);
+            return std::make_unique<CursorImpl>(m_attributes, offset, count);
         }
 
     private:
@@ -176,6 +176,6 @@ namespace
 
     std::unique_ptr<SearchSpace> SearchSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
     {
-        return std::make_unique<CandidatesSpaceImpl>(makeAttributeSpace(personCount, attrTypeCount, std::move(filter)));
+        return std::make_unique<SearchSpaceImpl>(makeAttributeSpace(personCount, attrTypeCount, std::move(filter)));
     }
 }

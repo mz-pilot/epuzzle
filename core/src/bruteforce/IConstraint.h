@@ -1,5 +1,5 @@
 #pragma once
-#include "ICandidateIterator.h"
+#include "SearchSpaceCursor.h"
 
 namespace epuzzle::details::bruteforce
 {
@@ -11,7 +11,7 @@ namespace epuzzle::details::bruteforce
         virtual ~IConstraint() = default;
 
         virtual size_t complexity() const = 0;
-        virtual bool satisfies(const ICandidateIterator& candidate) const = 0;
+        virtual bool satisfies(const SearchSpaceCursor& solutionCandidate) const = 0;
     };
 
 }

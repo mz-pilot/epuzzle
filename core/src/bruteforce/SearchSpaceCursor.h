@@ -3,11 +3,11 @@
 
 namespace epuzzle::details::bruteforce
 {
-    // Navigates through the SearchSpace and provides access to the current "solution candidate"
-    class ICandidateIterator
+    // Navigates through the SearchSpace in some range and provides access to the current "solution candidate". 
+    class SearchSpaceCursor
     {
     public:
-        virtual ~ICandidateIterator() = default;
+        virtual ~SearchSpaceCursor() = default;
 
         [[nodiscard]] virtual bool next() = 0;
 

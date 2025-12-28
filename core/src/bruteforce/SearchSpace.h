@@ -1,9 +1,9 @@
 #pragma once
-#include "ICandidateIterator.h"
+#include "SearchSpaceCursor.h"
 
 namespace epuzzle::details::bruteforce
 {
-    // Space of potential solution candidates
+    // Space of potential solution candidates. Interface - because may be different implementations (with/without prefetch, etc).
     class SearchSpace
     {
     public:
@@ -13,8 +13,9 @@ namespace epuzzle::details::bruteforce
         static std::unique_ptr<SearchSpace> create(size_t personCount, size_t attrTypeCount, AllowFilter);
         virtual ~SearchSpace() = default;
 
-        virtual std::uint64_t candidatesCount() const = 0;
+        virtual std::uint64_t totalCandidates() const = 0;
         // empty unique_ptr if no candidates
-        [[nodiscard]] virtual std::unique_ptr<ICandidateIterator> createIterator(std::uint64_t firstCandidate, std::uint64_t count) const = 0;
+        [[nodiscard]] virtual std::unique_ptr<SearchSpaceCursor> createCursor(std::uint64_t offset, std::uint64_t count) const = 0;
+        [[nodiscard]] std::unique_ptr<SearchSpaceCursor> createCursor() const { return createCursor(0, totalCandidates()); }
     };
 }

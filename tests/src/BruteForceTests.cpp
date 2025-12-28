@@ -12,7 +12,7 @@ namespace epuzzle::tests
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);
         using namespace utils;
-        EXPECT_EQ(space->candidatesCount(), power(factorial(personCount), attrCount));
+        EXPECT_EQ(space->totalCandidates(), power(factorial(personCount), attrCount));
     }
 
     TEST(BruteForceTests, IterateAllWithDistributorOk)
@@ -21,7 +21,7 @@ namespace epuzzle::tests
         std::unique_ptr<SearchSpace> space;
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);
-        const auto totalCandidates = space->candidatesCount();
+        const auto totalCandidates = space->totalCandidates();
         SpaceParallelDistributor distributor{ totalCandidates };
 
         std::uint64_t iterated = 0;

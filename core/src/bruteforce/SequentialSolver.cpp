@@ -12,21 +12,20 @@ namespace epuzzle::details::bruteforce
     {
         std::vector<PuzzleSolution> solutions;
         constexpr auto minProgressCount = 1'000'000u;
-        const auto totalCandidates = m_ctx.searchSpace().candidatesCount();
-        utils::ProgressTracker tracker(totalCandidates, opts.progressInterval, minProgressCount, opts.progressCallback);
+        utils::ProgressTracker tracker(m_ctx.searchSpace().totalCandidates(), opts.progressInterval, minProgressCount, opts.progressCallback);
 
-        if (auto itCandidate = m_ctx.searchSpace().createIterator(0, totalCandidates))
+        if (auto cursor = m_ctx.searchSpace().createCursor())
         {
             do
             {
                 // Hot cycle!
-                if (m_ctx.validator().isSolutionCandidateValid(*itCandidate)) [[unlikely]]
+                if (m_ctx.validator().isSolutionCandidateValid(*cursor)) [[unlikely]]
                 {
-                    solutions.push_back(toPuzzleSolution(itCandidate->getSolutionModel(), m_ctx.puzzleModel()));
+                    solutions.push_back(toPuzzleSolution(cursor->getSolutionModel(), m_ctx.puzzleModel()));
                 }
                 if (!tracker.update()) [[unlikely]] // user canceled
                     return solutions;
-            } while (itCandidate->next());
+            } while (cursor->next());
         }
         else
             tracker.finish();

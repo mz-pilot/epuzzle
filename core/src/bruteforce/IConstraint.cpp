@@ -21,24 +21,24 @@ namespace
             else static_assert(false, "Need return complexity value for current TParams!");
         }
 
-        bool satisfies(const ICandidateIterator& candidate) const override
+        bool satisfies(const SearchSpaceCursor& solutionCandidate) const override
         {
             if constexpr (std::is_same_v<TParams, PersonProperty>)
             {
-                return (m_params.person == candidate.ownerOf(m_params.attr.typeId, m_params.attr.valueId))
+                return (m_params.person == solutionCandidate.ownerOf(m_params.attr.typeId, m_params.attr.valueId))
                     != m_params.negate;
             }
             else if constexpr (std::is_same_v<TParams, SameOwner>)
             {
-                return (candidate.ownerOf(m_params.first.typeId, m_params.first.valueId) == candidate.ownerOf(m_params.second.typeId, m_params.second.valueId))
+                return (solutionCandidate.ownerOf(m_params.first.typeId, m_params.first.valueId) == solutionCandidate.ownerOf(m_params.second.typeId, m_params.second.valueId))
                     != m_params.secondNegate;
             }
             else if constexpr (std::is_same_v<TParams, PositionComparison>)
             {
-                const auto owner1 = candidate.ownerOf(m_params.first.typeId, m_params.first.valueId);
-                const auto owner2 = candidate.ownerOf(m_params.second.typeId, m_params.second.valueId);
-                const size_t pos1 = candidate.personPosition(owner1, m_params.compareByType);
-                const size_t pos2 = candidate.personPosition(owner2, m_params.compareByType);
+                const auto owner1 = solutionCandidate.ownerOf(m_params.first.typeId, m_params.first.valueId);
+                const auto owner2 = solutionCandidate.ownerOf(m_params.second.typeId, m_params.second.valueId);
+                const size_t pos1 = solutionCandidate.personPosition(owner1, m_params.compareByType);
+                const size_t pos2 = solutionCandidate.personPosition(owner2, m_params.compareByType);
 
                 using Relation = PuzzleDefinition::Comparison::Relation;
                 switch (m_params.relation)

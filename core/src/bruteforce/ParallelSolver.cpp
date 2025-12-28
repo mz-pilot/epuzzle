@@ -11,7 +11,7 @@ namespace epuzzle::details::bruteforce
 
     std::vector<PuzzleSolution> ParallelSolver::solve(SolveOptions opts)
     {
-        const auto totalCandidates = m_ctx.searchSpace().candidatesCount();
+        const auto totalCandidates = m_ctx.searchSpace().totalCandidates();
         if (totalCandidates == 0)
             return handleNoCandidates(opts);
 
@@ -72,7 +72,7 @@ namespace epuzzle::details::bruteforce
 
     void ParallelSolver::handleProgressFinish(const SolveOptions& opts, std::uint64_t progressResult) const
     {
-        const auto totalCandidates = m_ctx.searchSpace().candidatesCount();
+        const auto totalCandidates = m_ctx.searchSpace().totalCandidates();
         opts.progressCallback(totalCandidates, totalCandidates);
 
         ENSURE(totalCandidates == progressResult, "All workers are finished but progress is not completed!" <<

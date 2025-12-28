@@ -12,13 +12,13 @@ target_sources(epuzzle_core
     PRIVATE
         src/bruteforce/BruteForceFactory.cpp
         src/bruteforce/BruteForceFactory.h
-        src/bruteforce/ICandidateIterator.h
         src/bruteforce/IConstraint.cpp
         src/bruteforce/IConstraint.h
         src/bruteforce/ParallelSolver.cpp
         src/bruteforce/ParallelSolver.h
         src/bruteforce/SearchSpace.cpp
         src/bruteforce/SearchSpace.h
+        src/bruteforce/SearchSpaceCursor.h
         src/bruteforce/SequentialSolver.cpp
         src/bruteforce/SequentialSolver.h
         src/bruteforce/SolverContext.h

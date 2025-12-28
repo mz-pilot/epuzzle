@@ -11,7 +11,7 @@ namespace epuzzle::details::bruteforce
         {
         }
 
-        std::unique_ptr<ICandidateIterator> take(const SearchSpace& space)
+        std::unique_ptr<SearchSpaceCursor> take(const SearchSpace& space)
         {
             std::uint64_t first = 0;
             std::uint64_t count = 0;
@@ -25,7 +25,7 @@ namespace epuzzle::details::bruteforce
                 count = std::min(chunkSize, m_totalCandidates - m_distributed);
                 m_distributed += count;
             }
-            return space.createIterator(first, count);
+            return space.createCursor(first, count);
         }
 
     private:
