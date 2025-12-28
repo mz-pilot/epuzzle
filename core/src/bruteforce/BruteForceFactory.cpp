@@ -1,4 +1,4 @@
-#include "BruteForcer.h"
+#include "SequentialSolver.h"
 #include "ParallelBruteForcer.h"
 #include "BruteForceFactory.h"
 
@@ -14,7 +14,7 @@ namespace epuzzle::details
         }
         else
         {
-            return std::make_unique<BruteForcer>(std::move(context));
+            return std::make_unique<SequentialSolver>(std::move(context));
         }
     }
 }

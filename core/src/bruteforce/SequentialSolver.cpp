@@ -1,14 +1,14 @@
-#include "BruteForcer.h"
+#include "SequentialSolver.h"
 
 namespace epuzzle::details
 {
 
-    BruteForcer::BruteForcer(BruteForceContext&& ctx)
+    SequentialSolver::SequentialSolver(BruteForceContext&& ctx)
         : m_ctx(std::move(ctx))
     {
     }
 
-    std::vector<PuzzleSolution> BruteForcer::solve(SolveOptions opts)
+    std::vector<PuzzleSolution> SequentialSolver::solve(SolveOptions opts)
     {
         std::vector<PuzzleSolution> solutions;
         constexpr auto minProgressCount = 1'000'000u;

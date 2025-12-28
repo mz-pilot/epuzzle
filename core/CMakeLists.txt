@@ -13,8 +13,8 @@ target_sources(epuzzle_core
         src/bruteforce/BruteForceContext.h
         src/bruteforce/BruteForceFactory.cpp
         src/bruteforce/BruteForceFactory.h
-        src/bruteforce/BruteForcer.cpp
-        src/bruteforce/BruteForcer.h
+        src/bruteforce/SequentialSolver.cpp
+        src/bruteforce/SequentialSolver.h
         src/bruteforce/Validator.cpp
         src/bruteforce/Validator.h
         src/bruteforce/ICandidateIterator.h

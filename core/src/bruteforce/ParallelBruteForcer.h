@@ -4,7 +4,8 @@
 
 namespace epuzzle::details
 {
-    // Parallel (multithreaded) version of BruteForcer
+
+    // Solving in thread pool
     class ParallelBruteForcer final : public Solver
     {
     public:

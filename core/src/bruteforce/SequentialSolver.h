@@ -5,11 +5,11 @@
 
 namespace epuzzle::details
 {
-    // Checks all specified configurations against constraints.
-    class BruteForcer final : public Solver
+    // Solving in calling thread
+    class SequentialSolver final : public Solver
     {
     public:
-        explicit BruteForcer(BruteForceContext&&);
+        explicit SequentialSolver(BruteForceContext&&);
 
         std::vector<PuzzleSolution> solve(SolveOptions) override;
 
