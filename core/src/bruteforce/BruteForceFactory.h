@@ -2,7 +2,7 @@
 #include "epuzzle/Solver.h"
 #include "PuzzleModel.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
-    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForceConfig&, PuzzleModel&&);
+    std::unique_ptr<Solver> createSolver(const SolverConfig::BruteForceConfig&, PuzzleModel&&);
 }

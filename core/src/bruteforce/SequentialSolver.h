@@ -1,20 +1,20 @@
 #pragma once
 #include "epuzzle/Solver.h"
-#include "BruteForceContext.h"
+#include "SolverContext.h"
 
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
     // Solving in calling thread
     class SequentialSolver final : public Solver
     {
     public:
-        explicit SequentialSolver(BruteForceContext&&);
+        explicit SequentialSolver(SolverContext&&);
 
         std::vector<PuzzleSolution> solve(SolveOptions) override;
 
     private:
-        BruteForceContext m_ctx;
+        SolverContext m_ctx;
     };
 
 }

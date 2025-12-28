@@ -1,15 +1,15 @@
 #pragma once
 #include "epuzzle/Solver.h"
-#include "BruteForceContext.h"
+#include "SolverContext.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
 
     // Solving in thread pool
     class ParallelSolver final : public Solver
     {
     public:
-        explicit ParallelSolver(BruteForceContext&&);
+        explicit ParallelSolver(SolverContext&&);
 
         std::vector<PuzzleSolution> solve(SolveOptions) override;
 
@@ -18,7 +18,7 @@ namespace epuzzle::details
         void handleProgressFinish(const SolveOptions&, std::uint64_t progressResult) const;
 
     private:
-        const BruteForceContext m_ctx;
+        const SolverContext m_ctx;
     };
 
 }

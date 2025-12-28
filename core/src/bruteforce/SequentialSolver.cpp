@@ -1,9 +1,9 @@
 #include "SequentialSolver.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
 
-    SequentialSolver::SequentialSolver(BruteForceContext&& ctx)
+    SequentialSolver::SequentialSolver(SolverContext&& ctx)
         : m_ctx(std::move(ctx))
     {
     }

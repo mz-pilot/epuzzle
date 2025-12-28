@@ -1,7 +1,7 @@
 #include "epuzzle/Exceptions.h"
 #include "ICandidatesSpace.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
 
 namespace

@@ -1,7 +1,7 @@
 #pragma once
 #include "SolutionModel.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
     // Navigates through the SearchSpace and provides access to the current "solution candidate"
     class ICandidateIterator

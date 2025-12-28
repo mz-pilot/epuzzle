@@ -1,6 +1,6 @@
 #include "DeductiveSolver.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::deductive
 {
 
     DeductiveSolver::DeductiveSolver(PuzzleModel&& puzzleModel)

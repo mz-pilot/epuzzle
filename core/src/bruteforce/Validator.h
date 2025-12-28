@@ -1,7 +1,7 @@
 #pragma once
 #include "IConstraint.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
     // Manage checks for bruteforce solving (prefilter and main checks).
     // * If prefiltering enabled: some trivial checks will be performed during the SearchSpace generation stage, 

@@ -3,7 +3,7 @@
 namespace epuzzle::tests
 {
 
-    namespace { using namespace epuzzle::details; }
+    namespace { using namespace epuzzle::details::bruteforce; }
 
     TEST(BruteForceTests, ICandidatesSpaceCreateOk)
     {

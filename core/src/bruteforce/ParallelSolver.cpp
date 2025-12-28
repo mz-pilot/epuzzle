@@ -1,10 +1,10 @@
 #include "SpaceParallelDistributor.h"
 #include "ParallelSolver.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
 
-    ParallelSolver::ParallelSolver(BruteForceContext&& ctx)
+    ParallelSolver::ParallelSolver(SolverContext&& ctx)
         : m_ctx(std::move(ctx))
     {
     }

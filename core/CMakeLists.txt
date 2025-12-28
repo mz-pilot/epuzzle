@@ -10,13 +10,8 @@ target_sources(epuzzle_core
         include/epuzzle/Solver.h
         include/epuzzle/SolverConfig.h
     PRIVATE
-        src/bruteforce/BruteForceContext.h
         src/bruteforce/BruteForceFactory.cpp
         src/bruteforce/BruteForceFactory.h
-        src/bruteforce/SequentialSolver.cpp
-        src/bruteforce/SequentialSolver.h
-        src/bruteforce/Validator.cpp
-        src/bruteforce/Validator.h
         src/bruteforce/ICandidateIterator.h
         src/bruteforce/ICandidatesSpace.cpp
         src/bruteforce/ICandidatesSpace.h
@@ -24,7 +19,12 @@ target_sources(epuzzle_core
         src/bruteforce/IConstraint.h
         src/bruteforce/ParallelSolver.cpp
         src/bruteforce/ParallelSolver.h
+        src/bruteforce/SequentialSolver.cpp
+        src/bruteforce/SequentialSolver.h
+        src/bruteforce/SolverContext.h
         src/bruteforce/SpaceParallelDistributor.h
+        src/bruteforce/Validator.cpp
+        src/bruteforce/Validator.h
         src/deductive/DeductiveSolver.cpp
         src/deductive/DeductiveSolver.h
         src/IndexedTypes.h

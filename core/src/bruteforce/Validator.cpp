@@ -1,6 +1,6 @@
 #include "Validator.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
     Validator::Validator(size_t attrTypeCount, const std::vector<ConstraintModel>& constraints, bool needPrefiltering)
         : m_prefilters(attrTypeCount)

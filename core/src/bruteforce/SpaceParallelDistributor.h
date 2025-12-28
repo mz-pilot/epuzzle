@@ -1,7 +1,7 @@
 #pragma once
 #include "ICandidatesSpace.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
     class SpaceParallelDistributor
     {

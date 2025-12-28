@@ -3,13 +3,13 @@
 #include "Validator.h"
 #include "ICandidatesSpace.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
 
-    class BruteForceContext
+    class SolverContext
     {
     public:
-        BruteForceContext(PuzzleModel&& puzzleModel, bool usePrefiltering)
+        SolverContext(PuzzleModel&& puzzleModel, bool usePrefiltering)
             : m_model(std::move(puzzleModel))
             , m_validator(m_model.attrTypeCount(), m_model.constraints(), usePrefiltering)
         {

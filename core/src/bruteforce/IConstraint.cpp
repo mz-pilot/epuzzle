@@ -1,6 +1,6 @@
 #include "IConstraint.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
 namespace
 {

@@ -10,15 +10,17 @@ namespace epuzzle
 
         normalize(puzzleDefinition);
         validate(puzzleDefinition);
-        details::PuzzleModel puzzleModel{ std::move(puzzleDefinition) };
+
+        using namespace details;
+        PuzzleModel puzzleModel{ std::move(puzzleDefinition) };
 
         if (config.solvingMethod == SolverConfig::SolvingMethod::BruteForce)
         {
-            return details::createBruteForcer(config.bruteForce.value(), std::move(puzzleModel));
+            return bruteforce::createSolver(config.bruteForce.value(), std::move(puzzleModel));
         }
         else
         {
-            return std::make_unique<details::DeductiveSolver>(std::move(puzzleModel));
+            return std::make_unique<deductive::DeductiveSolver>(std::move(puzzleModel));
         }
     }
 

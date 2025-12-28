@@ -1,7 +1,7 @@
 #pragma once
 #include "ICandidateIterator.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
     // Constraint, that can be checked. Also it offers calculation complexity (cost of check).
     class IConstraint

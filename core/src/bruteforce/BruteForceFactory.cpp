@@ -2,11 +2,11 @@
 #include "ParallelSolver.h"
 #include "BruteForceFactory.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
-    std::unique_ptr<Solver> createBruteForcer(const SolverConfig::BruteForceConfig& config, PuzzleModel&& puzzleModel)
+    std::unique_ptr<Solver> createSolver(const SolverConfig::BruteForceConfig& config, PuzzleModel&& puzzleModel)
     {
-        BruteForceContext context{ std::move(puzzleModel), config.prefilter };
+        SolverContext context{ std::move(puzzleModel), config.prefilter };
 
         if (config.execution == SolverConfig::BruteForceConfig::ExecPolicy::Parallel)
         {

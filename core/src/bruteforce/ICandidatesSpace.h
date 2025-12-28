@@ -1,7 +1,7 @@
 #pragma once
 #include "ICandidateIterator.h"
 
-namespace epuzzle::details
+namespace epuzzle::details::bruteforce
 {
     // Space of potential solution candidates
     class ICandidatesSpace
