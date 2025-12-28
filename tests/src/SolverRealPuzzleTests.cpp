@@ -11,8 +11,8 @@ namespace epuzzle::tests
     protected:
         void SetUp() override
         {
-            if (GetParam().solvingMethod == SolverConfig::SolvingMethod::Reasoning)
-                GTEST_SKIP() << "Reasoner implementation coming in next version!";
+            if (GetParam().solvingMethod == SolverConfig::SolvingMethod::Deductive)
+                GTEST_SKIP() << "Deductive implementation coming in next version!";
         }
 
         auto solve(std::string_view fileName)
@@ -77,7 +77,7 @@ namespace epuzzle::tests
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Parallel} }));
 
     INSTANTIATE_TEST_SUITE_P(
-        SolverRealPuzzleReasoning,
+        SolverRealPuzzleDeductive,
         SolverRealPuzzleTests,
-        testing::Values(SolverConfig{ Method::Reasoning, {} }));
+        testing::Values(SolverConfig{ Method::Deductive, {} }));
 }

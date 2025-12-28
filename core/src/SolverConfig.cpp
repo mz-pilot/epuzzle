@@ -24,7 +24,7 @@ namespace epuzzle
         }
         else
         {
-            ENSURE_CFG(cfg.solvingMethod == Method::Reasoning, "Unexpected solving method: (int)" << static_cast<int>(cfg.solvingMethod));
+            ENSURE_CFG(cfg.solvingMethod == Method::Deductive, "Unexpected solving method: (int)" << static_cast<int>(cfg.solvingMethod));
         }
     }
 
@@ -34,7 +34,7 @@ namespace epuzzle
         {
             switch (method)
             {
-            case Method::Reasoning:     return os << "Reasoning";
+            case Method::Deductive:     return os << "Deductive";
             case Method::BruteForce:    return os << "BruteForce";
             default: ENSURE(false, "Unsupported solving method type: (int) " << static_cast<int>(method));
             };

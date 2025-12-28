@@ -89,15 +89,15 @@ namespace
             std::cout << "# Quickly test the solver (default mode)\n";
             std::cout << appName << " --file puzzle_examples/einsteins.toml\n\n";
 
-            std::cout << "# Basic usage with reasoning\n";
-            std::cout << appName << " -f \"My puzzle.toml\"" << " -m " << EnumHelper::name(Method::Reasoning) << "\n\n";
+            std::cout << "# Basic usage with Deductive method\n";
+            std::cout << appName << " -f \"My puzzle.toml\"" << " -m " << EnumHelper::name(Method::Deductive) << "\n\n";
 
-            std::cout << "# Parallel bruteforce\n";
+            std::cout << "# Parallel BruteForce\n";
             std::cout << appName << " --file Zebra.toml"
                 << " --method " << EnumHelper::name(Method::BruteForce)
                 << " --execpolicy " << EnumHelper::name(ExecPolicy::Parallel) << "\n\n";
 
-            std::cout << "# Disable prefilter for Sequenced bruteforce\n";
+            std::cout << "# Disable prefilter for Sequenced BruteForce\n";
             std::cout << appName << " -f test.toml"
                 << " -m " << EnumHelper::name(Method::BruteForce)
                 << " -p " << EnumHelper::name(PrefilterMode::Disabled)

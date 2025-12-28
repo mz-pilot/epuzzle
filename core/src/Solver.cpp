@@ -1,5 +1,5 @@
 #include "bruteforce/BruteForceFactory.h"
-#include "deductive/Reasoner.h"
+#include "deductive/DeductiveSolver.h"
 
 namespace epuzzle
 {
@@ -18,7 +18,7 @@ namespace epuzzle
         }
         else
         {
-            return std::make_unique<details::Reasoner>(std::move(puzzleModel));
+            return std::make_unique<details::DeductiveSolver>(std::move(puzzleModel));
         }
     }
 

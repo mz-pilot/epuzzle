@@ -249,7 +249,7 @@ epuzzle --help
 - `-f, --file <ФАЙЛ>` — путь к файлу с данными пазла (.toml)
 
 **Опциональные аргументы:**
-- `-m, --method <МЕТОД>` — метод решения: `BruteForce` (по умолчанию) или `Reasoning` (в разработке)
+- `-m, --method <МЕТОД>` — метод решения: `BruteForce` (по умолчанию) или `Deductive` (в разработке)
 - `-p, --prefilter <РЕЖИМ>` — предфильтрация (только для BruteForce): `Enabled` (по умолчанию) или `Disabled`
 - `-e, --execpolicy <ПОЛИТИКА>` — политика выполнения (только для BruteForce): `Parallel` (по умолчанию) или `Sequenced`
 - `-v, --version` — показать версию программы
@@ -271,7 +271,7 @@ epuzzle -f test.toml -m BruteForce -p Disabled -e Sequenced
 
 ##### Методы решения (`--method`)
 - *BruteForce* — полный перебор всех возможных вариантов. Гарантирует нахождение всех решений.
-- *Reasoning* — логический вывод (в разработке).
+- *Deductive* — логический вывод (в разработке).
 
 ##### Предфильтрация (`--prefilter`, только для BruteForce)
 - *Enabled* (по умолчанию) — исключает заведомо неверные варианты на этапе подготовки (ускоряет работу в 10-100 раз).
@@ -319,7 +319,7 @@ Solution #1:
 #### Большие пазлы
 BruteForce метод может потребовать значительного объема памяти и времени при большом количестве комбинаций. Рекомендации:
 - Используйте `--prefilter Enabled` (включен по умолчанию)
-- Для очень больших задач предпочтительнее использовать Reasoning методы решения
+- Для очень больших задач предпочтительнее использовать Deductive методы решения
 
 #### Файл не найден
 Убедитесь, что путь к файлу указан правильно. В Windows используйте двойные кавычки, если путь содержит пробелы:
@@ -372,7 +372,7 @@ namespace epuzzle
 ```cpp
 struct SolverConfig 
 {
-    enum class SolvingMethod { BruteForce, Reasoning };
+    enum class SolvingMethod { BruteForce, Deductive };
            
     struct BruteForceConfig 
     {
@@ -389,15 +389,15 @@ struct SolverConfig
 
 #### Расширяемость: шаги для добавления нового решателя:
 
-1. **Создать класс**, наследующий от `Solver`, см. например Reasoner:
+1. **Создать класс**, наследующий от `Solver`, см. например `DeductiveSolver`:
 ```cpp
 namespace epuzzle::details
 {
-    // Deductive reasoner (human-like thinking)
-    class Reasoner final : public Solver
+    // Deductive solver (human-like thinking)
+    class DeductiveSolver final : public Solver
     {
     public:
-        explicit Reasoner(PuzzleModel&&);
+        explicit DeductiveSolver(PuzzleModel&&);
         std::vector<PuzzleSolution> solve(SolveOptions) override;
     };
 }
@@ -406,7 +406,7 @@ namespace epuzzle::details
 3. **Расширить фабричный метод** `Solver::create()`
 4. **Добавить в параметризованные тесты** (см. раздел ниже).
 
-**Текущий статус:** Проект уже содержит заглушку для `Reasoner`, что демонстрирует готовый путь расширения.
+**Текущий статус:** Проект уже содержит заглушку для `DeductiveSolver`, что демонстрирует готовый путь расширения.
 
 </details>
 
@@ -418,16 +418,16 @@ namespace epuzzle::details
 
 #### Стратегия тестирования
 ```cpp
-// Тесты не привязаны к конкретному решателю, например SolverTests для BruteForce и для Reasoning:
+// Тесты не привязаны к конкретному решателю, например SolverTests для BruteForce и для Deductive:
     INSTANTIATE_TEST_SUITE_P(
         SolverBruteForcePrefilter,
         SolverTests,
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequenced} }));
 
     INSTANTIATE_TEST_SUITE_P(
-        SolverReasoning,
+        SolverDeductive,
         SolverTests,
-        testing::Values(SolverConfig{ Method::Reasoning, {} }));
+        testing::Values(SolverConfig{ Method::Deductive, {} }));
 ```
 
 #### Трехуровневая система проверок:
@@ -629,7 +629,7 @@ ctest -V --preset=test-lin-release
 * Использовать WSL2 — в Linux-среде проблема не проявляется
 * Игнорировать "проваленные" пропущенные тесты в Test Explorer
 
-**Почему используется `GTEST_SKIP()`:** Для временного отключения тестов для еще не реализованного функционала (например, `Reasoning` solver).
+**Почему используется `GTEST_SKIP()`:** Для временного отключения тестов для еще не реализованного функционала (например, `DeductiveSolver`).
 
 </details>
 
@@ -657,12 +657,12 @@ cdb epuzzle.exe
 ### Roadmap
 
 #### Версия 1.1 (в разработке)
-- [ ] Реализация `Reasoning` solver (логический вывод)
+- [ ] Реализация `DeductiveSolver` (логический вывод)
 - [ ] Добавление новых типов constraints для расширения класса решаемых задач
 
 #### Стратегия развития
 - **BruteForce решатель** останется эталоном для проверки корректности новых алгоритмов
-- **Reasoning решатели** будут разрабатываться для эффективного решения больших пазлов (6x6 и более)
+- **Deductive решатели** будут разрабатываться для эффективного решения больших пазлов (6x6 и более)
 - **Тестирование новых алгоритмов** будет проводиться в том числе со сравнением результатов с BruteForce
 
 ---

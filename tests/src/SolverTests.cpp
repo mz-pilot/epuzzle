@@ -21,8 +21,8 @@ namespace epuzzle::tests
 
         void SetUp() override
         {
-            if (GetParam().solvingMethod == SolverConfig::SolvingMethod::Reasoning)
-                GTEST_SKIP() << "Reasoner implementation coming in next version!";
+            if (GetParam().solvingMethod == SolverConfig::SolvingMethod::Deductive)
+                GTEST_SKIP() << "Deductive implementation coming in next version!";
         }
 
         static constexpr PuzzleDefinition puzzle_2x2()
@@ -560,7 +560,7 @@ namespace epuzzle::tests
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequenced} }));
 
     INSTANTIATE_TEST_SUITE_P(
-        SolverReasoning,
+        SolverDeductive,
         SolverTests,
-        testing::Values(SolverConfig{ Method::Reasoning, {} }));
+        testing::Values(SolverConfig{ Method::Deductive, {} }));
 }

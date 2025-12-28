@@ -10,7 +10,7 @@ namespace epuzzle
         enum class SolvingMethod
         {
             BruteForce,
-            Reasoning
+            Deductive
         };
 
         struct BruteForceConfig

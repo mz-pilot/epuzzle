@@ -25,8 +25,8 @@ target_sources(epuzzle_core
         src/bruteforce/ParallelBruteForcer.cpp
         src/bruteforce/ParallelBruteForcer.h
         src/bruteforce/SpaceParallelDistributor.h
-        src/deductive/Reasoner.cpp
-        src/deductive/Reasoner.h
+        src/deductive/DeductiveSolver.cpp
+        src/deductive/DeductiveSolver.h
         src/IndexedTypes.h
         src/pch.h
         src/PuzzleDefinition.cpp

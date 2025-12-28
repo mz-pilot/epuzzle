@@ -4,11 +4,11 @@
 
 namespace epuzzle::details
 {
-    // Deductive reasoner (human-like thinking)
-    class Reasoner final : public Solver
+    // Deductive solver (human-like thinking)
+    class DeductiveSolver final : public Solver
     {
     public:
-        explicit Reasoner(PuzzleModel&&);
+        explicit DeductiveSolver(PuzzleModel&&);
 
         std::vector<PuzzleSolution> solve(SolveOptions) override;
 
