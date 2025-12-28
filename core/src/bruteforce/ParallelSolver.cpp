@@ -1,15 +1,15 @@
 #include "SpaceParallelDistributor.h"
-#include "ParallelBruteForcer.h"
+#include "ParallelSolver.h"
 
 namespace epuzzle::details
 {
 
-    ParallelBruteForcer::ParallelBruteForcer(BruteForceContext&& ctx)
+    ParallelSolver::ParallelSolver(BruteForceContext&& ctx)
         : m_ctx(std::move(ctx))
     {
     }
 
-    std::vector<PuzzleSolution> ParallelBruteForcer::solve(SolveOptions opts)
+    std::vector<PuzzleSolution> ParallelSolver::solve(SolveOptions opts)
     {
         const auto totalCandidates = m_ctx.searchSpace().candidatesCount();
         if (totalCandidates == 0)
@@ -63,14 +63,14 @@ namespace epuzzle::details
         return consolidated;
     }
 
-    std::vector<PuzzleSolution> ParallelBruteForcer::handleNoCandidates(const SolveOptions& opts) const
+    std::vector<PuzzleSolution> ParallelSolver::handleNoCandidates(const SolveOptions& opts) const
     {
         opts.progressCallback(1, 0);
         opts.progressCallback(1, 1);
         return {};
     }
 
-    void ParallelBruteForcer::handleProgressFinish(const SolveOptions& opts, std::uint64_t progressResult) const
+    void ParallelSolver::handleProgressFinish(const SolveOptions& opts, std::uint64_t progressResult) const
     {
         const auto totalCandidates = m_ctx.searchSpace().candidatesCount();
         opts.progressCallback(totalCandidates, totalCandidates);

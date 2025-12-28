@@ -6,10 +6,10 @@ namespace epuzzle::details
 {
 
     // Solving in thread pool
-    class ParallelBruteForcer final : public Solver
+    class ParallelSolver final : public Solver
     {
     public:
-        explicit ParallelBruteForcer(BruteForceContext&&);
+        explicit ParallelSolver(BruteForceContext&&);
 
         std::vector<PuzzleSolution> solve(SolveOptions) override;
 

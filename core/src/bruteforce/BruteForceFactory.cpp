@@ -1,5 +1,5 @@
 #include "SequentialSolver.h"
-#include "ParallelBruteForcer.h"
+#include "ParallelSolver.h"
 #include "BruteForceFactory.h"
 
 namespace epuzzle::details
@@ -10,7 +10,7 @@ namespace epuzzle::details
 
         if (config.execution == SolverConfig::BruteForceConfig::ExecPolicy::Parallel)
         {
-            return std::make_unique<ParallelBruteForcer>(std::move(context));
+            return std::make_unique<ParallelSolver>(std::move(context));
         }
         else
         {

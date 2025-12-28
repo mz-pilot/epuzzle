@@ -22,8 +22,8 @@ target_sources(epuzzle_core
         src/bruteforce/ICandidatesSpace.h
         src/bruteforce/IConstraint.cpp
         src/bruteforce/IConstraint.h
-        src/bruteforce/ParallelBruteForcer.cpp
-        src/bruteforce/ParallelBruteForcer.h
+        src/bruteforce/ParallelSolver.cpp
+        src/bruteforce/ParallelSolver.h
         src/bruteforce/SpaceParallelDistributor.h
         src/deductive/DeductiveSolver.cpp
         src/deductive/DeductiveSolver.h
