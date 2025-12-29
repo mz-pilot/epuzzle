@@ -6,10 +6,10 @@ namespace
 {
     // No big `switch` here but `if constexpr ... else static_assert` - so that compiler can help us add new constraints correctly
     template <typename TParams>
-    class ConstraintCheckerImpl final : public ConstraintChecker
+    class CheckerImpl final : public ConstraintChecker
     {
     public:
-        explicit ConstraintCheckerImpl(const TParams& params)
+        explicit CheckerImpl(const TParams& params)
             : m_params(params)
         {
         }
@@ -68,7 +68,7 @@ namespace
             [](const auto& arg) -> std::unique_ptr<ConstraintChecker>
             {
                 using T = std::decay_t<decltype(arg)>;
-                return std::make_unique<ConstraintCheckerImpl<T>>(arg);
+                return std::make_unique<CheckerImpl<T>>(arg);
             },
             constraint);
     }
