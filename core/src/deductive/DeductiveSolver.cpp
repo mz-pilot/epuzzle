@@ -10,9 +10,7 @@ namespace epuzzle::details::deductive
 
     std::vector<PuzzleSolution> DeductiveSolver::solve(SolveOptions)
     {
-        // TODO: Implement it! 
-        // 
-        // And don't forget to remove GTEST_SKIP() from SolverTests::SetUp() and SolverRealPuzzleTests::SetUp()!
+        // TODO: Implement it! And don't forget to remove GTEST_SKIP() from SolverTests::SetUp() and SolverRealPuzzleTests::SetUp()!
 
         throw std::logic_error("Deductive method not implemented yet! Coming soon!");
     }
