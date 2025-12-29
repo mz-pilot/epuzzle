@@ -1,82 +1,95 @@
-#include "SpaceParallelDistributor.h"
+#include "SpaceSplitter.h"
 #include "ParallelSolver.h"
 
 namespace epuzzle::details::bruteforce
 {
+    namespace
+    {
+        constexpr std::uint64_t progressCountInterval = 1'000'000;
+        static const auto threadsCount = std::max(1u, std::jthread::hardware_concurrency());
+    }
 
     ParallelSolver::ParallelSolver(SolverContext&& ctx)
         : m_ctx(std::move(ctx))
+        , m_totalCombinations(m_ctx.searchSpace().totalCombinations())
     {
     }
 
     std::vector<PuzzleSolution> ParallelSolver::solve(SolveOptions opts)
     {
-        const auto totalCandidates = m_ctx.searchSpace().totalCandidates();
-        if (totalCandidates == 0)
-            return handleNoCandidates(opts);
+        if (m_totalCombinations == 0)
+            return handleNoCombinations(opts);
 
-        opts.progressCallback(totalCandidates, 0);
+        opts.progressCallback(m_totalCombinations, 0);
 
-        SpaceParallelDistributor spaceDistributor(totalCandidates);
+        utils::AtomicProgressTracker atomicTracker{ progressCountInterval };
+        SpaceSplitter spaceSplitter{ m_totalCombinations };
 
-        const std::uint64_t countInterval = 1'000'000;
-        utils::AtomicProgressTracker atomicTracker{ countInterval };
-
-        using ThreadResult = std::vector<PuzzleSolution>;
-        const auto threadsCount = std::max(1u, std::jthread::hardware_concurrency());
-        utils::ParallelExecutor<ThreadResult> executor{ threadsCount, [this, &spaceDistributor, &atomicTracker](std::stop_token st)
+        utils::ParallelExecutor<std::vector<PuzzleSolution>> executor{ threadsCount, [this, &atomicTracker, &spaceSplitter](std::stop_token st)
             {
-                ThreadResult threadResult;
-                auto localTracker = atomicTracker.getLocalTracker();
-
-                const auto& validator = m_ctx.validator();
-                while (auto itCandidate = spaceDistributor.take(m_ctx.searchSpace()))
-                {
-                    if (st.stop_requested()) [[unlikely]]
-                        return threadResult;
-                    do
-                    {
-                        // Hot cycle!
-                        if (validator.isSolutionCandidateValid(*itCandidate)) [[unlikely]]
-                        {
-                            threadResult.push_back(toPuzzleSolution(itCandidate->getSolutionModel(), m_ctx.puzzleModel()));
-                        }
-                        localTracker.update();
-                    } while (itCandidate->next());
-                }
-                return threadResult;
+                return runWorker(st, atomicTracker, spaceSplitter);
             } };
 
         bool canceled = false;
         while (!executor.waitFor(opts.progressInterval))
         {
-            if (!opts.progressCallback(totalCandidates, atomicTracker.load()))
+            if (!opts.progressCallback(m_totalCombinations, atomicTracker.load()))
             {
-                executor.request_stop();
                 canceled = true;
+                executor.request_stop();
                 break;
             }
         }
-        const auto consolidated = utils::join(executor.get()); // after that all threads finished, results or exceptions collected
+
+        // After `executor.get()` all threads finished, results or exceptions collected
+        const auto joinedResult = utils::join(executor.get());
+
         if (!canceled)
             handleProgressFinish(opts, atomicTracker.load());
-        return consolidated;
+
+        return joinedResult;
     }
 
-    std::vector<PuzzleSolution> ParallelSolver::handleNoCandidates(const SolveOptions& opts) const
+    // parallel
+    std::vector<PuzzleSolution> ParallelSolver::runWorker(std::stop_token st, utils::AtomicProgressTracker& atomicTracker, SpaceSplitter& spaceSplitter) const
+    {
+        std::vector<PuzzleSolution> threadResult;
+        auto localTracker = atomicTracker.getLocalTracker();
+        const auto& validator = m_ctx.validator();
+
+        while (auto chunk = spaceSplitter.nextChunk())
+        {
+            auto cursor = m_ctx.searchSpace().createCursor(chunk->offset, chunk->count);
+            ENSURE(cursor, "cursor must be created!");
+
+            if (st.stop_requested()) [[unlikely]]
+                return threadResult;
+            do
+            {
+                // Hot cycle!
+                if (validator.isSolutionValid(*cursor)) [[unlikely]]
+                {
+                    threadResult.push_back(toPuzzleSolution(cursor->getSolutionModel(), m_ctx.puzzleModel()));
+                }
+                localTracker.update();
+            } while (cursor->next());
+        }
+        return threadResult;
+    }
+
+    std::vector<PuzzleSolution> ParallelSolver::handleNoCombinations(const SolveOptions& opts) const
     {
         opts.progressCallback(1, 0);
         opts.progressCallback(1, 1);
         return {};
     }
 
-    void ParallelSolver::handleProgressFinish(const SolveOptions& opts, std::uint64_t progressResult) const
+    void ParallelSolver::handleProgressFinish(const SolveOptions& opts, std::uint64_t checkedCombinations) const
     {
-        const auto totalCandidates = m_ctx.searchSpace().totalCandidates();
-        opts.progressCallback(totalCandidates, totalCandidates);
+        opts.progressCallback(m_totalCombinations, m_totalCombinations);
 
-        ENSURE(totalCandidates == progressResult, "All workers are finished but progress is not completed!" <<
-            " totalCandidates = " << totalCandidates << ", progressResult = " << progressResult);
+        ENSURE(m_totalCombinations == checkedCombinations, "All workers are finished but progress is not completed!"
+            << " total: " << m_totalCombinations << ", checked: " << checkedCombinations);
     }
 
 }

@@ -3,7 +3,7 @@
 
 namespace epuzzle::details::bruteforce
 {
-    // Navigates through the SearchSpace in some range and provides access to the current "solution candidate". 
+    // Navigates through the SearchSpace in some range and provides access to the current combination as a `solution candidate`. 
     class SearchSpaceCursor
     {
     public:

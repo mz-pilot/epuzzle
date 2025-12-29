@@ -10,7 +10,7 @@
 
 Modern C++20 библиотека и консольная утилита для решения логических головоломок (таких как [Загадка Эйнштейна](https://ru.wikipedia.org/wiki/Загадка_Эйнштейна) ([Zebra Puzzle](https://en.wikipedia.org/wiki/Zebra_Puzzle)) и аналогичных задач на удовлетворение ограничений). 
 
-Проект демонстрирует практики Modern C++ 20, многопоточность, high performance computing, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на google test и CI/CD pipelines на GitHub Actions.
+Проект демонстрирует практики Modern C++ 20, многопоточность, HPC, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на google test и CI/CD pipelines на GitHub Actions.
 
 <details>
 
@@ -464,7 +464,7 @@ namespace epuzzle::details
 Создает ParallelExecutor с N потоками (по числу ядер CPU)
     ↓
 Каждый рабочий поток:
-    1. Запрашивает у SpaceParallelDistributor новый чанк
+    1. Запрашивает у SpaceSplitter новый чанк
     2. Проверяет каждый кандидат в чанке (hot loop!)
     3. Сохраняет подошедшие решения локально
     4. Обновляет AtomicProgressTracker

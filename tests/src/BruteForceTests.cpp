@@ -1,4 +1,5 @@
-#include "bruteforce/SpaceParallelDistributor.h"
+#include "bruteforce/SearchSpace.h"
+#include "bruteforce/SpaceSplitter.h"
 
 namespace epuzzle::tests
 {
@@ -12,26 +13,28 @@ namespace epuzzle::tests
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);
         using namespace utils;
-        EXPECT_EQ(space->totalCandidates(), power(factorial(personCount), attrCount));
+        EXPECT_EQ(space->totalCombinations(), power(factorial(personCount), attrCount));
     }
 
-    TEST(BruteForceTests, IterateAllWithDistributorOk)
+    TEST(BruteForceTests, IterateAllWithSplitterOk)
     {
         constexpr size_t personCount = 5, attrCount = 4;
         std::unique_ptr<SearchSpace> space;
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);
-        const auto totalCandidates = space->totalCandidates();
-        SpaceParallelDistributor distributor{ totalCandidates };
+        const auto totalCombinations = space->totalCombinations();
+        SpaceSplitter splitter{ totalCombinations };
 
         std::uint64_t iterated = 0;
-        while (auto iter = distributor.take(*space))
+        std::unique_ptr<SearchSpaceCursor> cursor;
+        while (auto chunk = splitter.nextChunk())
         {
+            ASSERT_TRUE(cursor = space->createCursor(chunk->offset, chunk->count));
             do
                 ++iterated;
-            while (iter->next());
+            while (cursor->next());
         }
-        EXPECT_EQ(iterated, totalCandidates);
+        EXPECT_EQ(iterated, totalCombinations);
     }
 
 }

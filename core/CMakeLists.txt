@@ -22,7 +22,7 @@ target_sources(epuzzle_core
         src/bruteforce/SequentialSolver.cpp
         src/bruteforce/SequentialSolver.h
         src/bruteforce/SolverContext.h
-        src/bruteforce/SpaceParallelDistributor.h
+        src/bruteforce/SpaceSplitter.h
         src/bruteforce/Validator.cpp
         src/bruteforce/Validator.h
         src/deductive/DeductiveSolver.cpp

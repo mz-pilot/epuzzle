@@ -148,18 +148,18 @@ namespace
     public:
         explicit SearchSpaceImpl(AttributeSpace&& attributes)
             : m_attributes(std::move(attributes))
-            , m_totalCandidates(calcTotalCandidates(m_attributes))
+            , m_totalCombinations(calcTotalCandidates(m_attributes))
         {
         }
 
-        std::uint64_t totalCandidates() const override
+        std::uint64_t totalCombinations() const override
         {
-            return m_totalCandidates;
+            return m_totalCombinations;
         }
 
         std::unique_ptr<SearchSpaceCursor> createCursor(std::uint64_t offset, std::uint64_t count) const override
         {
-            if (m_totalCandidates == 0 || count == 0 || m_totalCandidates < offset || m_totalCandidates - offset < count)
+            if (m_totalCombinations == 0 || count == 0 || offset >= m_totalCombinations || count > m_totalCombinations - offset)
                 return {};
 
             return std::make_unique<CursorImpl>(m_attributes, offset, count);
@@ -167,7 +167,7 @@ namespace
 
     private:
         const AttributeSpace m_attributes;
-        const std::uint64_t m_totalCandidates;
+        const std::uint64_t m_totalCombinations;
     };
 
 } // namespace

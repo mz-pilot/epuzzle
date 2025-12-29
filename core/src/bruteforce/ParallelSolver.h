@@ -14,11 +14,14 @@ namespace epuzzle::details::bruteforce
         std::vector<PuzzleSolution> solve(SolveOptions) override;
 
     private:
-        std::vector<PuzzleSolution> handleNoCandidates(const SolveOptions&) const;
-        void handleProgressFinish(const SolveOptions&, std::uint64_t progressResult) const;
+        std::vector<PuzzleSolution> runWorker(std::stop_token st, utils::AtomicProgressTracker&, class SpaceSplitter&) const;
+
+        std::vector<PuzzleSolution> handleNoCombinations(const SolveOptions&) const;
+        void handleProgressFinish(const SolveOptions&, std::uint64_t checkedCombinations) const;
 
     private:
         const SolverContext m_ctx;
+        const std::uint64_t m_totalCombinations;
     };
 
 }
