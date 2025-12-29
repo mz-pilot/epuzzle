@@ -16,12 +16,12 @@ namespace epuzzle::details::bruteforce
             }
             else
             {
-                m_constraintCheckers.push_back(IConstraint::create(constraint));
+                m_constraintCheckers.push_back(ConstraintChecker::create(constraint));
             }
         };
 
         // We'll check constraints from simplest to most complex
-        std::ranges::sort(m_constraintCheckers, {}, &IConstraint::complexity);
+        std::ranges::sort(m_constraintCheckers, {}, &ConstraintChecker::complexity);
     }
 
     bool Validator::isAssignmentValid(AttributeTypeID typeId, AttributeValueID valueId, PersonID personId) const
@@ -39,7 +39,7 @@ namespace epuzzle::details::bruteforce
         // Hot path!
         for (const auto& constraintChecker : m_constraintCheckers)
         {
-            if (!constraintChecker->satisfies(solutionCandidate)) [[likely]]
+            if (!constraintChecker->satisfiedBy(solutionCandidate)) [[likely]]
                 return false;
         }
         [[unlikely]]

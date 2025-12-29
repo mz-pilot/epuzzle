@@ -1,14 +1,15 @@
-#include "IConstraint.h"
+#include "ConstraintChecker.h"
 
 namespace epuzzle::details::bruteforce
 {
 namespace
 {
+    // No big `switch` here but `if constexpr ... else static_assert` - so that compiler can help us add new constraints correctly
     template <typename TParams>
-    class ConstraintImpl final : public IConstraint
+    class ConstraintCheckerImpl final : public ConstraintChecker
     {
     public:
-        explicit ConstraintImpl(const TParams& params)
+        explicit ConstraintCheckerImpl(const TParams& params)
             : m_params(params)
         {
         }
@@ -21,7 +22,7 @@ namespace
             else static_assert(false, "Need return complexity value for current TParams!");
         }
 
-        bool satisfies(const SearchSpaceCursor& solutionCandidate) const override
+        bool satisfiedBy(const SearchSpaceCursor& solutionCandidate) const override
         {
             if constexpr (std::is_same_v<TParams, PersonProperty>)
             {
@@ -52,7 +53,7 @@ namespace
                 };
             }
             else
-                static_assert(false, "Need special implementation in satisfies() method for current TParams!");
+                static_assert(false, "Need special implementation in satisfiedBy() method for current TParams!");
         }
 
     private:
@@ -61,13 +62,13 @@ namespace
 
 } // namespace
 
-    std::unique_ptr<IConstraint> IConstraint::create(const ConstraintModel& constraint)
+    std::unique_ptr<ConstraintChecker> ConstraintChecker::create(const ConstraintModel& constraint)
     {
         return std::visit(
-            [](const auto& arg) -> std::unique_ptr<IConstraint>
+            [](const auto& arg) -> std::unique_ptr<ConstraintChecker>
             {
                 using T = std::decay_t<decltype(arg)>;
-                return std::make_unique<ConstraintImpl<T>>(arg);
+                return std::make_unique<ConstraintCheckerImpl<T>>(arg);
             },
             constraint);
     }

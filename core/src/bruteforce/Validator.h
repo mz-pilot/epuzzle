@@ -1,5 +1,5 @@
 #pragma once
-#include "IConstraint.h"
+#include "ConstraintChecker.h"
 
 namespace epuzzle::details::bruteforce
 {
@@ -17,7 +17,7 @@ namespace epuzzle::details::bruteforce
 
     private:
         utils::IndexedVector<AttributeTypeID, std::vector<PersonProperty>> m_prefilters;
-        std::vector<std::unique_ptr<IConstraint>> m_constraintCheckers;
+        std::vector<std::unique_ptr<ConstraintChecker>> m_constraintCheckers;
     };
 
 }

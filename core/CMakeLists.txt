@@ -12,8 +12,8 @@ target_sources(epuzzle_core
     PRIVATE
         src/bruteforce/BruteForceFactory.cpp
         src/bruteforce/BruteForceFactory.h
-        src/bruteforce/IConstraint.cpp
-        src/bruteforce/IConstraint.h
+        src/bruteforce/ConstraintChecker.cpp
+        src/bruteforce/ConstraintChecker.h
         src/bruteforce/ParallelSolver.cpp
         src/bruteforce/ParallelSolver.h
         src/bruteforce/SearchSpace.cpp
