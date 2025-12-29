@@ -38,7 +38,7 @@ namespace epuzzle::details
                 return Attribute{ typeId, attrValueID(typeId, attr.value) };
             };
 
-        // Prepare PuzzleModel::m_constraints (indexed) from PuzzleDefinition::constraints (DTO)
+        // PuzzleDefinition::constraints (input DTO)  ->  PuzzleModel::m_constraints (optimized model)
 
         m_constraints.reserve(m_definition.constraints.size());
         for (const auto& constr : m_definition.constraints)
