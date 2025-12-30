@@ -15,7 +15,7 @@ namespace
     public:
         CursorImpl(const AttributeSpace& attrs, std::uint64_t firstCandidate, std::uint64_t count)
             : m_attributes(attrs)
-            , m_remainingCandidates(count) // parameters checked in SearchSpaceImpl::createCursor
+            , m_remainingCandidates(count) // parameters checked in SpaceImpl::createCursor
         {
             m_context.reserve(m_attributes.size());
 
@@ -60,12 +60,10 @@ namespace
 
         SolutionModel getSolutionModel() const override
         {
-            SolutionModel solution;
-            solution.attributes.reserve(m_attributes.size());
-
+            SolutionModel solution{ m_attributes.size() };
             for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ m_attributes.size() }; ++typeId)
             {
-                solution.attributes.push_back(currentAttrAssignment(typeId));
+                solution.setAttributeAssignment(typeId, currentAttrAssignment(typeId));
             }
             return solution;
         }
@@ -88,7 +86,7 @@ namespace
         std::uint64_t m_remainingCandidates = 0;
     };
 
-    // -------------------------------- helper functions for class SearchSpaceImpl  --------------------------------------
+    // -------------------------------- helper functions for class SpaceImpl  --------------------------------------
 
     AttributeSpace makeAttributeSpace(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
     {
@@ -131,12 +129,13 @@ namespace
         return totalCandidates;
     }
 
-    // -------------------------------- class SearchSpaceImpl  ------------------------------------------------
+    // -------------------------------- class SpaceImpl  ------------------------------------------------
 
-    class SearchSpaceImpl final : public SearchSpace
+    // Implementation behind the interface - because there can be different implementations (with or without pre-generated permutations, etc.).
+    class SpaceImpl final : public SearchSpace
     {
     public:
-        explicit SearchSpaceImpl(AttributeSpace&& attributes)
+        explicit SpaceImpl(AttributeSpace&& attributes)
             : m_attributes(std::move(attributes))
             , m_totalCombinations(calcTotalCandidates(m_attributes))
         {
@@ -166,6 +165,6 @@ namespace
 
     std::unique_ptr<SearchSpace> SearchSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
     {
-        return std::make_unique<SearchSpaceImpl>(makeAttributeSpace(personCount, attrTypeCount, std::move(filter)));
+        return std::make_unique<SpaceImpl>(makeAttributeSpace(personCount, attrTypeCount, std::move(filter)));
     }
 }

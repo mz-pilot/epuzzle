@@ -69,7 +69,7 @@ namespace epuzzle::details::bruteforce
                 // Hot cycle!
                 if (validator.isSolutionValid(*cursor)) [[unlikely]]
                 {
-                    threadResult.push_back(toPuzzleSolution(cursor->getSolutionModel(), m_ctx.puzzleModel()));
+                    threadResult.push_back(cursor->getSolutionModel().toPuzzleSolution(m_ctx.puzzleModel()));
                 }
                 localTracker.update();
             } while (cursor->next());

@@ -4,7 +4,7 @@
 namespace epuzzle::details::bruteforce
 {
     // Search space for bruteforce. Contain all possible combinations of attribute values assigned to persons.
-    // Interface - because may be different implementations (with/without prefetch, etc).
+    // Interface - because there can be different implementations (with or without pre-generated permutations, etc.).
     class SearchSpace
     {
     public:

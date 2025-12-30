@@ -2,7 +2,19 @@
 
 namespace epuzzle::details
 {
-    PuzzleSolution toPuzzleSolution(const SolutionModel& solutionModel, const PuzzleModel& puzzleModel)
+
+    SolutionModel::SolutionModel(size_t attrTypeCount)
+        : m_attributes(attrTypeCount)
+    {
+    }
+
+    void SolutionModel::setAttributeAssignment(AttributeTypeID attrTypeId, Assignment assignment)
+    {
+        ENSURE(attrTypeId.value() < m_attributes.size(), "");
+        m_attributes[attrTypeId] = std::move(assignment);
+    }
+
+    PuzzleSolution SolutionModel::toPuzzleSolution(const PuzzleModel& puzzleModel) const
     {
         PuzzleSolution puzzleSolution;
         // The first attribute type is "person".
@@ -22,7 +34,7 @@ namespace epuzzle::details
             std::vector<std::string> values(personCount);
             for (auto valueId = AttributeValueID{ 0 }; valueId < AttributeValueID{ personCount }; ++valueId)
             {
-                const auto personId = solutionModel.attributes[typeId][valueId];
+                const auto personId = m_attributes[typeId][valueId];
                 values[personId.value()] = puzzleModel.attrValueName(typeId, valueId);
             }
             std::string typeName(puzzleModel.attrTypeName(typeId));

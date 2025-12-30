@@ -5,12 +5,15 @@
 namespace epuzzle::details
 {
     // Indexed (internal) version of puzzle solution
-    struct SolutionModel
+    class SolutionModel
     {
-        using AttributeAssignment = utils::IndexedVector<AttributeValueID, PersonID>;
+    public:
+        explicit SolutionModel(size_t attrTypeCount);
+        void setAttributeAssignment(AttributeTypeID, Assignment);
 
-        utils::IndexedVector<AttributeTypeID, AttributeAssignment> attributes;
+        PuzzleSolution toPuzzleSolution(const PuzzleModel&) const;
+
+    private:
+        utils::IndexedVector<AttributeTypeID, Assignment> m_attributes;
     };
-
-    PuzzleSolution toPuzzleSolution(const SolutionModel&, const PuzzleModel&);
 }

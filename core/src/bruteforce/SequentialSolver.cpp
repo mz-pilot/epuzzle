@@ -21,7 +21,7 @@ namespace epuzzle::details::bruteforce
                 // Hot cycle!
                 if (m_ctx.validator().isSolutionValid(*cursor)) [[unlikely]]
                 {
-                    solutions.push_back(toPuzzleSolution(cursor->getSolutionModel(), m_ctx.puzzleModel()));
+                    solutions.push_back(cursor->getSolutionModel().toPuzzleSolution(m_ctx.puzzleModel()));
                 }
                 if (!tracker.update()) [[unlikely]] // user canceled
                     return solutions;
