@@ -8,8 +8,8 @@ namespace epuzzle::details::bruteforce
     class SearchSpace
     {
     public:
-        // AllowFilter can exclude obviously invalid combinations of parameters (should return false in that case)
-        using AllowFilter = std::function<bool(AttributeTypeID, AttributeValueID, PersonID)>;
+        // AllowFilter can exclude the assignment of obviously invalid attribute values ​​(in this case, return false).
+        using AllowFilter = std::function<bool(AttributeTypeID, const Assignment&)>;
 
         static std::unique_ptr<SearchSpace> create(size_t personCount, size_t attrTypeCount, AllowFilter);
         virtual ~SearchSpace() = default;

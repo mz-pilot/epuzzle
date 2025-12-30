@@ -12,7 +12,7 @@ namespace epuzzle::details::bruteforce
     public:
         Validator(size_t attrTypeCount, const std::vector<ConstraintModel>&, bool needPrefiltering);
 
-        bool isAssignmentValid(AttributeTypeID, AttributeValueID, PersonID) const;
+        bool isAssignmentValid(AttributeTypeID, const Assignment&) const;
         bool isSolutionValid(const SearchSpaceCursor&) const;
 
     private:

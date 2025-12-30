@@ -90,27 +90,17 @@ namespace
 
     // -------------------------------- helper functions for class SearchSpaceImpl  --------------------------------------
 
-    AttributeSpace makeAttributeSpace(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter filter)
+    AttributeSpace makeAttributeSpace(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
     {
-        auto makeAttrPermutations = [&filter, personCount](AttributeTypeID typeId)
+        auto makeAttrPermutations = [&allowFilter, personCount](AttributeTypeID attrTypeId)
             {
-                auto allowFilter = [&filter, typeId](const Assignment& assignment) -> bool
-                    {
-                        for (auto valueId = AttributeValueID{ 0 }; valueId < AttributeValueID{ assignment.size() }; ++valueId)
-                        {
-                            if (!filter(typeId, valueId, assignment[valueId]))
-                                return false;
-                        }
-                        return true;
-                    };
-
-                const bool hasFilter = static_cast<bool>(filter);
+                const bool hasFilter = static_cast<bool>(allowFilter);
                 std::vector<Assignment> permutations;
                 Assignment assignment(personCount);
                 std::iota(assignment.begin(), assignment.end(), PersonID{ 0 });
                 do
                 {
-                    if (!hasFilter || allowFilter(assignment))
+                    if (!hasFilter || allowFilter(attrTypeId, assignment))
                     {
                         permutations.push_back(assignment);
                     }

@@ -24,12 +24,15 @@ namespace epuzzle::details::bruteforce
         std::ranges::sort(m_constraintCheckers, {}, &ConstraintChecker::complexity);
     }
 
-    bool Validator::isAssignmentValid(AttributeTypeID typeId, AttributeValueID valueId, PersonID personId) const
+    bool Validator::isAssignmentValid(AttributeTypeID attrTypeId, const Assignment& assignment) const
     {
-        for (const auto& property : m_prefilters[typeId])
+        for (const auto& property : m_prefilters[attrTypeId])
         {
-            if (property.person == personId && ((property.attr.valueId != valueId) != property.negate))
-                return false;
+            for (auto valueId = AttributeValueID{ 0 }; valueId < AttributeValueID{ assignment.size() }; ++valueId)
+            {
+                if (property.person == assignment[valueId] && ((property.attr.valueId != valueId) != property.negate))
+                    return false;
+            }
         }
         return true;
     }

@@ -16,7 +16,7 @@ namespace epuzzle::details::bruteforce
             using namespace std::placeholders;
             // see Validator class description
             m_space = SearchSpace::create(m_model.personCount(), m_model.attrTypeCount(),
-                std::bind(&Validator::isAssignmentValid, &m_validator, _1, _2, _3));
+                std::bind(&Validator::isAssignmentValid, &m_validator, _1, _2));
         }
 
         const PuzzleModel& puzzleModel() const { return m_model; }
