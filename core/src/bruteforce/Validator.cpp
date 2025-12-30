@@ -24,7 +24,7 @@ namespace epuzzle::details::bruteforce
         std::ranges::sort(m_constraintCheckers, {}, &ConstraintChecker::complexity);
     }
 
-    bool Validator::isAssignmentValid(AttributeTypeID attrTypeId, const Assignment& assignment) const
+    bool Validator::isAttributeAssignmentValid(AttributeTypeID attrTypeId, const AttributeAssignment& assignment) const
     {
         for (const auto& property : m_prefilters[attrTypeId])
         {

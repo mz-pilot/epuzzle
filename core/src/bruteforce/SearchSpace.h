@@ -3,13 +3,13 @@
 
 namespace epuzzle::details::bruteforce
 {
-    // Search space for bruteforce. Contain all possible combinations of attribute values assigned to persons.
+    // Search space for bruteforce. Contains all possible combinations of attribute values assigned to persons.
     // Interface - because there can be different implementations (with or without pre-generated permutations, etc.).
     class SearchSpace
     {
     public:
-        // AllowFilter can exclude the assignment of obviously invalid attribute values ​​(in this case, return false).
-        using AllowFilter = std::function<bool(AttributeTypeID, const Assignment&)>;
+        // AllowFilter can exclude AttributeAssignment with a known invalid combination of attribute value bindings to persons.
+        using AllowFilter = std::function<bool(AttributeTypeID, const AttributeAssignment&)>;
 
         static std::unique_ptr<SearchSpace> create(size_t personCount, size_t attrTypeCount, AllowFilter);
         virtual ~SearchSpace() = default;

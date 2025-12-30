@@ -6,7 +6,7 @@ namespace epuzzle::details::bruteforce
 
 namespace
 {
-    using AttributeSpace = utils::IndexedVector<AttributeTypeID, std::vector<Assignment>>; // All attributes actual permutations
+    using AttributeSpace = utils::IndexedVector<AttributeTypeID, std::vector<AttributeAssignment>>; // All attributes actual permutations
 
     // -------------------------------- class CursorImpl ------------------------------------------------
 
@@ -69,7 +69,7 @@ namespace
         }
 
     private:
-        const Assignment& currentAttrAssignment(AttributeTypeID typeId) const
+        const AttributeAssignment& currentAttrAssignment(AttributeTypeID typeId) const
         {
             return m_attributes[typeId][m_context[typeId].permutIndex];
         }
@@ -93,8 +93,8 @@ namespace
         auto makeAttrPermutations = [&allowFilter, personCount](AttributeTypeID attrTypeId)
             {
                 const bool hasFilter = static_cast<bool>(allowFilter);
-                std::vector<Assignment> permutations;
-                Assignment assignment(personCount);
+                std::vector<AttributeAssignment> permutations;
+                AttributeAssignment assignment(personCount);
                 std::iota(assignment.begin(), assignment.end(), PersonID{ 0 });
                 do
                 {

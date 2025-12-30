@@ -9,11 +9,11 @@ namespace epuzzle::details
     {
     public:
         explicit SolutionModel(size_t attrTypeCount);
-        void setAttributeAssignment(AttributeTypeID, Assignment);
+        void setAttributeAssignment(AttributeTypeID, AttributeAssignment);
 
         PuzzleSolution toPuzzleSolution(const PuzzleModel&) const;
 
     private:
-        utils::IndexedVector<AttributeTypeID, Assignment> m_attributes;
+        utils::IndexedVector<AttributeTypeID, AttributeAssignment> m_attributes;
     };
 }

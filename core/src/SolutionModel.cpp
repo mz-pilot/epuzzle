@@ -8,7 +8,7 @@ namespace epuzzle::details
     {
     }
 
-    void SolutionModel::setAttributeAssignment(AttributeTypeID attrTypeId, Assignment assignment)
+    void SolutionModel::setAttributeAssignment(AttributeTypeID attrTypeId, AttributeAssignment assignment)
     {
         ENSURE(attrTypeId.value() < m_attributes.size(), "");
         m_attributes[attrTypeId] = std::move(assignment);
