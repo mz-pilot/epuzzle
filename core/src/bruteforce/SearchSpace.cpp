@@ -33,7 +33,7 @@
      - If it completes a full rotation -> increment the second wheel and reset the first.
      - This continues until the last attribute is reached.
 
- Pre-filtering is also used: an `AllowFilter` is applied BEFORE the search space is finalized.
+ Pre-filtering is also used: an `AllowFilter` is applied BEFORE the search space generation.
  If a specific permutation violates a standalone constraint (e.g., "The Norwegian lives
  in the first house"), it is excluded from its respective wheel entirely.
  =============================================================================================
@@ -53,14 +53,14 @@ namespace
     class CursorImpl final : public SearchSpaceCursor
     {
     public:
-        CursorImpl(const WheelSet& wheels, std::uint64_t firstCandidate, std::uint64_t count)
+        CursorImpl(const WheelSet& wheels, std::uint64_t offset, std::uint64_t count)
             : m_wheels(wheels)
-            , m_remainingCandidates(count) // parameters checked in SpaceImpl::createCursor
+            , m_remainingCombinations(count) // parameters checked in SpaceImpl::createCursor
         {
             m_wheelsState.reserve(m_wheels.size());
 
             // linear index -> multiindex
-            std::uint64_t remainingLinearIndex = firstCandidate;
+            std::uint64_t remainingLinearIndex = offset;
             for (const auto& wheel : m_wheels)
             {
                 const std::uint64_t radix = wheel.size();
@@ -73,8 +73,8 @@ namespace
         bool moveNext() override
         {
             // Hot path! 
-            --m_remainingCandidates;
-            for (auto attrTypeId = AttributeTypeID{ 0 }; m_remainingCandidates && attrTypeId < AttributeTypeID{ m_wheels.size() }; ++attrTypeId)
+            --m_remainingCombinations;
+            for (auto attrTypeId = AttributeTypeID{ 0 }; m_remainingCombinations && attrTypeId < AttributeTypeID{ m_wheels.size() }; ++attrTypeId)
             {
                 if (++m_wheelsState[attrTypeId].permutIndex < m_wheelsState[attrTypeId].permutCount) [[likely]]
                     return true;
@@ -123,48 +123,54 @@ namespace
             size_t permutCount = 0; // cache (hot data)
         };
         utils::IndexedVector<AttributeTypeID, WheelState> m_wheelsState;
-        std::uint64_t m_remainingCandidates = 0;
+        std::uint64_t m_remainingCombinations = 0;
     };
 
     // -------------------------------- helper functions for class SpaceImpl  --------------------------------------
 
-    WheelSet makeWheels(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
+    // For each attribute generates `wheel` - list of possible permutations of values ​​for this attribute
+    // If allowFilter specified - filtering out obviously false ones.
+    WheelSet generateWheels(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
     {
-        auto makeAttrPermutations = [&allowFilter, personCount](AttributeTypeID attrTypeId)
+        auto generateWheel = [&allowFilter, personCount](AttributeTypeID attrTypeId)
             {
                 const bool hasFilter = static_cast<bool>(allowFilter);
-                std::vector<AttributeAssignment> permutations;
-                AttributeAssignment assignment(personCount);
-                std::iota(assignment.begin(), assignment.end(), PersonID{ 0 });
+                // Generation of permutations:
+                // start: [0, 1, 2, 3, 4] -> AttributeAssignment[value_0] = Person_0, AttributeAssignment[value_1] = Person_1, ...
+                // next:  [0, 1, 2, 4, 3] ...
+                // end:   [4, 3, 2, 1, 0]
+
+                std::vector<AttributeAssignment> permutationList;
+                AttributeAssignment attributeAssignment(personCount);
+                std::iota(attributeAssignment.begin(), attributeAssignment.end(), PersonID{ 0 }); // init start permutation
                 do
                 {
-                    if (!hasFilter || allowFilter(attrTypeId, assignment))
+                    if (!hasFilter || allowFilter(attrTypeId, attributeAssignment))
                     {
-                        permutations.push_back(assignment);
+                        permutationList.push_back(attributeAssignment);
                     }
-                } while (std::ranges::next_permutation(assignment).found);
+                } while (std::ranges::next_permutation(attributeAssignment).found);
 
-                return permutations;
+                return permutationList;
             };
 
         WheelSet wheels;
         wheels.reserve(attrTypeCount);
 
         for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ attrTypeCount }; ++typeId)
-            wheels.emplace_back(makeAttrPermutations(typeId));
+            wheels.emplace_back(generateWheel(typeId));
 
         return wheels;
     }
 
-    std::uint64_t calcTotalCombinations(const WheelSet& attrs)
+    std::uint64_t calcTotalCombinations(const WheelSet& wheels)
     {
         std::uint64_t totalCombinations = 1;
-        for (const auto& attr : attrs)
+        for (const auto& wheel : wheels)
         {
-            const auto attrPermutationCount = attr.size();
-            ENSURE(attrPermutationCount == 0 || totalCombinations <= std::numeric_limits<uint64_t>::max() / attrPermutationCount,
+            ENSURE(wheel.size() == 0 || totalCombinations <= std::numeric_limits<uint64_t>::max() / wheel.size(),
                 "Too much combinations count for using uint64!");
-            totalCombinations *= attrPermutationCount;
+            totalCombinations *= wheel.size();
         }
         return totalCombinations;
     }
@@ -205,6 +211,6 @@ namespace
 
     std::unique_ptr<SearchSpace> SearchSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
     {
-        return std::make_unique<SpaceImpl>(makeWheels(personCount, attrTypeCount, std::move(filter)));
+        return std::make_unique<SpaceImpl>(generateWheels(personCount, attrTypeCount, std::move(filter)));
     }
 }
