@@ -1,6 +1,44 @@
 #include "epuzzle/Exceptions.h"
 #include "SearchSpace.h"
 
+/*
+ ======================================================================================
+ ARCHITECTURE NOTE: SEARCH SPACE GENERATION
+ =============================================================================================
+     CONCEPT
+ Представьте кодовый замок с N колёсиками. На каждом колёсике нарисованы не цифры 0-9,
+ а уникальные варианты перестановки конкретного атрибута (например, Цвета Домов).
+  1. Мы генерируем все валидные перестановки для каждого типа атрибута отдельно.
+     Например, если у нас 5 домов и 5 цветов -> это 5! = 120 вариантов раскраски.
+     Это наши "числа" на колесике.
+  2. Пространство поиска — перебор всех комбинаций положений наших "колёсиков".
+  3. Итерация работает как одометр (счетчик пробега) в машине:
+     - Сдвигаем первое колёсико.
+     - Если оно сделало полный оборот -> сдвигаем второе колёсико, а первое сбрасываем.
+     - И так далее до последнего атрибута.
+ Также применяется prefiltering: `AllowFilter` применяется ДО генерации пространства.
+ Если перестановка нарушает условие (например, "Норвежец живет в доме #1"), она даже
+ не попадает в список допустимых значений для "колёсика".
+ ---------------------------------------------------------------------------------------------
+     CONCEPT
+ Imagine a combination lock with N wheels. Instead of digits 0–9, each wheel
+ contains all unique permutations of a specific attribute type (e.g., House Colors).
+  1. We generate all valid permutations for each attribute type independently.
+     Example: 5 houses and 5 colors result in 5! = 120 possible coloring patterns.
+     These patterns represent the "digits" on a single wheel.
+  2. The search space is defined as the Cartesian product of all wheels, representing
+     every possible combination of attribute assignments.
+  3. The iterator functions like a vehicle odometer (mileage counter):
+     - Increment the first wheel.
+     - If it completes a full rotation -> increment the second wheel and reset the first.
+     - This continues until the last attribute is reached.
+
+ Prefiltering is also used: an `AllowFilter` is applied BEFORE the search space is finalized.
+ If a specific permutation violates a standalone constraint (e.g., "The Norwegian lives
+ in the first house"), it is excluded from its respective wheel entirely.
+ =============================================================================================
+ */
+
 namespace epuzzle::details::bruteforce
 {
 
