@@ -67,9 +67,9 @@ namespace epuzzle::tests
 
 
     INSTANTIATE_TEST_SUITE_P(
-        SolverRealPuzzleBruteForceSequenced,
+        SolverRealPuzzleBruteForceSequential,
         SolverRealPuzzleTests,
-        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequenced} }));
+        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequential} }));
 
     INSTANTIATE_TEST_SUITE_P(
         SolverRealPuzzleBruteForceParallel,

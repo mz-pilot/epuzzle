@@ -97,11 +97,11 @@ namespace
                 << " --method " << EnumHelper::name(Method::BruteForce)
                 << " --execpolicy " << EnumHelper::name(ExecPolicy::Parallel) << "\n\n";
 
-            std::cout << "# Disable prefilter for Sequenced BruteForce\n";
+            std::cout << "# Disable prefilter for Sequential BruteForce\n";
             std::cout << appName << " -f test.toml"
                 << " -m " << EnumHelper::name(Method::BruteForce)
                 << " -p " << EnumHelper::name(PrefilterMode::Disabled)
-                << " -e " << EnumHelper::name(ExecPolicy::Sequenced);
+                << " -e " << EnumHelper::name(ExecPolicy::Sequential);
 
             std::cout << std::endl;
             return {};

@@ -251,7 +251,7 @@ epuzzle --help
 **Опциональные аргументы:**
 - `-m, --method <МЕТОД>` — метод решения: `BruteForce` (по умолчанию) или `Deductive` (в разработке)
 - `-p, --prefilter <РЕЖИМ>` — предфильтрация (только для BruteForce): `Enabled` (по умолчанию) или `Disabled`
-- `-e, --execpolicy <ПОЛИТИКА>` — политика выполнения (только для BruteForce): `Parallel` (по умолчанию) или `Sequenced`
+- `-e, --execpolicy <ПОЛИТИКА>` — политика выполнения (только для BruteForce): `Parallel` (по умолчанию) или `Sequential`
 - `-v, --version` — показать версию программы
 - `-h, --help` — показать справку
 
@@ -264,7 +264,7 @@ epuzzle --file puzzle_examples/einsteins.toml
 epuzzle --file загадка.toml --method BruteForce --execpolicy Parallel
 
 # Однопоточный перебор без предфильтрации
-epuzzle -f test.toml -m BruteForce -p Disabled -e Sequenced
+epuzzle -f test.toml -m BruteForce -p Disabled -e Sequential
 ```
 
 #### Описание режимов работы
@@ -279,7 +279,7 @@ epuzzle -f test.toml -m BruteForce -p Disabled -e Sequenced
 
 ##### Политика выполнения (`--execpolicy`, только для BruteForce)
 - *Parallel* (по умолчанию) — многопоточная обработка (использует все доступные ядра CPU).
-- *Sequenced* — однопоточная обработка (удобно для отладки).
+- *Sequential* — однопоточная обработка (удобно для отладки).
 
 </details>
 
@@ -376,7 +376,7 @@ struct SolverConfig
            
     struct BruteForceConfig 
     {
-        enum class ExecPolicy { Sequenced, Parallel };
+        enum class ExecPolicy { Sequential, Parallel };
         bool prefilter = true;
         ExecPolicy execution = ExecPolicy::Parallel;
     };
@@ -422,7 +422,7 @@ namespace epuzzle::details
     INSTANTIATE_TEST_SUITE_P(
         SolverBruteForcePrefilter,
         SolverTests,
-        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequenced} }));
+        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequential} }));
 
     INSTANTIATE_TEST_SUITE_P(
         SolverDeductive,

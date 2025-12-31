@@ -116,17 +116,17 @@ namespace
         return attrs;
     }
 
-    std::uint64_t calcTotalCandidates(const AttributeSpace& attrs)
+    std::uint64_t calcTotalCombinations(const AttributeSpace& attrs)
     {
-        std::uint64_t totalCandidates = 1;
+        std::uint64_t totalCombinations = 1;
         for (const auto& attr : attrs)
         {
             const auto attrPermutationCount = attr.size();
-            ENSURE(attrPermutationCount == 0 || totalCandidates <= std::numeric_limits<uint64_t>::max() / attrPermutationCount,
-                "Too much candidates count for using uint64!");
-            totalCandidates *= attrPermutationCount;
+            ENSURE(attrPermutationCount == 0 || totalCombinations <= std::numeric_limits<uint64_t>::max() / attrPermutationCount,
+                "Too much combinations count for using uint64!");
+            totalCombinations *= attrPermutationCount;
         }
-        return totalCandidates;
+        return totalCombinations;
     }
 
     // -------------------------------- class SpaceImpl  ------------------------------------------------
@@ -137,7 +137,7 @@ namespace
     public:
         explicit SpaceImpl(AttributeSpace&& attributes)
             : m_attributes(std::move(attributes))
-            , m_totalCombinations(calcTotalCandidates(m_attributes))
+            , m_totalCombinations(calcTotalCombinations(m_attributes))
         {
         }
 

@@ -552,12 +552,12 @@ namespace epuzzle::tests
     INSTANTIATE_TEST_SUITE_P(
         SolverBruteForce,
         SolverTests,
-        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = false, .execution = ExecPolicy::Sequenced} }));
+        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = false, .execution = ExecPolicy::Sequential} }));
 
     INSTANTIATE_TEST_SUITE_P(
         SolverBruteForcePrefilter,
         SolverTests,
-        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequenced} }));
+        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequential} }));
 
     INSTANTIATE_TEST_SUITE_P(
         SolverDeductive,

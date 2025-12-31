@@ -17,7 +17,7 @@ namespace epuzzle
         {
             enum class ExecPolicy
             {
-                Sequenced,
+                Sequential,
                 Parallel
             };
 

@@ -19,7 +19,7 @@ namespace epuzzle
         {
             ENSURE_CFG(cfg.bruteForce.has_value(), "Must present for BruteForce solving method!");
             const auto execPolicy = cfg.bruteForce->execution;
-            ENSURE_CFG(execPolicy == ExecPolicy::Parallel || execPolicy == ExecPolicy::Sequenced,
+            ENSURE_CFG(execPolicy == ExecPolicy::Parallel || execPolicy == ExecPolicy::Sequential,
                 "Unexpected execution policy: (int)" << static_cast<int>(execPolicy));
         }
         else
@@ -45,7 +45,7 @@ namespace epuzzle
             switch (exec)
             {
             case ExecPolicy::Parallel:  return os << "Parallel";
-            case ExecPolicy::Sequenced: return os << "Sequenced";
+            case ExecPolicy::Sequential: return os << "Sequential";
             default: ENSURE(false, "Unsupported execution policy type: (int) " << static_cast<int>(exec));
             };
         }
