@@ -32,7 +32,7 @@ namespace epuzzle::tests
             ASSERT_TRUE(cursor = space->createCursor(chunk->offset, chunk->count));
             do
                 ++iterated;
-            while (cursor->next());
+            while (cursor->moveNext());
         }
         EXPECT_EQ(iterated, totalCombinations);
     }

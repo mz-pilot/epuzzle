@@ -10,7 +10,7 @@ namespace epuzzle::details::bruteforce
         virtual ~SearchSpaceCursor() = default;
 
         // Move to next combination (solution candidate)
-        [[nodiscard]] virtual bool next() = 0;
+        [[nodiscard]] virtual bool moveNext() = 0;
 
         virtual PersonID ownerOf(AttributeTypeID, AttributeValueID) const = 0;
         virtual size_t personPosition(PersonID, AttributeTypeID) const = 0;

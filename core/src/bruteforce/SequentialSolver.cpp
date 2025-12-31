@@ -26,7 +26,7 @@ namespace epuzzle::details::bruteforce
                 if (!tracker.update()) [[unlikely]] // user canceled
                     return solutions;
 
-            } while (cursor->next());
+            } while (cursor->moveNext());
         }
         else
             tracker.finish();

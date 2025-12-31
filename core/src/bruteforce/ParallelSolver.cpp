@@ -72,7 +72,7 @@ namespace epuzzle::details::bruteforce
                     threadResult.push_back(cursor->getSolutionModel().toPuzzleSolution(m_ctx.puzzleModel()));
                 }
                 localTracker.update();
-            } while (cursor->next());
+            } while (cursor->moveNext());
         }
         return threadResult;
     }

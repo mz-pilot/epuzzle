@@ -8,7 +8,7 @@ namespace epuzzle::details
     using PersonID = utils::TypedIndex<struct PersonID_tag>;
 
     // Combination of values of one attribute. For example, for attribute type "house_color":
-    // AttributeAssignment[red_id] = Bob_id, AttributeAssignment[green_id] = Alice_id, ...)
+    // AttributeAssignment[red] = Alice, AttributeAssignment[green] = Bob, AttributeAssignment[white] = John, ...)
     using AttributeAssignment = utils::IndexedVector<AttributeValueID, PersonID>; 
 
     // Note: person - special attribute type (not so pretty, but very practical)

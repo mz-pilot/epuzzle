@@ -265,11 +265,11 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}} },
-                    Fact{ {{"person"}, {"NameA"}}, {{"attr2"}, {"attr2_val2"}} }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}} },
+                Fact{ {{"person"}, {"NameA"}}, {{"attr2"}, {"attr2_val2"}} }
+            },
             {
                 PuzzleSolution
                 {{
@@ -279,11 +279,11 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val2"}}, NEGATE },
-                    Fact{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val2"}} }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val2"}}, NEGATE },
+                Fact{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val2"}} }
+            },
             {
                 PuzzleSolution
                 {{
@@ -293,11 +293,11 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}}, NEGATE },
-                    Fact{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val2"}}, NEGATE }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}}, NEGATE },
+                Fact{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val2"}}, NEGATE }
+            },
             {
                 PuzzleSolution
                 {{
@@ -307,12 +307,12 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}} },
-                    Fact{ {{"person"}, {"NameB"}}, {{"attr1"}, {"attr1_val2"}} },
-                    Fact{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val2"}} }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Fact{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}} },
+                Fact{ {{"person"}, {"NameB"}}, {{"attr1"}, {"attr1_val2"}} },
+                Fact{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val2"}} }
+            },
             {
                 PuzzleSolution
                 {{
@@ -322,11 +322,11 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Comparison{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val2"}}, {"attr1"}, Relation::Before },
-                    Comparison{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val1"}}, {"attr2"}, Relation::ImmediateRight }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Comparison{ {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val2"}}, {"attr1"}, Relation::Before },
+                Comparison{ {{"person"}, {"NameB"}}, {{"attr2"}, {"attr2_val1"}}, {"attr2"}, Relation::ImmediateRight }
+            },
             {
                 PuzzleSolution
                 {{
@@ -336,12 +336,12 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Comparison{ {{"person"}, {"NameA"}}, {{"person"}, {"NameB"}}, {"attr1"}, Relation::ImmediateLeft },
-                    Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr2"}, {"attr2_val2"}}, {"attr2"}, Relation::Adjacent },
-                    Comparison{ {{"person"}, {"NameB"}}, {{"person"}, {"NameA"}}, {"attr2"}, Relation::After }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Comparison{ {{"person"}, {"NameA"}}, {{"person"}, {"NameB"}}, {"attr1"}, Relation::ImmediateLeft },
+                Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr2"}, {"attr2_val2"}}, {"attr2"}, Relation::Adjacent },
+                Comparison{ {{"person"}, {"NameB"}}, {{"person"}, {"NameA"}}, {"attr2"}, Relation::After }
+            },
             {
                 PuzzleSolution
                 {{
@@ -351,11 +351,11 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Fact{       {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val2"}}, NEGATE },
-                    Comparison{ {{"person"}, {"NameA"}}, {{"attr2"}, {"attr2_val1"}}, {"attr2"}, Relation::Adjacent }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Fact{       {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val2"}}, NEGATE },
+                Comparison{ {{"person"}, {"NameA"}}, {{"attr2"}, {"attr2_val1"}}, {"attr2"}, Relation::Adjacent }
+            },
             {
                 PuzzleSolution
                 {{
@@ -365,12 +365,12 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr1"}, {"attr1_val2"}}, {"attr2"}, Relation::ImmediateLeft },
-                    Comparison{ {{"attr2"}, {"attr2_val1"}}, {{"attr2"}, {"attr2_val2"}}, {"attr1"}, Relation::Before },
-                    Fact{       {{"person"}, {"NameB"}}, {{"attr1"}, {"attr1_val1"}}, NEGATE }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr1"}, {"attr1_val2"}}, {"attr2"}, Relation::ImmediateLeft },
+                Comparison{ {{"attr2"}, {"attr2_val1"}}, {{"attr2"}, {"attr2_val2"}}, {"attr1"}, Relation::Before },
+                Fact{       {{"person"}, {"NameB"}}, {{"attr1"}, {"attr1_val1"}}, NEGATE }
+            },
             {
                 PuzzleSolution
                 {{
@@ -380,13 +380,13 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Fact{       {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}} },
-                    Fact{       {{"person"}, {"NameB"}}, {{"attr1"}, {"attr1_val2"}} },
-                    Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr1"}, {"attr1_val2"}}, {"attr2"}, Relation::Adjacent },
-                    Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr2"}, {"attr2_val2"}}, {"attr2"}, Relation::Before }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Fact{       {{"person"}, {"NameA"}}, {{"attr1"}, {"attr1_val1"}} },
+                Fact{       {{"person"}, {"NameB"}}, {{"attr1"}, {"attr1_val2"}} },
+                Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr1"}, {"attr1_val2"}}, {"attr2"}, Relation::Adjacent },
+                Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr2"}, {"attr2_val2"}}, {"attr2"}, Relation::Before }
+            },
             {
                 PuzzleSolution
                 {{
@@ -419,10 +419,10 @@ namespace epuzzle::tests
                 }}
             }));
 
-            EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
-                {
-                    Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr1"}, {"attr1_val2"}}, {"attr2"}, Relation::Before }
-                },
+        EXPECT_TRUE(hasSolutionSet(puzzle_2x2(),
+            {
+                Comparison{ {{"attr1"}, {"attr1_val1"}}, {{"attr1"}, {"attr1_val2"}}, {"attr2"}, Relation::Before }
+            },
             {
                 PuzzleSolution
                 {{

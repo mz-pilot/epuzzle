@@ -16,7 +16,7 @@
      - Сдвигаем первое колёсико.
      - Если оно сделало полный оборот -> сдвигаем второе колёсико, а первое сбрасываем.
      - И так далее до последнего атрибута.
- Также применяется prefiltering: `AllowFilter` применяется ДО генерации пространства.
+ Также применяется pre-filtering: `AllowFilter` применяется ДО генерации пространства.
  Если перестановка нарушает условие (например, "Норвежец живет в доме #1"), она даже
  не попадает в список допустимых значений для "колёсика".
  ---------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@
      - If it completes a full rotation -> increment the second wheel and reset the first.
      - This continues until the last attribute is reached.
 
- Prefiltering is also used: an `AllowFilter` is applied BEFORE the search space is finalized.
+ Pre-filtering is also used: an `AllowFilter` is applied BEFORE the search space is finalized.
  If a specific permutation violates a standalone constraint (e.g., "The Norwegian lives
  in the first house"), it is excluded from its respective wheel entirely.
  =============================================================================================
@@ -44,42 +44,43 @@ namespace epuzzle::details::bruteforce
 
 namespace
 {
-    using AttributeSpace = utils::IndexedVector<AttributeTypeID, std::vector<AttributeAssignment>>; // All attributes actual permutations
+    // Store set of possible permutations for each attribute type
+    // Index: AttributeTypeID -> Value: list of possible permutations of values ​​for this attribute
+    using WheelSet = utils::IndexedVector<AttributeTypeID, std::vector<AttributeAssignment>>;
 
     // -------------------------------- class CursorImpl ------------------------------------------------
 
     class CursorImpl final : public SearchSpaceCursor
     {
     public:
-        CursorImpl(const AttributeSpace& attrs, std::uint64_t firstCandidate, std::uint64_t count)
-            : m_attributes(attrs)
+        CursorImpl(const WheelSet& wheels, std::uint64_t firstCandidate, std::uint64_t count)
+            : m_wheels(wheels)
             , m_remainingCandidates(count) // parameters checked in SpaceImpl::createCursor
         {
-            m_context.reserve(m_attributes.size());
+            m_wheelsState.reserve(m_wheels.size());
 
             // linear index -> multiindex
             std::uint64_t remainingLinearIndex = firstCandidate;
-            for (const auto& attr : m_attributes)
+            for (const auto& wheel : m_wheels)
             {
-                const auto attrPermutationsCount = attr.size();
-                const std::uint64_t radix = attrPermutationsCount;
-                m_context.emplace_back(remainingLinearIndex % radix, radix);
+                const std::uint64_t radix = wheel.size();
+                m_wheelsState.emplace_back(remainingLinearIndex % radix, radix);
                 remainingLinearIndex /= radix;
             }
             ENSURE(remainingLinearIndex == 0, "");
         }
 
-        bool next() override
+        bool moveNext() override
         {
             // Hot path! 
             --m_remainingCandidates;
-            for (auto attrTypeId = AttributeTypeID{ 0 }; attrTypeId < AttributeTypeID{ m_attributes.size() } && m_remainingCandidates; ++attrTypeId)
+            for (auto attrTypeId = AttributeTypeID{ 0 }; m_remainingCandidates && attrTypeId < AttributeTypeID{ m_wheels.size() }; ++attrTypeId)
             {
-                if (++m_context[attrTypeId].permutIndex < m_context[attrTypeId].permutCount) [[likely]]
+                if (++m_wheelsState[attrTypeId].permutIndex < m_wheelsState[attrTypeId].permutCount) [[likely]]
                     return true;
 
                 [[unlikely]]
-                m_context[attrTypeId].permutIndex = 0;
+                m_wheelsState[attrTypeId].permutIndex = 0;
             }
             [[unlikely]]
             return false; // last reached
@@ -87,46 +88,47 @@ namespace
 
         PersonID ownerOf(AttributeTypeID typeId, AttributeValueID valueId) const override
         {
-            return typeId == AttributeTypeID_person ? PersonID{ valueId.value() } : currentAttrAssignment(typeId)[valueId];
+            return typeId == AttributeTypeID_person ? PersonID{ valueId.value() } : currentAssignment(typeId)[valueId];
         }
 
         size_t personPosition(PersonID personId, AttributeTypeID typeId) const override
         {
-            const auto& assignment = currentAttrAssignment(typeId);
+            const auto& assignment = currentAssignment(typeId);
             return std::ranges::find(assignment, personId) - assignment.cbegin();
         }
 
         SolutionModel getSolutionModel() const override
         {
-            SolutionModel solution{ m_attributes.size() };
-            for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ m_attributes.size() }; ++typeId)
+            const auto attrTypeCount = m_wheels.size();
+            SolutionModel solution{ attrTypeCount };
+            for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ attrTypeCount }; ++typeId)
             {
-                solution.setAttributeAssignment(typeId, currentAttrAssignment(typeId));
+                solution.setAttributeAssignment(typeId, currentAssignment(typeId));
             }
             return solution;
         }
 
     private:
-        const AttributeAssignment& currentAttrAssignment(AttributeTypeID typeId) const
+        const AttributeAssignment& currentAssignment(AttributeTypeID typeId) const
         {
-            return m_attributes[typeId][m_context[typeId].permutIndex];
+            return m_wheels[typeId][m_wheelsState[typeId].permutIndex];
         }
 
     private:
-        const AttributeSpace& m_attributes;
+        const WheelSet& m_wheels;
 
-        struct AttributeContext
+        struct WheelState
         {
             size_t permutIndex = 0;
             size_t permutCount = 0; // cache (hot data)
         };
-        utils::IndexedVector<AttributeTypeID, AttributeContext> m_context;
+        utils::IndexedVector<AttributeTypeID, WheelState> m_wheelsState;
         std::uint64_t m_remainingCandidates = 0;
     };
 
     // -------------------------------- helper functions for class SpaceImpl  --------------------------------------
 
-    AttributeSpace makeAttributeSpace(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
+    WheelSet makeWheels(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
     {
         auto makeAttrPermutations = [&allowFilter, personCount](AttributeTypeID attrTypeId)
             {
@@ -145,16 +147,16 @@ namespace
                 return permutations;
             };
 
-        AttributeSpace attrs;
-        attrs.reserve(attrTypeCount);
+        WheelSet wheels;
+        wheels.reserve(attrTypeCount);
 
         for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ attrTypeCount }; ++typeId)
-            attrs.emplace_back(makeAttrPermutations(typeId));
+            wheels.emplace_back(makeAttrPermutations(typeId));
 
-        return attrs;
+        return wheels;
     }
 
-    std::uint64_t calcTotalCombinations(const AttributeSpace& attrs)
+    std::uint64_t calcTotalCombinations(const WheelSet& attrs)
     {
         std::uint64_t totalCombinations = 1;
         for (const auto& attr : attrs)
@@ -173,9 +175,9 @@ namespace
     class SpaceImpl final : public SearchSpace
     {
     public:
-        explicit SpaceImpl(AttributeSpace&& attributes)
-            : m_attributes(std::move(attributes))
-            , m_totalCombinations(calcTotalCombinations(m_attributes))
+        explicit SpaceImpl(WheelSet&& wheels)
+            : m_wheels(std::move(wheels))
+            , m_totalCombinations(calcTotalCombinations(m_wheels))
         {
         }
 
@@ -189,20 +191,20 @@ namespace
             if (m_totalCombinations == 0 || count == 0 || offset >= m_totalCombinations || count > m_totalCombinations - offset)
                 return {};
 
-            return std::make_unique<CursorImpl>(m_attributes, offset, count);
+            return std::make_unique<CursorImpl>(m_wheels, offset, count);
         }
 
     private:
-        const AttributeSpace m_attributes;
+        const WheelSet m_wheels;
         const std::uint64_t m_totalCombinations;
     };
 
 } // namespace
 
-        // -------------------------------- class SearchSpace ------------------------------------------------
+    // -------------------------------- class SearchSpace ------------------------------------------------
 
     std::unique_ptr<SearchSpace> SearchSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
     {
-        return std::make_unique<SpaceImpl>(makeAttributeSpace(personCount, attrTypeCount, std::move(filter)));
+        return std::make_unique<SpaceImpl>(makeWheels(personCount, attrTypeCount, std::move(filter)));
     }
 }
