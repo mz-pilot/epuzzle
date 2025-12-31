@@ -129,8 +129,8 @@ namespace
     // -------------------------------- helper functions for class SpaceImpl  --------------------------------------
 
     // For each attribute generates `wheel` - list of possible permutations of values ​​for this attribute
-    // If allowFilter specified - filtering out obviously false ones.
-    WheelSet generateWheels(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
+    // If allowFilter specified - filtering out obviously false ones. It reduces the wheel size.
+    WheelSet generateWheelSet(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
     {
         auto generateWheel = [&allowFilter, personCount](AttributeTypeID attrTypeId)
             {
@@ -211,6 +211,6 @@ namespace
 
     std::unique_ptr<SearchSpace> SearchSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
     {
-        return std::make_unique<SpaceImpl>(generateWheels(personCount, attrTypeCount, std::move(filter)));
+        return std::make_unique<SpaceImpl>(generateWheelSet(personCount, attrTypeCount, std::move(filter)));
     }
 }
