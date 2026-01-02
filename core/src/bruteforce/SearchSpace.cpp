@@ -59,10 +59,11 @@ namespace
         {
             m_wheelsState.reserve(m_wheels.size());
 
-            // linear index -> multiindex (WheelsState)
+            // Transform linear index (offset) to WheelsState
             std::uint64_t remainingLinearIndex = offset;
             for (const auto& wheel : m_wheels)
             {
+                // note: when the pre-filter enabled, each wheel may be a different size (permutations count)
                 m_wheelsState.emplace_back(remainingLinearIndex % wheel.size(), wheel.size());
                 remainingLinearIndex /= wheel.size();
             }
