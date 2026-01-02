@@ -34,7 +34,7 @@ namespace epuzzle
             bool secondNegate = false;
         };
 
-        // Compare two persons by third attribute.
+        // Compare two persons by position in the third attribute.
         // Example: first(type = "house_color", value = "pink"), compareBy("house_position") relation(ImmediateRight) second(type = "person", value = "Bob")
         //  - means "Pink house position is immediate right than Bob's house
         struct Comparison
@@ -55,7 +55,7 @@ namespace epuzzle
             Relation relation = Relation::Uninitialized;
         };
 
-        // A person is a special attribute.It identifies the owner of any attribute. It's type name used in constraints in puzzle data.
+        // A `person` is a special attribute. It identifies the owner of any attribute. It's type name used in constraints in puzzle data.
         static constexpr auto personTypeName = "person";
 
         std::vector<std::string> persons; // example: "Spaniard"

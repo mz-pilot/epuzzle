@@ -36,12 +36,21 @@ namespace
             }
             else if constexpr (std::is_same_v<TParams, PositionComparison>)
             {
-                const auto owner1 = solutionCandidate.ownerOf(m_params.first.typeId, m_params.first.valueId);
-                const auto owner2 = solutionCandidate.ownerOf(m_params.second.typeId, m_params.second.valueId);
-                const size_t pos1 = solutionCandidate.personPosition(owner1, m_params.compareByType);
-                const size_t pos2 = solutionCandidate.personPosition(owner2, m_params.compareByType);
+                auto getPersonByVariant = [&solutionCandidate](const std::variant<PersonID, Attribute>& personVariant) -> PersonID
+                    {
+                        if (const auto* personId = std::get_if<PersonID>(&personVariant))
+                            return *personId;
+                        else if (const auto* attribute = std::get_if<Attribute>(&personVariant))
+                            return solutionCandidate.ownerOf(attribute->typeId, attribute->valueId);
+                        else
+                            ENSURE(false, "Need special handler for specified personVariant type!");
+                        return PersonID{}; // std::unreachable in C++23
+                    };
 
-                using Relation = PuzzleDefinition::Comparison::Relation;
+                const size_t pos1 = solutionCandidate.personPosition(getPersonByVariant(m_params.first), m_params.compareByType);
+                const size_t pos2 = solutionCandidate.personPosition(getPersonByVariant(m_params.second), m_params.compareByType);
+
+                using Relation = decltype(m_params.relation);
                 switch (m_params.relation)
                 {
                 case Relation::ImmediateLeft:   return pos1 < pos2 && (pos2 - pos1 == 1);
@@ -49,7 +58,7 @@ namespace
                 case Relation::Adjacent:        return std::max(pos1, pos2) - std::min(pos1, pos2) == 1;
                 case Relation::Before:          return pos1 < pos2;
                 case Relation::After:           return pos1 > pos2;
-                default: ENSURE(false, "Unexpected PuzzleDefinition::ComparisonParams::Relation: (int)" << static_cast<int>(m_params.relation));
+                default: ENSURE(false, "Unexpected PositionComparison::relation: (int)" << static_cast<int>(m_params.relation));
                 };
             }
             else

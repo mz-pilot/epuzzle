@@ -16,19 +16,20 @@ namespace epuzzle
 
     bool personHasAttribute(const PuzzleSolution& solution, std::string_view person, std::string_view attributeType, std::string_view attributeValue)
     {
-        if (solution.attributes.size() >= 1)
+        // So, we have 'special attribute' - 'person' and at least 2 attributes with values
+        const auto minAttributesCount = 1 + 2;
+        ENSURE(solution.attributes.size() >= minAttributesCount && solution.attributes.front().type == PuzzleSolution::personTypeName,
+            "PuzzleSolution has unexpected format!");
+
+        const auto& personValues = solution.attributes.front().values;
+        const auto itFoundPerson = std::ranges::find(personValues, person);
+        if (itFoundPerson != personValues.end())
         {
-            ENSURE(solution.attributes.front().type == PuzzleSolution::personTypeName, "first attribute type in puzzle solution must be personTypeName!");
-            const auto& personValues = solution.attributes.front().values;
-            const auto itFoundPerson = std::ranges::find(personValues, person);
-            if (itFoundPerson != personValues.end())
+            const size_t personIndex = itFoundPerson - personValues.begin();
+            for (size_t i = 1; i < solution.attributes.size(); ++i)
             {
-                const size_t personIndex = itFoundPerson - personValues.begin();
-                for (size_t attrIndex = 1; attrIndex < solution.attributes.size(); ++attrIndex)
-                {
-                    if (solution.attributes[attrIndex].type == attributeType)
-                        return solution.attributes[attrIndex].values[personIndex] == attributeValue;
-                }
+                if (solution.attributes[i].type == attributeType)
+                    return solution.attributes[i].values[personIndex] == attributeValue;
             }
         }
         return false;

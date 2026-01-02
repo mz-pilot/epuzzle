@@ -57,14 +57,14 @@ namespace
             : m_wheels(wheels)
             , m_remainingCombinations(count) // parameters checked in SpaceImpl::createCursor
         {
-            m_wheelsState.reserve(m_wheels.size());
+            m_odometerState.reserve(m_wheels.size());
 
             // Transform linear index (offset) to WheelsState
             std::uint64_t remainingLinearIndex = offset;
             for (const auto& wheel : m_wheels)
             {
                 // note: when the pre-filter enabled, each wheel may be a different size (permutations count)
-                m_wheelsState.emplace_back(remainingLinearIndex % wheel.size(), wheel.size());
+                m_odometerState.emplace_back(remainingLinearIndex % wheel.size(), wheel.size());
                 remainingLinearIndex /= wheel.size();
             }
             ENSURE(remainingLinearIndex == 0, "");
@@ -74,25 +74,28 @@ namespace
         {
             // Hot path!
 
-            --m_remainingCombinations;
+            if (--m_remainingCombinations == 0) [[unlikely]]
+                return false;
+
             // Odometer logic (mileage counter)
-            for (auto attrTypeId = AttributeTypeID{ 0 }; m_remainingCombinations && attrTypeId < AttributeTypeID{ m_wheels.size() }; ++attrTypeId)
+            for (auto& wheelState : m_odometerState)
             {
                 // increment the first wheel
-                if (++m_wheelsState[attrTypeId].permutIndex < m_wheelsState[attrTypeId].permutCount) [[likely]]
+                if (++wheelState.permutIndex < wheelState.permutCount) [[likely]]
                     return true;
 
-                // if it completes a full rotation -> reset the first wheel and increment the next wheel
                 [[unlikely]]
-                m_wheelsState[attrTypeId].permutIndex = 0;
+                // if it completes a full rotation -> reset the first wheel and increment the next wheel
+                wheelState.permutIndex = 0;
             }
+
             [[unlikely]]
             return false; // last reached
         }
 
         PersonID ownerOf(AttributeTypeID typeId, AttributeValueID valueId) const override
         {
-            return typeId == AttributeTypeID_person ? PersonID{ valueId.value() } : currentAssignment(typeId)[valueId];
+            return currentAssignment(typeId)[valueId];
         }
 
         size_t personPosition(PersonID personId, AttributeTypeID typeId) const override
@@ -115,7 +118,12 @@ namespace
     private:
         const AttributeAssignment& currentAssignment(AttributeTypeID typeId) const
         {
-            return m_wheels[typeId][m_wheelsState[typeId].permutIndex];
+            return m_wheels[typeId][m_odometerState[typeId].permutIndex];
+        }
+
+        const AttributeAssignment& currentAssignment2(AttributeTypeID typeId) const
+        {
+            return m_wheels[typeId][m_odometerState[typeId].permutIndex];
         }
 
     private:
@@ -126,7 +134,7 @@ namespace
             size_t permutIndex = 0;
             size_t permutCount = 0; // cache (hot data)
         };
-        utils::IndexedVector<AttributeTypeID, WheelState> m_wheelsState;
+        utils::IndexedVector<AttributeTypeID, WheelState> m_odometerState;
         std::uint64_t m_remainingCombinations = 0;
     };
 

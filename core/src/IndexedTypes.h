@@ -11,17 +11,15 @@ namespace epuzzle::details
     // AttributeAssignment[red] = Alice, AttributeAssignment[green] = Bob, AttributeAssignment[white] = John, ...)
     using AttributeAssignment = utils::IndexedVector<AttributeValueID, PersonID>; 
 
-    // Note: person - special attribute type (not so pretty, but very practical)
-    static constexpr auto AttributeTypeID_person = AttributeTypeID{ std::numeric_limits<size_t>::max() };
 
-    using Relation = PuzzleDefinition::Comparison::Relation;
-
+    // Some value of some attribute
     struct Attribute
     {
         AttributeTypeID typeId;
         AttributeValueID valueId;
     };
 
+    // Fact type: the specified person has the specified attribute
     struct PersonProperty
     {
         PersonID person;
@@ -29,6 +27,7 @@ namespace epuzzle::details
         bool negate = false;
     };
 
+    // Fact type: two different attributes have the same owner
     struct SameOwner
     {
         Attribute first;
@@ -36,12 +35,13 @@ namespace epuzzle::details
         bool secondNegate = false;
     };
 
+    // PositionComparison: сompare two persons by position in the third attribute.
     struct PositionComparison
     {
-        Attribute first;
-        Attribute second;
+        std::variant<PersonID, Attribute> first;
+        std::variant<PersonID, Attribute> second;
         AttributeTypeID compareByType;
-        Relation relation;
+        PuzzleDefinition::Comparison::Relation relation;
     };
 
     using ConstraintModel = std::variant<PersonProperty, SameOwner, PositionComparison>;

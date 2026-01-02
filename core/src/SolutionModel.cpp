@@ -2,6 +2,7 @@
 
 namespace epuzzle::details
 {
+    static_assert(PuzzleSolution::personTypeName == PuzzleDefinition::personTypeName);
 
     SolutionModel::SolutionModel(size_t attrTypeCount)
         : m_attributes(attrTypeCount)
@@ -27,7 +28,7 @@ namespace epuzzle::details
         {
             persons.emplace_back(puzzleModel.personName(PersonID{ personIndex }));
         }
-        puzzleSolution.attributes.emplace_back(PuzzleDefinition::personTypeName, std::move(persons));
+        puzzleSolution.attributes.emplace_back(PuzzleSolution::personTypeName, std::move(persons));
 
         for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ puzzleModel.attrTypeCount() }; ++typeId)
         {

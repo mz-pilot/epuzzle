@@ -2,6 +2,9 @@
 
 namespace epuzzle::details
 {
+    // Note: person - special attribute type (not so pretty, but very practical)
+    static constexpr auto AttributeTypeID_person = AttributeTypeID{ std::numeric_limits<size_t>::max() };
+
     PuzzleModel::PuzzleModel(PuzzleDefinition definition)
         : m_definition(std::move(definition))
     {
@@ -48,6 +51,8 @@ namespace epuzzle::details
                     [this, indexedAttr](const PuzzleDefinition::Fact& fact)
                     {
                         auto indexedFactFirst = indexedAttr(fact.first);
+                        // Note: if we have a fact with a `person` attribute, it can only be the first attribute
+                        // (see `normalize(PuzzleDefinition&)` and `validate(const PuzzleDefinition&)` functions
                         if (AttributeTypeID_person == indexedFactFirst.typeId)
                         {
                             m_constraints.emplace_back(std::in_place_type<PersonProperty>,

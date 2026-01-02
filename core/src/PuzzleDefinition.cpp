@@ -89,7 +89,7 @@ namespace epuzzle
                     validateAttribute(fact.first);
                     validateAttribute(fact.second);
                     ENSURE_VALID(fact.first.type != fact.second.type);
-                    ENSURE_VALID(fact.second.type != PuzzleDefinition::personTypeName);
+                    ENSURE_VALID(fact.second.type != PuzzleDefinition::personTypeName); // see also `normalize(PuzzleDefinition&)` function
                 },
                 [validateAttribute, findAttrDescr](const PuzzleDefinition::Comparison& comp)
                 {
