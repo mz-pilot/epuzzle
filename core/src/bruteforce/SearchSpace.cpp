@@ -59,26 +59,29 @@ namespace
         {
             m_wheelsState.reserve(m_wheels.size());
 
-            // linear index -> multiindex
+            // linear index -> multiindex (WheelsState)
             std::uint64_t remainingLinearIndex = offset;
             for (const auto& wheel : m_wheels)
             {
-                const std::uint64_t radix = wheel.size();
-                m_wheelsState.emplace_back(remainingLinearIndex % radix, radix);
-                remainingLinearIndex /= radix;
+                m_wheelsState.emplace_back(remainingLinearIndex % wheel.size(), wheel.size());
+                remainingLinearIndex /= wheel.size();
             }
             ENSURE(remainingLinearIndex == 0, "");
         }
 
         bool moveNext() override
         {
-            // Hot path! 
+            // Hot path!
+
             --m_remainingCombinations;
+            // Odometer logic (mileage counter)
             for (auto attrTypeId = AttributeTypeID{ 0 }; m_remainingCombinations && attrTypeId < AttributeTypeID{ m_wheels.size() }; ++attrTypeId)
             {
+                // increment the first wheel
                 if (++m_wheelsState[attrTypeId].permutIndex < m_wheelsState[attrTypeId].permutCount) [[likely]]
                     return true;
 
+                // if it completes a full rotation -> reset the first wheel and increment the next wheel
                 [[unlikely]]
                 m_wheelsState[attrTypeId].permutIndex = 0;
             }
@@ -94,7 +97,7 @@ namespace
         size_t personPosition(PersonID personId, AttributeTypeID typeId) const override
         {
             const auto& assignment = currentAssignment(typeId);
-            return std::ranges::find(assignment, personId) - assignment.cbegin();
+            return std::ranges::find(assignment, personId) - assignment.cbegin(); // it's rare call
         }
 
         SolutionModel getSolutionModel() const override
