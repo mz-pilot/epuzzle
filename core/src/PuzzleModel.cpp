@@ -2,43 +2,44 @@
 
 namespace epuzzle::details
 {
-    // Note: person - special attribute type (not so pretty, but very practical)
-    static constexpr auto AttributeTypeID_person = AttributeTypeID{ std::numeric_limits<size_t>::max() };
 
     PuzzleModel::PuzzleModel(PuzzleDefinition definition)
         : m_definition(std::move(definition))
     {
         // helper lambdas
 
-        auto attrTypeID = [&attrs = m_definition.attributes](std::string_view typeName)
+        auto indexedPerson = [this](std::string_view valueName)
             {
-                if (typeName == PuzzleDefinition::personTypeName)
-                    return AttributeTypeID_person;
-
-                const auto cit = std::ranges::find(attrs, typeName, &PuzzleDefinition::AttributeDescription::type);
-                ENSURE(cit != attrs.cend(), "unexpected attribute type: " << typeName);
-                return AttributeTypeID::fromDistance(cit, attrs.cbegin());
+                const auto cit = std::ranges::find(m_definition.persons, valueName);
+                ENSURE(cit != m_definition.persons.cend(), "unexpected person name: " << valueName);
+                return PersonID::fromDistance(cit, m_definition.persons.cbegin());
             };
 
-        auto attrValueID = [this](AttributeTypeID typeId, std::string_view valueName)
+        auto attrTypeID = [this](std::string_view typeName)
             {
-                if (typeId == AttributeTypeID_person)
-                {
-                    const auto cit = std::ranges::find(m_definition.persons, valueName);
-                    ENSURE(cit != m_definition.persons.cend(), "unexpected person name: " << valueName);
-                    return AttributeValueID::fromDistance(cit, m_definition.persons.cbegin());
-                }
+                const auto cit = std::ranges::find(m_definition.attributes, typeName, &PuzzleDefinition::AttributeDescription::type);
+                ENSURE(cit != m_definition.attributes.cend(), "unexpected attribute type: " << typeName);
+                return AttributeTypeID::fromDistance(cit, m_definition.attributes.cbegin());
+            };
+
+        auto indexedAttr = [this, attrTypeID](const PuzzleDefinition::Attribute& attr) -> Attribute
+            {
+                const auto typeId = attrTypeID(attr.type);
+                const auto valueName = attr.value;
 
                 const auto& values = m_definition.attributes[typeId.value()].values;
                 const auto cit = std::ranges::find(values, valueName);
                 ENSURE(cit != values.cend(), "unexpected value name: " << valueName);
-                return AttributeValueID::fromDistance(cit, values.cbegin());
+
+                return Attribute{ typeId, AttributeValueID::fromDistance(cit, values.cbegin()) };
             };
 
-        auto indexedAttr = [this, attrTypeID, attrValueID](const PuzzleDefinition::Attribute& attr) -> Attribute
+        auto indexedComparable = [indexedPerson, indexedAttr](const PuzzleDefinition::Attribute& attr) -> std::variant<PersonID, Attribute>
             {
-                const auto typeId = attrTypeID(attr.type);
-                return Attribute{ typeId, attrValueID(typeId, attr.value) };
+                if (attr.type == PuzzleDefinition::personTypeName)
+                    return indexedPerson(attr.value);
+                else
+                    return indexedAttr(attr);
             };
 
         // PuzzleDefinition::constraints (input DTO)  ->  PuzzleModel::m_constraints (optimized model)
@@ -48,26 +49,25 @@ namespace epuzzle::details
         {
             std::visit(utils::overloaded
                 {
-                    [this, indexedAttr](const PuzzleDefinition::Fact& fact)
+                    [this, indexedAttr, indexedPerson](const PuzzleDefinition::Fact& fact)
                     {
-                        auto indexedFactFirst = indexedAttr(fact.first);
-                        // Note: if we have a fact with a `person` attribute, it can only be the first attribute
+                        // Note: if we have a Fact with a `person` attribute, it can only be the first attribute
                         // (see `normalize(PuzzleDefinition&)` and `validate(const PuzzleDefinition&)` functions
-                        if (AttributeTypeID_person == indexedFactFirst.typeId)
+                        if (fact.first.type == PuzzleDefinition::personTypeName)
                         {
                             m_constraints.emplace_back(std::in_place_type<PersonProperty>,
-                                PersonID{indexedFactFirst.valueId.value()}, indexedAttr(fact.second), fact.secondNegate);
+                                indexedPerson(fact.first.value), indexedAttr(fact.second), fact.secondNegate);
                         }
                         else
                         {
                             m_constraints.emplace_back(std::in_place_type<SameOwner>,
-                                std::move(indexedFactFirst), indexedAttr(fact.second), fact.secondNegate);
+                                indexedAttr(fact.first), indexedAttr(fact.second), fact.secondNegate);
                         }
                     },
-                    [this, indexedAttr, attrTypeID](const PuzzleDefinition::Comparison& comp)
+                    [this, attrTypeID, indexedComparable](const PuzzleDefinition::Comparison& comp)
                     {
                         m_constraints.emplace_back(std::in_place_type<PositionComparison>,
-                            indexedAttr(comp.first), indexedAttr(comp.second), attrTypeID(comp.compareBy), comp.relation);
+                            indexedComparable(comp.first), indexedComparable(comp.second), attrTypeID(comp.compareBy), comp.relation);
                     },
                 }, constr);
         }
