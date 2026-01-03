@@ -20,8 +20,7 @@ namespace epuzzle::details::bruteforce
         if (m_totalSolutionCandidates == 0)
             return handleNoSolutionCandidates(opts);
 
-        if (!sendProgress(opts, 0)) [[unlikely]]
-            return {};
+        sendProgress(opts, 0);
 
         utils::AtomicProgressTracker atomicTracker{ progressCountInterval };
         SpaceSplitter spaceSplitter{ m_totalSolutionCandidates };
