@@ -46,22 +46,23 @@ namespace
 {
     // Store set of possible permutations for each attribute type
     // Index: AttributeTypeID -> Value: list of possible permutations of values ​​for this attribute
-    using WheelSet = utils::IndexedVector<AttributeTypeID, std::vector<AttributeAssignment>>;
+    using Odometer = utils::IndexedVector<AttributeTypeID, std::vector<AttributeAssignment>>;
 
     // -------------------------------- class CursorImpl ------------------------------------------------
 
     class CursorImpl final : public SearchSpaceCursor
     {
     public:
-        CursorImpl(const WheelSet& wheels, std::uint64_t offset, std::uint64_t count)
-            : m_wheels(wheels)
+        CursorImpl(const Odometer& odometer, std::uint64_t offset, std::uint64_t count)
+            : m_odometer(odometer)
             , m_remainingCombinations(count) // parameters checked in SpaceImpl::createCursor
         {
-            m_odometerState.reserve(m_wheels.size());
+            m_odometerState.reserve(m_odometer.size());
 
-            // Transform linear index (offset) to WheelsState
+            // Set begining odometer state to `offset` position: convert the linear index (offset) to m_odometerState.
+            // This is the same as calling MoveNext() `offset`-times, starting from the beginning.
             std::uint64_t remainingLinearIndex = offset;
-            for (const auto& wheel : m_wheels)
+            for (const auto& wheel : m_odometer)
             {
                 // note: when the pre-filter enabled, each wheel may be a different size (permutations count)
                 m_odometerState.emplace_back(remainingLinearIndex % wheel.size(), wheel.size());
@@ -106,7 +107,7 @@ namespace
 
         SolutionModel getSolutionModel() const override
         {
-            const auto attrTypeCount = m_wheels.size();
+            const auto attrTypeCount = m_odometer.size();
             SolutionModel solution{ attrTypeCount };
             for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ attrTypeCount }; ++typeId)
             {
@@ -118,16 +119,16 @@ namespace
     private:
         const AttributeAssignment& currentAssignment(AttributeTypeID typeId) const
         {
-            return m_wheels[typeId][m_odometerState[typeId].permutIndex];
+            return m_odometer[typeId][m_odometerState[typeId].permutIndex];
         }
 
         const AttributeAssignment& currentAssignment2(AttributeTypeID typeId) const
         {
-            return m_wheels[typeId][m_odometerState[typeId].permutIndex];
+            return m_odometer[typeId][m_odometerState[typeId].permutIndex];
         }
 
     private:
-        const WheelSet& m_wheels;
+        const Odometer& m_odometer;
 
         struct WheelState
         {
@@ -142,7 +143,7 @@ namespace
 
     // For each attribute generates `wheel` - list of possible permutations of values ​​for this attribute
     // If allowFilter specified - filtering out obviously false ones. It reduces the wheel size.
-    WheelSet generateWheelSet(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
+    Odometer generateOdometer(size_t personCount, size_t attrTypeCount, SearchSpace::AllowFilter allowFilter)
     {
         auto generateWheel = [&allowFilter, personCount](AttributeTypeID attrTypeId)
             {
@@ -166,19 +167,17 @@ namespace
                 return permutationList;
             };
 
-        WheelSet wheels;
-        wheels.reserve(attrTypeCount);
+        Odometer odometer(attrTypeCount);
+        for (auto attrTypeId = AttributeTypeID{ 0 }; attrTypeId < AttributeTypeID{ attrTypeCount }; ++attrTypeId)
+            odometer[attrTypeId] = generateWheel(attrTypeId);
 
-        for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ attrTypeCount }; ++typeId)
-            wheels.emplace_back(generateWheel(typeId));
-
-        return wheels;
+        return odometer;
     }
 
-    std::uint64_t calcTotalCombinations(const WheelSet& wheels)
+    std::uint64_t calcTotalCombinations(const Odometer& odometer)
     {
         std::uint64_t totalCombinations = 1;
-        for (const auto& wheel : wheels)
+        for (const auto& wheel : odometer)
         {
             ENSURE(wheel.size() == 0 || totalCombinations <= std::numeric_limits<uint64_t>::max() / wheel.size(),
                 "Too much combinations count for using uint64!");
@@ -190,12 +189,13 @@ namespace
     // -------------------------------- class SpaceImpl  ------------------------------------------------
 
     // Implementation behind the interface - because there can be different implementations (with or without pre-generated permutations, etc.).
+    // All class is const - ready for multithreaded use and cache friendly.
     class SpaceImpl final : public SearchSpace
     {
     public:
-        explicit SpaceImpl(WheelSet&& wheels)
-            : m_wheels(std::move(wheels))
-            , m_totalCombinations(calcTotalCombinations(m_wheels))
+        explicit SpaceImpl(Odometer&& odometer)
+            : m_odometer(std::move(odometer))
+            , m_totalCombinations(calcTotalCombinations(m_odometer))
         {
         }
 
@@ -209,11 +209,11 @@ namespace
             if (m_totalCombinations == 0 || count == 0 || offset >= m_totalCombinations || count > m_totalCombinations - offset)
                 return {};
 
-            return std::make_unique<CursorImpl>(m_wheels, offset, count);
+            return std::make_unique<CursorImpl>(m_odometer, offset, count);
         }
 
     private:
-        const WheelSet m_wheels;
+        const Odometer m_odometer;
         const std::uint64_t m_totalCombinations;
     };
 
@@ -223,6 +223,6 @@ namespace
 
     std::unique_ptr<SearchSpace> SearchSpace::create(size_t personCount, size_t attrTypeCount, AllowFilter filter)
     {
-        return std::make_unique<SpaceImpl>(generateWheelSet(personCount, attrTypeCount, std::move(filter)));
+        return std::make_unique<SpaceImpl>(generateOdometer(personCount, attrTypeCount, std::move(filter)));
     }
 }

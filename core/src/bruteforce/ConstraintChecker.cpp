@@ -44,7 +44,7 @@ namespace
                             return solutionCandidate.ownerOf(attribute->typeId, attribute->valueId);
                         else
                             ENSURE(false, "Need special handler for specified personVariant type!");
-                        return PersonID{}; // std::unreachable in C++23
+                        return PersonID{};
                     };
 
                 const size_t pos1 = solutionCandidate.personPosition(getPersonByVariant(m_params.first), m_params.compareByType);
