@@ -11,19 +11,20 @@ namespace epuzzle::details::bruteforce
 
     ParallelSolver::ParallelSolver(SolverContext&& ctx)
         : m_ctx(std::move(ctx))
-        , m_totalCombinations(m_ctx.searchSpace().totalCombinations())
+        , m_totalSolutionCandidates(m_ctx.searchSpace().totalSolutionCandidates())
     {
     }
 
     std::vector<PuzzleSolution> ParallelSolver::solve(SolveOptions opts)
     {
-        if (m_totalCombinations == 0)
-            return handleNoCombinations(opts);
+        if (m_totalSolutionCandidates == 0)
+            return handleNoSolutionCandidates(opts);
 
-        opts.progressCallback(m_totalCombinations, 0);
+        if (!sendProgress(opts, 0)) [[unlikely]]
+            return {};
 
         utils::AtomicProgressTracker atomicTracker{ progressCountInterval };
-        SpaceSplitter spaceSplitter{ m_totalCombinations };
+        SpaceSplitter spaceSplitter{ m_totalSolutionCandidates };
 
         utils::ParallelExecutor<std::vector<PuzzleSolution>> executor{ threadsCount, [this, &atomicTracker, &spaceSplitter](std::stop_token st)
             {
@@ -33,7 +34,7 @@ namespace epuzzle::details::bruteforce
         bool userCanceled = false;
         while (!executor.waitFor(opts.progressInterval))
         {
-            if (!opts.progressCallback(m_totalCombinations, atomicTracker.load()))
+            if (!sendProgress(opts, atomicTracker.load())) [[unlikely]]
             {
                 userCanceled = true;
                 executor.request_stop();
@@ -76,19 +77,23 @@ namespace epuzzle::details::bruteforce
         return threadResult;
     }
 
-    std::vector<PuzzleSolution> ParallelSolver::handleNoCombinations(const SolveOptions& opts) const
+    std::vector<PuzzleSolution> ParallelSolver::handleNoSolutionCandidates(const SolveOptions& opts) const
     {
         opts.progressCallback(1, 0);
         opts.progressCallback(1, 1);
         return {};
     }
 
-    void ParallelSolver::handleProgressFinish(const SolveOptions& opts, std::uint64_t checkedCombinations) const
+    bool ParallelSolver::sendProgress(const SolveOptions& opts, std::uint64_t current) const
     {
-        opts.progressCallback(m_totalCombinations, m_totalCombinations);
+        return opts.progressCallback(m_totalSolutionCandidates, current);
+    }
 
-        ENSURE(m_totalCombinations == checkedCombinations, "All workers are finished but progress is not completed!"
-            << " total: " << m_totalCombinations << ", checked: " << checkedCombinations);
+    void ParallelSolver::handleProgressFinish(const SolveOptions& opts, std::uint64_t checked) const
+    {
+        sendProgress(opts, checked);
+        ENSURE(checked == m_totalSolutionCandidates, "All workers are finished but progress is not completed!"
+            << " checked: " << checked << ", total: " << m_totalSolutionCandidates);
     }
 
 }

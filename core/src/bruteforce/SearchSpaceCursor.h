@@ -3,13 +3,13 @@
 
 namespace epuzzle::details::bruteforce
 {
-    // Navigates through the SearchSpace in some range and provides access to the current combination as a `solution candidate`. 
+    // Navigates through the SearchSpace in some range and provides access to the current solution candidate. 
     class SearchSpaceCursor
     {
     public:
         virtual ~SearchSpaceCursor() = default;
 
-        // Move to next combination (solution candidate)
+        // Move to next solution candidate
         [[nodiscard]] virtual bool moveNext() = 0;
 
         virtual PersonID ownerOf(AttributeTypeID, AttributeValueID) const = 0;

@@ -201,7 +201,7 @@ namespace
         {
         }
 
-        std::uint64_t totalCombinations() const override
+        std::uint64_t totalSolutionCandidates() const override
         {
             return m_totalCombinations;
         }

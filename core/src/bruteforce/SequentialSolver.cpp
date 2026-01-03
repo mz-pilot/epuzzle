@@ -12,7 +12,7 @@ namespace epuzzle::details::bruteforce
     {
         std::vector<PuzzleSolution> solutions;
         constexpr auto minCountInterval = 1'000'000u;
-        utils::ProgressTracker tracker(m_ctx.searchSpace().totalCombinations(), opts.progressInterval, minCountInterval, opts.progressCallback);
+        utils::ProgressTracker tracker(m_ctx.searchSpace().totalSolutionCandidates(), opts.progressInterval, minCountInterval, opts.progressCallback);
 
         if (auto cursor = m_ctx.searchSpace().createCursor())
         {

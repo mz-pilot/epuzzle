@@ -13,7 +13,7 @@ namespace epuzzle::tests
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);
         using namespace utils;
-        EXPECT_EQ(space->totalCombinations(), power(factorial(personCount), attrCount));
+        EXPECT_EQ(space->totalSolutionCandidates(), power(factorial(personCount), attrCount));
     }
 
     TEST(BruteForceTests, IterateAllWithSplitterOk)
@@ -22,8 +22,8 @@ namespace epuzzle::tests
         std::unique_ptr<SearchSpace> space;
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);
-        const auto totalCombinations = space->totalCombinations();
-        SpaceSplitter splitter{ totalCombinations };
+        const auto totalSolutionCandidates = space->totalSolutionCandidates();
+        SpaceSplitter splitter{ totalSolutionCandidates };
 
         std::uint64_t iterated = 0;
         std::unique_ptr<SearchSpaceCursor> cursor;
@@ -34,7 +34,7 @@ namespace epuzzle::tests
                 ++iterated;
             while (cursor->moveNext());
         }
-        EXPECT_EQ(iterated, totalCombinations);
+        EXPECT_EQ(iterated, totalSolutionCandidates);
     }
 
 }
