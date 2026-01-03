@@ -50,6 +50,7 @@ namespace
 
     // -------------------------------- class CursorImpl ------------------------------------------------
 
+    // Implements iteration over a set of combinations in a search space using odometer logic.
     class CursorImpl final : public SearchSpaceCursor
     {
     public:
@@ -60,15 +61,14 @@ namespace
             m_odometerState.reserve(m_odometer.size());
 
             // Set begining odometer state to `offset` position: convert the linear index (offset) to m_odometerState.
-            // This is the same as calling MoveNext() `offset`-times, starting from the beginning.
-            std::uint64_t remainingLinearIndex = offset;
+            // This is the same as calling moveNext() `offset`-times, starting from the beginning.
             for (const auto& wheel : m_odometer)
             {
                 // note: when the pre-filter enabled, each wheel may be a different size (permutations count)
-                m_odometerState.emplace_back(wheel.size(), remainingLinearIndex % wheel.size());
-                remainingLinearIndex /= wheel.size();
+                m_odometerState.emplace_back(wheel.size(), offset % wheel.size());
+                offset /= wheel.size();
             }
-            ENSURE(remainingLinearIndex == 0, "");
+            ENSURE(offset == 0, "");
         }
 
         bool moveNext() override
@@ -107,6 +107,7 @@ namespace
 
         SolutionModel getSolutionModel() const override
         {
+            // Return current combination as solution
             const auto attrTypeCount = m_odometer.size();
             SolutionModel solution{ attrTypeCount };
             for (auto typeId = AttributeTypeID{ 0 }; typeId < AttributeTypeID{ attrTypeCount }; ++typeId)
@@ -130,6 +131,7 @@ namespace
             const size_t size; // cache (hot data)
             size_t position = 0;
         };
+        // Optimal storage of odometer state: a continuous vector of structures with "hottest" data - fits into a pair of cache-lines
         utils::IndexedVector<AttributeTypeID, WheelState> m_odometerState;
         std::uint64_t m_remainingCombinations = 0;
     };

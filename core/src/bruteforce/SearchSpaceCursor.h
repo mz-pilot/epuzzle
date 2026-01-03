@@ -15,6 +15,7 @@ namespace epuzzle::details::bruteforce
         virtual PersonID ownerOf(AttributeTypeID, AttributeValueID) const = 0;
         virtual size_t personPosition(PersonID, AttributeTypeID) const = 0;
 
+        // Get current combination as solution
         virtual SolutionModel getSolutionModel() const = 0;
     };
 
