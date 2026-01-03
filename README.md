@@ -18,7 +18,7 @@ Modern C++20 библиотека и консольная утилита для 
 
 ### Архитектура, паттерны, идиомы и безопасность типов
 
-* Слоистая архитектура с разделением на DTO, Model и алгоритмы.
+* Прагматичная слоистая архитектура с разделением на DTO, Model и алгоритмы.
 * Опора на `SOLID` при проектировании.
 * Polymorphism: Solver, `std::variant` + `std::visit`, и др.
 * Strong Typing: IndexedVector + TypedIndex.
@@ -337,7 +337,7 @@ BruteForce метод может потребовать значительног
 
 ### Архитектура проекта
 
-Проект `epuzzle` построен на слоистой архитектуре с разделением на DTO (Data Transfer Objects - PuzzleDefinition, PuzzleSolution), Model (PuzzleModel, SolutionModel) и алгоритмы:
+Проект `epuzzle` построен на прагматичной слоистой архитектуре с разделением на DTO (Data Transfer Objects - PuzzleDefinition, PuzzleSolution), Model (PuzzleModel, SolutionModel) и алгоритмы:
 
 ![Схема](docs/images/epuzzle_arch.png)
 
