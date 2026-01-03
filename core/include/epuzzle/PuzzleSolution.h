@@ -6,7 +6,7 @@
 
 namespace epuzzle
 {
-    // The puzzle solution table: attribute type x list of values. The first attribute type is personTypeName. 
+    // The puzzle solution table: attribute type x list of values. The first attribute type is `person` (value of personTypeName). 
     // The values of other attributes with the same index belong to the same person.
     // Example: "person"      - "Spaniard", "Englishman"
     //          "house_color" - "green",    "white"

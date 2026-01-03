@@ -10,14 +10,14 @@ namespace epuzzle
         enum class SolvingMethod
         {
             BruteForce,
-            Reasoning
+            Deductive
         };
 
-        struct BruteForce
+        struct BruteForceConfig
         {
             enum class ExecPolicy
             {
-                Sequenced,
+                Sequential,
                 Parallel
             };
 
@@ -26,7 +26,7 @@ namespace epuzzle
         };
 
         SolvingMethod solvingMethod = SolvingMethod::BruteForce;
-        std::optional<BruteForce> bruteForce; // YAGNI: if Reasoning will have config - change to std::variant<BruteForce, Reasoning>
+        std::optional<BruteForceConfig> bruteForce;
     };
 
     void validate(const SolverConfig&); // throw SolverConfigError

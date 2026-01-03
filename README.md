@@ -10,7 +10,7 @@
 
 Modern C++20 библиотека и консольная утилита для решения логических головоломок (таких как [Загадка Эйнштейна](https://ru.wikipedia.org/wiki/Загадка_Эйнштейна) ([Zebra Puzzle](https://en.wikipedia.org/wiki/Zebra_Puzzle)) и аналогичных задач на удовлетворение ограничений). 
 
-Проект демонстрирует практики Modern C++ 20, многопоточность, high performance computing, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на google test и CI/CD pipelines на GitHub Actions.
+Проект демонстрирует практики Modern C++ 20, многопоточность, HPC, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на google test и CI/CD pipelines на GitHub Actions.
 
 <details>
 
@@ -20,7 +20,7 @@ Modern C++20 библиотека и консольная утилита для 
 
 * Чистая слоистая архитектура с разделением на DTO, indexed data и алгоритмы.
 * Опора на `SOLID` при проектировании.
-* Polymorphism: ISolver, `std::variant` + `std::visit`, и др.
+* Polymorphism: Solver, `std::variant` + `std::visit`, и др.
 * Strong Typing: IndexedVector + TypedIndex.
 * Проверки инвариантов: `compiletime`, `runtime`, информативные исключения.
 * Паттерны GoF: стратегия, фабричный метод, итератор, посредник и др.
@@ -32,7 +32,7 @@ Modern C++20 библиотека и консольная утилита для 
 * Concurrency & Thread Cancellation: `std::jthread` и `std::stop_token` (кооперативная отмена в ParallelExecutor).
 * Concepts & Constraints: `std::concepts`, `std::regular`, `std::totally_ordered` (в TypedIndex) и др.
 * Attributes: `[[likely]]` - `[[unlikely]]` (предсказания переходов в горячих циклах).
-* Other core: explicit template lambdas (валидация PuzzleData), designated initialization, user-defined literals, Spaceship operator и др.
+* Other core: explicit template lambdas (валидация PuzzleDefinition), designated initialization, user-defined literals, Spaceship operator и др.
 * Standard library: `std::ranges`, `std::views`, `std::format`, `std::source_location` и др.
 
 ### Производительность и многопоточность
@@ -249,9 +249,9 @@ epuzzle --help
 - `-f, --file <ФАЙЛ>` — путь к файлу с данными пазла (.toml)
 
 **Опциональные аргументы:**
-- `-m, --method <МЕТОД>` — метод решения: `BruteForce` (по умолчанию) или `Reasoning` (в разработке)
+- `-m, --method <МЕТОД>` — метод решения: `BruteForce` (по умолчанию) или `Deductive` (в разработке)
 - `-p, --prefilter <РЕЖИМ>` — предфильтрация (только для BruteForce): `Enabled` (по умолчанию) или `Disabled`
-- `-e, --execpolicy <ПОЛИТИКА>` — политика выполнения (только для BruteForce): `Parallel` (по умолчанию) или `Sequenced`
+- `-e, --execpolicy <ПОЛИТИКА>` — политика выполнения (только для BruteForce): `Parallel` (по умолчанию) или `Sequential`
 - `-v, --version` — показать версию программы
 - `-h, --help` — показать справку
 
@@ -264,14 +264,14 @@ epuzzle --file puzzle_examples/einsteins.toml
 epuzzle --file загадка.toml --method BruteForce --execpolicy Parallel
 
 # Однопоточный перебор без предфильтрации
-epuzzle -f test.toml -m BruteForce -p Disabled -e Sequenced
+epuzzle -f test.toml -m BruteForce -p Disabled -e Sequential
 ```
 
 #### Описание режимов работы
 
 ##### Методы решения (`--method`)
 - *BruteForce* — полный перебор всех возможных вариантов. Гарантирует нахождение всех решений.
-- *Reasoning* — логический вывод (в разработке).
+- *Deductive* — логический вывод (в разработке).
 
 ##### Предфильтрация (`--prefilter`, только для BruteForce)
 - *Enabled* (по умолчанию) — исключает заведомо неверные варианты на этапе подготовки (ускоряет работу в 10-100 раз).
@@ -279,7 +279,7 @@ epuzzle -f test.toml -m BruteForce -p Disabled -e Sequenced
 
 ##### Политика выполнения (`--execpolicy`, только для BruteForce)
 - *Parallel* (по умолчанию) — многопоточная обработка (использует все доступные ядра CPU).
-- *Sequenced* — однопоточная обработка (удобно для отладки).
+- *Sequential* — однопоточная обработка (удобно для отладки).
 
 </details>
 
@@ -319,7 +319,7 @@ Solution #1:
 #### Большие пазлы
 BruteForce метод может потребовать значительного объема памяти и времени при большом количестве комбинаций. Рекомендации:
 - Используйте `--prefilter Enabled` (включен по умолчанию)
-- Для очень больших задач предпочтительнее использовать Reasoning методы решения
+- Для очень больших задач предпочтительнее использовать Deductive методы решения
 
 #### Файл не найден
 Убедитесь, что путь к файлу указан правильно. В Windows используйте двойные кавычки, если путь содержит пробелы:
@@ -337,24 +337,24 @@ BruteForce метод может потребовать значительног
 
 ### Архитектура проекта
 
-Проект `epuzzle` построен на слоистой архитектуре с разделением на DTO (Data Transfer Objects - PuzzleData, PuzzleSolution), indexed data и алгоритмы:
+Проект `epuzzle` построен на слоистой архитектуре с разделением на DTO (Data Transfer Objects - PuzzleDefinition, PuzzleSolution), indexed data и алгоритмы:
 
 ![Схема](docs/images/epuzzle_arch.png)
 
 <details>
 <summary><h4> Развернуть >> Базовые интерфейсы</h4></summary>
 
-#### Интерфейс решателя (ISolver)
-Ядро логики построено вокруг абстрактного интерфейса `ISolver`, что позволяет легко добавлять новые алгоритмы решения:
+#### Интерфейс решателя (Solver)
+Ядро логики построено вокруг абстрактного интерфейса `Solver`, что позволяет легко добавлять новые алгоритмы решения:
 ```cpp
 namespace epuzzle
 {
-    // Solver. The main interface for client code.
-    class ISolver
+    // The main interface for client code.
+    class Solver
     {
     public:
-        static std::unique_ptr<ISolver> create(SolverConfig, PuzzleData);
-        virtual ~ISolver() = default;
+        static std::unique_ptr<Solver> create(SolverConfig, PuzzleDefinition);
+        virtual ~Solver() = default;
 
         // Parameter object. The callback executes in solve()'s calling thread. Return false to cancel the operation.
         struct SolveOptions
@@ -372,41 +372,41 @@ namespace epuzzle
 ```cpp
 struct SolverConfig 
 {
-    enum class SolvingMethod { BruteForce, Reasoning };
+    enum class SolvingMethod { BruteForce, Deductive };
            
-    struct BruteForce 
+    struct BruteForceConfig 
     {
-        enum class ExecPolicy { Sequenced, Parallel };
+        enum class ExecPolicy { Sequential, Parallel };
         bool prefilter = true;
         ExecPolicy execution = ExecPolicy::Parallel;
     };
            
     SolvingMethod solvingMethod = SolvingMethod::BruteForce;
-    std::optional<BruteForce> bruteForce;
+    std::optional<BruteForceConfig> bruteForce;
 };
 ```
 **Принцип:** Конфигурация валидируется на этапе создания решателя, что гарантирует корректность состояния до начала вычислений.
 
 #### Расширяемость: шаги для добавления нового решателя:
 
-1. **Создать класс**, наследующий от `ISolver`, см. например Reasoner:
+1. **Создать класс**, наследующий от `Solver`, см. например `DeductiveSolver`:
 ```cpp
 namespace epuzzle::details
 {
-    // Deductive reasoner (human-like thinking)
-    class Reasoner final : public ISolver
+    // Deductive solver (human-like thinking)
+    class DeductiveSolver final : public Solver
     {
     public:
-        explicit Reasoner(IndexedPuzzleData&&);
+        explicit DeductiveSolver(PuzzleModel&&);
         std::vector<PuzzleSolution> solve(SolveOptions) override;
     };
 }
 ```
 2. **Соответствующий метод** в `SolverConfig::SolvingMethod`
-3. **Расширить фабричный метод** `ISolver::create()`
+3. **Расширить фабричный метод** `Solver::create()`
 4. **Добавить в параметризованные тесты** (см. раздел ниже).
 
-**Текущий статус:** Проект уже содержит заглушку для `Reasoner`, что демонстрирует готовый путь расширения.
+**Текущий статус:** Проект уже содержит заглушку для `DeductiveSolver`, что демонстрирует готовый путь расширения.
 
 </details>
 
@@ -418,16 +418,16 @@ namespace epuzzle::details
 
 #### Стратегия тестирования
 ```cpp
-// Тесты не привязаны к конкретному решателю, например ISolverTests для BruteForce и для Reasoning:
+// Тесты не привязаны к конкретному решателю, например SolverTests для BruteForce и для Deductive:
     INSTANTIATE_TEST_SUITE_P(
-        ISolverBruteForcePrefilter,
-        ISolverTests,
-        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequenced} }));
+        SolverBruteForcePrefilter,
+        SolverTests,
+        testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequential} }));
 
     INSTANTIATE_TEST_SUITE_P(
-        ISolverReasoning,
-        ISolverTests,
-        testing::Values(SolverConfig{ Method::Reasoning, {} }));
+        SolverDeductive,
+        SolverTests,
+        testing::Values(SolverConfig{ Method::Deductive, {} }));
 ```
 
 #### Трехуровневая система проверок:
@@ -464,7 +464,7 @@ namespace epuzzle::details
 Создает ParallelExecutor с N потоками (по числу ядер CPU)
     ↓
 Каждый рабочий поток:
-    1. Запрашивает у SpaceParallelDistributor новый чанк
+    1. Запрашивает у SpaceSplitter новый чанк
     2. Проверяет каждый кандидат в чанке (hot loop!)
     3. Сохраняет подошедшие решения локально
     4. Обновляет AtomicProgressTracker
@@ -500,7 +500,7 @@ using PersonID = utils::TypedIndex<struct PersonID_tag>;
 #### Безопасные контейнеры (IndexedVector)
 Обертка над `std::vector` с проверкой типов индексов:
 ```cpp
-using Assignment = utils::IndexedVector<AttributeValueID, PersonID>; // Single combination values of single attribute
+using AttributeAssignment = utils::IndexedVector<AttributeValueID, PersonID>; // Single combination values of single attribute
 
 Assignment assignment;
 assignment.emplace_back(PersonID{}); // Ok
@@ -513,7 +513,7 @@ assignment[AttributeValueID{}] = PersonID{}; // Ok
 #### Расширение системы constraints
 
 Архитектура поддерживает добавление новых типов условий через статическую типизацию. Основные шаги:
-1. Добавить новый тип в `std::variant` в определении `PuzzleData::constraints`
+1. Добавить новый тип в `std::variant` в определении `PuzzleDefinition::constraints`
 2. Следовать ошибкам компиляции для реализации необходимой логики обработки
 3. Добавить соответствующие тесты
 
@@ -629,7 +629,7 @@ ctest -V --preset=test-lin-release
 * Использовать WSL2 — в Linux-среде проблема не проявляется
 * Игнорировать "проваленные" пропущенные тесты в Test Explorer
 
-**Почему используется `GTEST_SKIP()`:** Для временного отключения тестов для еще не реализованного функционала (например, `Reasoning` solver).
+**Почему используется `GTEST_SKIP()`:** Для временного отключения тестов для еще не реализованного функционала (например, `DeductiveSolver`).
 
 </details>
 
@@ -657,12 +657,12 @@ cdb epuzzle.exe
 ### Roadmap
 
 #### Версия 1.1 (в разработке)
-- [ ] Реализация `Reasoning` solver (логический вывод)
+- [ ] Реализация `DeductiveSolver` (логический вывод)
 - [ ] Добавление новых типов constraints для расширения класса решаемых задач
 
 #### Стратегия развития
 - **BruteForce решатель** останется эталоном для проверки корректности новых алгоритмов
-- **Reasoning решатели** будут разрабатываться для эффективного решения больших пазлов (6x6 и более)
+- **Deductive решатели** будут разрабатываться для эффективного решения больших пазлов (6x6 и более)
 - **Тестирование новых алгоритмов** будет проводиться в том числе со сравнением результатов с BruteForce
 
 ---

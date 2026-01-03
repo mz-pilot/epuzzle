@@ -10,7 +10,7 @@ namespace epuzzle
     namespace
     {
         using Method = SolverConfig::SolvingMethod;
-        using ExecPolicy = SolverConfig::BruteForce::ExecPolicy;
+        using ExecPolicy = SolverConfig::BruteForceConfig::ExecPolicy;
     }
 
     void validate(const SolverConfig& cfg)
@@ -19,12 +19,12 @@ namespace epuzzle
         {
             ENSURE_CFG(cfg.bruteForce.has_value(), "Must present for BruteForce solving method!");
             const auto execPolicy = cfg.bruteForce->execution;
-            ENSURE_CFG(execPolicy == ExecPolicy::Parallel || execPolicy == ExecPolicy::Sequenced,
+            ENSURE_CFG(execPolicy == ExecPolicy::Parallel || execPolicy == ExecPolicy::Sequential,
                 "Unexpected execution policy: (int)" << static_cast<int>(execPolicy));
         }
         else
         {
-            ENSURE_CFG(cfg.solvingMethod == Method::Reasoning, "Unexpected solving method: (int)" << static_cast<int>(cfg.solvingMethod));
+            ENSURE_CFG(cfg.solvingMethod == Method::Deductive, "Unexpected solving method: (int)" << static_cast<int>(cfg.solvingMethod));
         }
     }
 
@@ -34,7 +34,7 @@ namespace epuzzle
         {
             switch (method)
             {
-            case Method::Reasoning:     return os << "Reasoning";
+            case Method::Deductive:     return os << "Deductive";
             case Method::BruteForce:    return os << "BruteForce";
             default: ENSURE(false, "Unsupported solving method type: (int) " << static_cast<int>(method));
             };
@@ -45,7 +45,7 @@ namespace epuzzle
             switch (exec)
             {
             case ExecPolicy::Parallel:  return os << "Parallel";
-            case ExecPolicy::Sequenced: return os << "Sequenced";
+            case ExecPolicy::Sequential: return os << "Sequential";
             default: ENSURE(false, "Unsupported execution policy type: (int) " << static_cast<int>(exec));
             };
         }

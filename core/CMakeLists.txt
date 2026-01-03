@@ -4,39 +4,39 @@ add_library(epuzzle_core STATIC)
 target_sources(epuzzle_core
     PUBLIC
         include/epuzzle/Exceptions.h
-        include/epuzzle/ISolver.h
-        include/epuzzle/PuzzleData.h
-        include/epuzzle/PuzzleDataLoader.h
+        include/epuzzle/PuzzleDefinition.h
+        include/epuzzle/PuzzleParser.h
         include/epuzzle/PuzzleSolution.h
+        include/epuzzle/Solver.h
         include/epuzzle/SolverConfig.h
     PRIVATE
-        src/BruteForce/BruteForceChecker.cpp
-        src/BruteForce/BruteForceChecker.h
-        src/BruteForce/BruteForceContext.h
-        src/BruteForce/BruteForceFactory.cpp
-        src/BruteForce/BruteForceFactory.h
-        src/BruteForce/BruteForcer.cpp
-        src/BruteForce/BruteForcer.h
-        src/BruteForce/ICandidateIterator.h
-        src/BruteForce/ICandidatesSpace.cpp
-        src/BruteForce/ICandidatesSpace.h
-        src/BruteForce/IConstraint.cpp
-        src/BruteForce/IConstraint.h
-        src/BruteForce/ParallelBruteForcer.cpp
-        src/BruteForce/ParallelBruteForcer.h
-        src/BruteForce/SpaceParallelDistributor.h
-        src/Reasoning/Reasoner.cpp
-        src/Reasoning/Reasoner.h
-        src/IndexedPuzzleData.cpp
-        src/IndexedPuzzleData.h
-        src/IndexedSolution.cpp
-        src/IndexedSolution.h
+        src/bruteforce/BruteForceFactory.cpp
+        src/bruteforce/BruteForceFactory.h
+        src/bruteforce/ConstraintChecker.cpp
+        src/bruteforce/ConstraintChecker.h
+        src/bruteforce/ParallelSolver.cpp
+        src/bruteforce/ParallelSolver.h
+        src/bruteforce/SearchSpace.cpp
+        src/bruteforce/SearchSpace.h
+        src/bruteforce/SearchSpaceCursor.h
+        src/bruteforce/SequentialSolver.cpp
+        src/bruteforce/SequentialSolver.h
+        src/bruteforce/SolverContext.h
+        src/bruteforce/SpaceSplitter.h
+        src/bruteforce/Validator.cpp
+        src/bruteforce/Validator.h
+        src/deductive/DeductiveSolver.cpp
+        src/deductive/DeductiveSolver.h
         src/IndexedTypes.h
-        src/ISolver.cpp
         src/pch.h
-        src/PuzzleData.cpp
-        src/PuzzleDataLoader.cpp
+        src/PuzzleDefinition.cpp
+        src/PuzzleModel.cpp
+        src/PuzzleModel.h
+        src/PuzzleParser.cpp
         src/PuzzleSolution.cpp
+        src/SolutionModel.cpp
+        src/SolutionModel.h
+        src/Solver.cpp
         src/SolverConfig.cpp
 )
 

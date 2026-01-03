@@ -11,23 +11,23 @@
 namespace utils
 {
 
-    // Waits for N threads to finish, with optional timeout. std::latch hasn't wait_for() method!
-    class ThreadCompletionMonitor
+    // A simple analogue of a std::latch with a wait_for() method (std::latch hasn't it).
+    class TimedLatch
     {
     public:
-        explicit ThreadCompletionMonitor(size_t activeThreads)
-            : m_activeThreads(activeThreads)
+        explicit TimedLatch(size_t expected)
+            : m_counter(expected)
         {
-            ENSURE(activeThreads > 0, "");
+            ENSURE(expected > 0, "");
         }
 
-        void threadDone()
+        void countDown()
         {
             bool lastReached = false;
             {
                 std::lock_guard lock{ m_mx };
-                if (m_activeThreads > 0)
-                    lastReached = (--m_activeThreads == 0);
+                if (m_counter > 0)
+                    lastReached = (--m_counter == 0);
             }
             if (lastReached)
                 m_cv.notify_all();
@@ -38,13 +38,13 @@ namespace utils
         bool waitFor(const std::chrono::duration<TRep, TPeriod>& relTime)
         {
             std::unique_lock lock{ m_mx };
-            return m_cv.wait_for(lock, relTime, [this] { return m_activeThreads == 0; });
+            return m_cv.wait_for(lock, relTime, [this] { return m_counter == 0; });
         }
 
     private:
         std::mutex m_mx;
         std::condition_variable m_cv;
-        size_t m_activeThreads = 0;
+        size_t m_counter = 0;
     };
 
 
@@ -63,12 +63,12 @@ namespace utils
                         try
                         {
                             const auto threadResult = fun(st);
-                            m_monitor.threadDone();
+                            m_monitor.countDown(); // thread done
                             return threadResult;
                         }
                         catch (...)
                         {
-                            m_monitor.threadDone();
+                            m_monitor.countDown(); // thread done
                             request_stop();
                             throw;
                         }
@@ -91,7 +91,7 @@ namespace utils
             std::ranges::for_each(m_workers, [](auto& worker) { worker.thread.request_stop(); });
         }
 
-        std::vector<TResult> get() // throw ExceptionMessageCollector
+        std::vector<TResult> collectResults() // throw ExceptionMessageCollector
         {
             std::vector<TResult> results;
             results.reserve(m_workers.size());
@@ -124,7 +124,7 @@ namespace utils
             std::jthread thread;
         };
 
-        ThreadCompletionMonitor m_monitor;
+        TimedLatch m_monitor;
         std::vector<ThreadWorker> m_workers;
     };
 

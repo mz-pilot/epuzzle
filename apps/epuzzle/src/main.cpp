@@ -4,9 +4,9 @@
 #include "utils/Math.h"
 #include "utils/platform/ConsoleUtils.h"
 
-#include "epuzzle/PuzzleDataLoader.h"
+#include "epuzzle/PuzzleParser.h"
 #include "epuzzle/Exceptions.h"
-#include "epuzzle/ISolver.h"
+#include "epuzzle/Solver.h"
 
 #include "ProgramOptions.h"
 
@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
 
         cli::printVersion();
         std::cout << "Config: " << options->config << "\n";
-        auto puzzleData = epuzzle::puzzleDataFromFile(options->puzzleFilePath);
-        std::cout << "Puzzle data loaded: \n" << puzzleData << "\n";
+        auto puzzleDefinition = epuzzle::parseFile(options->puzzleFilePath);
+        std::cout << "Puzzle loaded: \n" << puzzleDefinition << "\n";
         std::cout << "Preparing ... \n";
-        auto solver = epuzzle::ISolver::create(std::move(options->config), std::move(puzzleData));
+        auto solver = epuzzle::Solver::create(std::move(options->config), std::move(puzzleDefinition));
         std::cout << "Preparing done.\n";
 
         using namespace utils;
