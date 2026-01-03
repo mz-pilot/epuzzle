@@ -65,7 +65,7 @@ namespace
             for (const auto& wheel : m_odometer)
             {
                 // note: when the pre-filter enabled, each wheel may be a different size (permutations count)
-                m_odometerState.emplace_back(remainingLinearIndex % wheel.size(), wheel.size());
+                m_odometerState.emplace_back(wheel.size(), remainingLinearIndex % wheel.size());
                 remainingLinearIndex /= wheel.size();
             }
             ENSURE(remainingLinearIndex == 0, "");
@@ -82,12 +82,12 @@ namespace
             for (auto& wheelState : m_odometerState)
             {
                 // increment the first wheel
-                if (++wheelState.permutIndex < wheelState.permutCount) [[likely]]
+                if (++wheelState.position < wheelState.size) [[likely]]
                     return true;
 
                 [[unlikely]]
                 // if it completes a full rotation -> reset the first wheel and increment the next wheel
-                wheelState.permutIndex = 0;
+                wheelState.position = 0;
             }
 
             [[unlikely]]
@@ -119,12 +119,7 @@ namespace
     private:
         const AttributeAssignment& currentAssignment(AttributeTypeID typeId) const
         {
-            return m_odometer[typeId][m_odometerState[typeId].permutIndex];
-        }
-
-        const AttributeAssignment& currentAssignment2(AttributeTypeID typeId) const
-        {
-            return m_odometer[typeId][m_odometerState[typeId].permutIndex];
+            return m_odometer[typeId][m_odometerState[typeId].position];
         }
 
     private:
@@ -132,8 +127,8 @@ namespace
 
         struct WheelState
         {
-            size_t permutIndex = 0;
-            size_t permutCount = 0; // cache (hot data)
+            const size_t size; // cache (hot data)
+            size_t position = 0;
         };
         utils::IndexedVector<AttributeTypeID, WheelState> m_odometerState;
         std::uint64_t m_remainingCombinations = 0;
