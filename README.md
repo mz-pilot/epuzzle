@@ -500,7 +500,7 @@ using PersonID = utils::TypedIndex<struct PersonID_tag>;
 #### Безопасные контейнеры (IndexedVector)
 Обертка над `std::vector` с проверкой типов индексов:
 ```cpp
-using Assignment = utils::IndexedVector<AttributeValueID, PersonID>; // Single combination values of single attribute
+using AttributeAssignment = utils::IndexedVector<AttributeValueID, PersonID>; // Single combination values of single attribute
 
 Assignment assignment;
 assignment.emplace_back(PersonID{}); // Ok
