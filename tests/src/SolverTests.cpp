@@ -550,12 +550,12 @@ namespace epuzzle::tests
 
 
     INSTANTIATE_TEST_SUITE_P(
-        SolverBruteForce,
+        SolverBruteForceNoPrefilter,
         SolverTests,
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = false, .execution = ExecPolicy::Sequential} }));
 
     INSTANTIATE_TEST_SUITE_P(
-        SolverBruteForcePrefilter,
+        SolverBruteForce,
         SolverTests,
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequential} }));
 

@@ -4,7 +4,7 @@ namespace epuzzle::details::bruteforce
 {
 namespace
 {
-    // No big `switch` here but `if constexpr ... else static_assert` - so that compiler can help us add new constraints correctly
+    // Using if constexpr + static_assert so the compiler helps us find unhandled constraint types at build time.
     template <typename TParams>
     class CheckerImpl final : public ConstraintChecker
     {
@@ -73,6 +73,7 @@ namespace
 
     std::unique_ptr<ConstraintChecker> ConstraintChecker::create(const ConstraintModel& constraint)
     {
+        // see class CheckerImpl description
         return std::visit(
             [](const auto& arg) -> std::unique_ptr<ConstraintChecker>
             {

@@ -3,7 +3,7 @@
 namespace epuzzle::tests
 {
 
-    TEST(PuzzleParserTests, LoadFromTextOk)
+    TEST(PuzzleParserTests, ParseTextOk)
     {
         static constexpr std::string_view text = R"(
             #

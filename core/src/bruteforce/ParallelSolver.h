@@ -5,7 +5,7 @@
 namespace epuzzle::details::bruteforce
 {
 
-    // Solving in thread pool
+    // Performs parallel exhaustive search in a thread pool using chunked range processing.
     class ParallelSolver final : public Solver
     {
     public:
