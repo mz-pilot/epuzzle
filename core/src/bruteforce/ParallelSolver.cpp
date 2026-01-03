@@ -30,21 +30,20 @@ namespace epuzzle::details::bruteforce
                 return runWorker(st, atomicTracker, spaceSplitter);
             } };
 
-        bool canceled = false;
+        bool userCanceled = false;
         while (!executor.waitFor(opts.progressInterval))
         {
             if (!opts.progressCallback(m_totalCombinations, atomicTracker.load()))
             {
-                canceled = true;
+                userCanceled = true;
                 executor.request_stop();
                 break;
             }
         }
 
-        // After `executor.get()` all threads finished, results or exceptions collected
-        const auto joinedResult = utils::join(executor.get());
+        const auto joinedResult = utils::join(executor.collectResults()); // here all worker-threads finished
 
-        if (!canceled)
+        if (!userCanceled)
             handleProgressFinish(opts, atomicTracker.load());
 
         return joinedResult;

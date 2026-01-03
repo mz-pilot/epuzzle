@@ -91,7 +91,7 @@ namespace utils
             std::ranges::for_each(m_workers, [](auto& worker) { worker.thread.request_stop(); });
         }
 
-        std::vector<TResult> get() // throw ExceptionMessageCollector
+        std::vector<TResult> collectResults() // throw ExceptionMessageCollector
         {
             std::vector<TResult> results;
             results.reserve(m_workers.size());
