@@ -11,7 +11,7 @@
 namespace epuzzle
 {
 
-    // Solver. The main interface for client code.
+    // The main interface for client code.
     class Solver
     {
     public:

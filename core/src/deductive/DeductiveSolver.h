@@ -4,7 +4,8 @@
 
 namespace epuzzle::details::deductive
 {
-    // Deductive solver (human-like thinking)
+    // Placeholder for a future intelligent solver based on deductive logic and constraint propagation.
+    // Currently under architectural design.
     class DeductiveSolver final : public Solver
     {
     public:

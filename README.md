@@ -18,7 +18,7 @@ Modern C++20 библиотека и консольная утилита для 
 
 ### Архитектура, паттерны, идиомы и безопасность типов
 
-* Чистая слоистая архитектура с разделением на DTO, indexed data и алгоритмы.
+* Слоистая архитектура с разделением на DTO, Model и алгоритмы.
 * Опора на `SOLID` при проектировании.
 * Polymorphism: Solver, `std::variant` + `std::visit`, и др.
 * Strong Typing: IndexedVector + TypedIndex.
@@ -337,7 +337,7 @@ BruteForce метод может потребовать значительног
 
 ### Архитектура проекта
 
-Проект `epuzzle` построен на слоистой архитектуре с разделением на DTO (Data Transfer Objects - PuzzleDefinition, PuzzleSolution), indexed data и алгоритмы:
+Проект `epuzzle` построен на слоистой архитектуре с разделением на DTO (Data Transfer Objects - PuzzleDefinition, PuzzleSolution), Model (PuzzleModel, SolutionModel) и алгоритмы:
 
 ![Схема](docs/images/epuzzle_arch.png)
 
@@ -393,7 +393,6 @@ struct SolverConfig
 ```cpp
 namespace epuzzle::details
 {
-    // Deductive solver (human-like thinking)
     class DeductiveSolver final : public Solver
     {
     public:
@@ -420,7 +419,7 @@ namespace epuzzle::details
 ```cpp
 // Тесты не привязаны к конкретному решателю, например SolverTests для BruteForce и для Deductive:
     INSTANTIATE_TEST_SUITE_P(
-        SolverBruteForcePrefilter,
+        SolverBruteForce,
         SolverTests,
         testing::Values(SolverConfig{ Method::BruteForce, BFConfig{.prefilter = true, .execution = ExecPolicy::Sequential} }));
 
@@ -507,7 +506,7 @@ assignment.emplace_back(PersonID{}); // Ok
 // assignment.emplace_back(AttributeTypeID{}); // compiler error!
 
 assignment[AttributeValueID{}] = PersonID{}; // Ok
-// assignment[PersonID{}] = AttributeValueID{}; // compiler error!
+// assignment[PersonID{}] = PersonID{}; // compiler error!
 ```
 
 #### Расширение системы constraints

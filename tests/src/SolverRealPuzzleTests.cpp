@@ -35,7 +35,7 @@ namespace epuzzle::tests
         using ExecPolicy = SolverConfig::BruteForceConfig::ExecPolicy;
     }
 
-    TEST_P(SolverRealPuzzleTests, DSSolutionCount128)
+    TEST_P(SolverRealPuzzleTests, FourGirlsSolutionCount128)
     {
         const auto solutions = solve("four_girls.toml");
         ASSERT_EQ(solutions.size(), 128);

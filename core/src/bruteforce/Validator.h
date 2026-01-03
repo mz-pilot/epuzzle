@@ -8,7 +8,7 @@ namespace epuzzle::details::bruteforce
     //   filtering out obviously unsuitable combinations subsets (via isAttributeAssignmentValid).
     //   These checks will be excluded from the subsequent main check (via isSolutionValid) as unnecessary.
     // * If prefiltering disabled: the main check stage (via isSolutionValid) will involve a full enumeration
-    // and all checks of all possible solution candidates.
+    //   and all checks of all possible solution candidates (mode for diagnostics, etc).
     class Validator
     {
     public:

@@ -70,7 +70,7 @@ namespace
         cxxopts::Options optsManager(appName, description);
         optsManager.custom_help("--file <FILE> [OPTIONS]");
         optsManager.add_options()
-            ("f,file", "[required] Path to puzzle data file", cxxopts::value<std::string>())
+            ("f,file", "[required] Path to puzzle definition file", cxxopts::value<std::string>())
             ("m,method", "[optional] Solving method, where arg is: " + EnumHelper::names<Method>(),
                 cxxopts::value<std::string>()->default_value(defaultMethod))
             ("p,prefilter", "[BruteForce only] Prefilter mode, where arg is: " + EnumHelper::names<PrefilterMode>(),

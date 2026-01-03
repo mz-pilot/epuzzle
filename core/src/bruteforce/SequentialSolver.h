@@ -5,7 +5,7 @@
 
 namespace epuzzle::details::bruteforce
 {
-    // Solving in calling thread
+    // Performs sequential exhaustive search in the calling thread.
     class SequentialSolver final : public Solver
     {
     public:
