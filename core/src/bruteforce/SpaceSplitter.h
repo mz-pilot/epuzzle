@@ -2,6 +2,7 @@
 
 namespace epuzzle::details::bruteforce
 {
+    // Splits a set into fragments of a specified size in a multi-threaded environment
     class SpaceSplitter
     {
     public:

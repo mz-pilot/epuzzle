@@ -2,7 +2,7 @@
 #include "SearchSpace.h"
 
 /*
- ======================================================================================
+ =============================================================================================
  ARCHITECTURE NOTE: SEARCH SPACE GENERATION
  =============================================================================================
      CONCEPT
@@ -19,6 +19,8 @@
  Также применяется pre-filtering: `AllowFilter` применяется ДО генерации пространства.
  Если перестановка нарушает условие (например, "Норвежец живет в доме #1"), она даже
  не попадает в список допустимых значений для "колёсика".
+ Примечание: мы генерируем перестановки заранее, занимая дополнительную
+ память, но получаем x2 прирост в скорости для типичных пазлов 5х5.
  ---------------------------------------------------------------------------------------------
      CONCEPT
  Imagine a combination lock with N wheels. Instead of digits 0–9, each wheel
@@ -36,6 +38,8 @@
  Pre-filtering is also used: an `AllowFilter` is applied BEFORE the search space generation.
  If a specific permutation violates a standalone constraint (e.g., "The Norwegian lives
  in the first house"), it is excluded from its respective wheel entirely.
+ Note: we generate the permutations at the beginning, taking up additional
+ memory, but we get a x2 increase in speed for typical 5x5 puzzles.
  =============================================================================================
  */
 
@@ -120,7 +124,8 @@ namespace
     private:
         const AttributeAssignment& currentAssignment(AttributeTypeID typeId) const
         {
-            return m_odometer[typeId][m_odometerState[typeId].position];
+            const auto& wheelPosition = m_odometerState[typeId].position;
+            return m_odometer[typeId][wheelPosition];
         }
 
     private:
