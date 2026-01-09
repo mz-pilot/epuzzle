@@ -624,9 +624,9 @@ ctest -V --preset=test-lin-release
 При использовании адаптера Google Test для Visual Studio тесты, помеченные как `GTEST_SKIP()`, могут ошибочно показываться как проваленные в Test Explorer. Это [известная проблема](https://developercommunity.visualstudio.com/t/googletest-skipped-tests-are-reported-as-failed-in/884416) Microsoft.
 
 **Рекомендуемые обходные пути:**
-* Отключить gtest adapter
 * Использовать WSL2 — в Linux-среде проблема не проявляется
-* Игнорировать "проваленные" пропущенные тесты в Test Explorer
+* Использовать CTest для запуска тестов данного проекта
+* Создать свой Playlist для Google Test Adapter, не включая в него skipped тесты
 
 **Почему используется `GTEST_SKIP()`:** Для временного отключения тестов для еще не реализованного функционала (например, `DeductiveSolver`).
 
