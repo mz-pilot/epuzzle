@@ -21,12 +21,12 @@ target_include_directories(epuzzle
         ${CMAKE_BINARY_DIR}/generated
 )
 
-add_custom_command(TARGET epuzzle POST_BUILD
+add_custom_target(copy_puzzle_examples ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/puzzle_examples
-        $<TARGET_FILE_DIR:epuzzle>/puzzle_examples
-    COMMENT "Puzzle examples copied"
+        "${CMAKE_SOURCE_DIR}/puzzle_examples"
+        "$<TARGET_FILE_DIR:epuzzle>/puzzle_examples"
 )
+add_dependencies(epuzzle copy_puzzle_examples)
 
 if(WIN32)
     install(TARGETS epuzzle RUNTIME DESTINATION .)
