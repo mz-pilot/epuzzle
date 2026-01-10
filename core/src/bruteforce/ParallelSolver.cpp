@@ -6,7 +6,7 @@ namespace epuzzle::details::bruteforce
     namespace
     {
         constexpr std::uint64_t progressCountInterval = 1'000'000;
-        static const auto threadsCount = std::max(1u, std::jthread::hardware_concurrency());
+        const auto threadsCount = std::max(1u, std::jthread::hardware_concurrency());
     }
 
     ParallelSolver::ParallelSolver(SolverContext&& ctx)
