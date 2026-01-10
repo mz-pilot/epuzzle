@@ -33,6 +33,8 @@ set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
 
+set_target_properties(gtest gtest_main PROPERTIES CXX_CLANG_TIDY "")
+
 include(GoogleTest)
 
 target_link_libraries(epuzzle_tests 
