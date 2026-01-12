@@ -66,7 +66,7 @@ namespace
                                     fact.secondNegate = true;
                                     fact.second.value.erase(0, 1);
                                 }
-                                data.constraints.push_back(std::move(fact));
+                                data.constraints.emplace_back(std::move(fact));
                             }
                             else if (type == "comparison")
                             {
@@ -76,7 +76,7 @@ namespace
 
                                 const auto relStr = constraintTable["relation"].value_or(""sv);
                                 using Relation = PuzzleDefinition::Comparison::Relation;
-                                Relation rel;
+                                Relation rel; // NOLINT(cppcoreguidelines-init-variables)
                                 if (relStr == "immediate_left")         rel = Relation::ImmediateLeft;
                                 else if (relStr == "immediate_right")   rel = Relation::ImmediateRight;
                                 else if (relStr == "adjacent")          rel = Relation::Adjacent;

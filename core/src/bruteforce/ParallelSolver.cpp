@@ -50,7 +50,7 @@ namespace epuzzle::details::bruteforce
     }
 
     // parallel
-    std::vector<PuzzleSolution> ParallelSolver::runWorker(std::stop_token st, utils::AtomicProgressTracker& atomicTracker, SpaceSplitter& spaceSplitter) const
+    std::vector<PuzzleSolution> ParallelSolver::runWorker(std::stop_token st, utils::AtomicProgressTracker& atomicTracker, SpaceSplitter& spaceSplitter) const 
     {
         std::vector<PuzzleSolution> threadResult;
         auto localTracker = atomicTracker.getLocalTracker();
@@ -76,7 +76,7 @@ namespace epuzzle::details::bruteforce
         return threadResult;
     }
 
-    std::vector<PuzzleSolution> ParallelSolver::handleNoSolutionCandidates(const SolveOptions& opts) const
+    std::vector<PuzzleSolution> ParallelSolver::handleNoSolutionCandidates(const SolveOptions& opts) const 
     {
         opts.progressCallback(1, 0);
         opts.progressCallback(1, 1);

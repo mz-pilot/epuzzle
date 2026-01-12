@@ -79,7 +79,7 @@ namespace epuzzle::tests
             };
         }
 
-        auto solve(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints)
+        static auto solve(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints)
         {
             puzzle.constraints = std::move(constraints);
             std::unique_ptr<Solver> solver;
@@ -92,12 +92,12 @@ namespace epuzzle::tests
             return solutions;
         }
 
-        bool noSolutionFor(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints)
+        static bool noSolutionFor(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints)
         {
             return solve(std::move(puzzle), std::move(constraints)).empty();
         }
 
-        bool hasSolutionSet(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints, std::vector<PuzzleSolution>&& expectedSolutions)
+        static bool hasSolutionSet(PuzzleDefinition&& puzzle, ConstraintDefs&& constraints, const std::vector<PuzzleSolution>& expectedSolutions)
         {
             auto solutions = solve(std::move(puzzle), std::move(constraints));
             EXPECT_EQ(solutions.size(), expectedSolutions.size());

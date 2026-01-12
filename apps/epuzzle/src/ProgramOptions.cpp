@@ -22,7 +22,7 @@ namespace
                     constexpr auto namesArr = magic_enum::enum_names<TEnum>();
                     for (auto i : std::views::iota(0u, namesArr.size()))
                     {
-                        str += namesArr[i];
+                        str += namesArr[i]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                         if (i < namesArr.size() - 1)
                             str += '|';
                     }
@@ -56,7 +56,7 @@ namespace
     constexpr auto appName = epuzzle::Version::projectName;
 } // namespace
 
-    std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])
+    std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])  // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
     {
         using Method = epuzzle::SolverConfig::SolvingMethod;
         using ExecPolicy = epuzzle::SolverConfig::BruteForceConfig::ExecPolicy;

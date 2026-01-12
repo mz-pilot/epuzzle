@@ -15,7 +15,7 @@ namespace epuzzle::tests
                 GTEST_SKIP() << "Deductive implementation coming in next version!";
         }
 
-        auto solve(std::string_view fileName)
+        static auto solve(std::string_view fileName)
         {
             std::unique_ptr<Solver> solver;
             std::vector<PuzzleSolution> solutions;
@@ -56,7 +56,7 @@ namespace epuzzle::tests
         ASSERT_NO_THROW(solver = Solver::create(GetParam(), parseFile(test_utils::puzzlePath("six_houses.toml"))));
         ASSERT_TRUE(static_cast<bool>(solver));
         using msec = std::chrono::milliseconds;
-        utils::Stopwatch sw;
+        const utils::Stopwatch sw;
         solver->solve({ msec(500), [](std::uint64_t, std::uint64_t) { return false; } });
         const auto elapsedSec = sw.elapsed();
         EXPECT_GE(elapsedSec.count(), 0.5);
