@@ -56,7 +56,7 @@ namespace
     constexpr auto appName = epuzzle::Version::projectName;
 } // namespace
 
-    std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])  // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+    std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[]) 
     {
         using Method = epuzzle::SolverConfig::SolvingMethod;
         using ExecPolicy = epuzzle::SolverConfig::BruteForceConfig::ExecPolicy;
