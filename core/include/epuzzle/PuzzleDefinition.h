@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <ostream>
 #include <string>
 #include <variant>
@@ -39,7 +40,7 @@ namespace epuzzle
         //  - means "Pink house position is immediate right than Bob's house
         struct Comparison
         {
-            enum class Relation
+            enum class Relation : std::uint8_t
             {
                 Uninitialized,
                 ImmediateLeft,

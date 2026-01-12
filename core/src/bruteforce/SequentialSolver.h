@@ -11,7 +11,7 @@ namespace epuzzle::details::bruteforce
     public:
         explicit SequentialSolver(SolverContext&&);
 
-        std::vector<PuzzleSolution> solve(SolveOptions) override;
+        std::vector<PuzzleSolution> solve(const SolveOptions&) override;
 
     private:
         SolverContext m_ctx;

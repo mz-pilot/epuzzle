@@ -362,7 +362,7 @@ namespace epuzzle
             std::chrono::milliseconds progressInterval = std::chrono::milliseconds(1000);
             std::function<bool(std::uint64_t total, std::uint64_t current)> progressCallback = [](auto, auto) { return true; };
         };
-        virtual std::vector<PuzzleSolution> solve(SolveOptions) = 0;
+        virtual std::vector<PuzzleSolution> solve(const SolveOptions&) = 0;
     };
 }
 ```
@@ -372,11 +372,11 @@ namespace epuzzle
 ```cpp
 struct SolverConfig 
 {
-    enum class SolvingMethod { BruteForce, Deductive };
+    enum class SolvingMethod : std::uint8_t { BruteForce, Deductive };
            
     struct BruteForceConfig 
     {
-        enum class ExecPolicy { Sequential, Parallel };
+        enum class ExecPolicy : std::uint8_t { Sequential, Parallel };
         bool prefilter = true;
         ExecPolicy execution = ExecPolicy::Parallel;
     };
@@ -397,7 +397,7 @@ namespace epuzzle::details
     {
     public:
         explicit DeductiveSolver(PuzzleModel&&);
-        std::vector<PuzzleSolution> solve(SolveOptions) override;
+        std::vector<PuzzleSolution> solve(const SolveOptions&) override;
     };
 }
 ```

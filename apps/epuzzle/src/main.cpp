@@ -4,8 +4,8 @@
 #include "utils/Math.h"
 #include "utils/platform/ConsoleUtils.h"
 
-#include "epuzzle/PuzzleParser.h"
 #include "epuzzle/Exceptions.h"
+#include "epuzzle/PuzzleParser.h"
 #include "epuzzle/Solver.h"
 
 #include "ProgramOptions.h"
@@ -13,7 +13,7 @@
 int main(int argc, char* argv[])
 {
     int retcode = EXIT_SUCCESS;
-    utils::Stopwatch sw;
+    const utils::Stopwatch sw;
     try
     {
         platform::setupConsole();
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         auto puzzleDefinition = epuzzle::parseFile(options->puzzleFilePath);
         std::cout << "Puzzle loaded: \n" << puzzleDefinition << "\n";
         std::cout << "Preparing ... \n";
-        auto solver = epuzzle::Solver::create(std::move(options->config), std::move(puzzleDefinition));
+        auto solver = epuzzle::Solver::create(options->config, std::move(puzzleDefinition));
         std::cout << "Preparing done.\n";
 
         using namespace utils;
@@ -54,9 +54,9 @@ int main(int argc, char* argv[])
     }
     catch (...)
     {
-        std::cerr << "\nUnknown exception occured!\n" << std::endl;
+        std::cerr << "\nUnknown exception occured!\n\n";
         retcode = EXIT_FAILURE;
     }
-    std::cout << "Elapsed: " << sw.elapsed() << std::endl;
+    std::cout << "Elapsed: " << sw.elapsed() << "\n";
     return retcode;
 }

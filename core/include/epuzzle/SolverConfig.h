@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <optional>
 #include <ostream>
 
@@ -7,7 +8,7 @@ namespace epuzzle
 
     struct SolverConfig
     {
-        enum class SolvingMethod
+        enum class SolvingMethod : std::uint8_t
         {
             BruteForce,
             Deductive
@@ -15,7 +16,7 @@ namespace epuzzle
 
         struct BruteForceConfig
         {
-            enum class ExecPolicy
+            enum class ExecPolicy : std::uint8_t
             {
                 Sequential,
                 Parallel

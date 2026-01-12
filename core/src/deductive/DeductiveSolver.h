@@ -11,7 +11,7 @@ namespace epuzzle::details::deductive
     public:
         explicit DeductiveSolver(PuzzleModel&&);
 
-        std::vector<PuzzleSolution> solve(SolveOptions) override;
+        std::vector<PuzzleSolution> solve(const SolveOptions&) override;
 
     private:
         const PuzzleModel m_puzzleModel;

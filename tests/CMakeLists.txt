@@ -33,7 +33,7 @@ set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
 
-set_target_properties(gtest gtest_main PROPERTIES CXX_CLANG_TIDY "")
+set_target_properties(gtest gtest_main PROPERTIES CXX_CLANG_TIDY "") # disable clang-tidy for google test sources
 
 include(GoogleTest)
 

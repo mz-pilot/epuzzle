@@ -78,7 +78,7 @@ namespace epuzzle
 
         // Validate constraints
 
-        ENSURE_VALID(dataView.constraints.size() >= 1);
+        ENSURE_VALID(!dataView.constraints.empty());
         for (const auto& constr : dataView.constraints)
         {
             std::visit(utils::overloaded
@@ -125,7 +125,7 @@ namespace epuzzle
     {
         utils::StringTablePrinter tablePrinter{ "  ", "  " };
         tablePrinter.reserve(1 + data.attributes.size());
-        tablePrinter.addRow(data.personTypeName, data.persons);
+        tablePrinter.addRow(PuzzleDefinition::personTypeName, data.persons);
         for (const auto& attr : data.attributes)
             tablePrinter.addRow(attr.type, attr.values);
 

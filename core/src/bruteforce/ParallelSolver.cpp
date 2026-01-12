@@ -15,7 +15,7 @@ namespace epuzzle::details::bruteforce
     {
     }
 
-    std::vector<PuzzleSolution> ParallelSolver::solve(SolveOptions opts)
+    std::vector<PuzzleSolution> ParallelSolver::solve(const SolveOptions& opts)
     {
         if (m_totalSolutionCandidates == 0)
             return handleNoSolutionCandidates(opts);

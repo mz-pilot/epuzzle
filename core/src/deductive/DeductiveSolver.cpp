@@ -8,7 +8,7 @@ namespace epuzzle::details::deductive
     {
     }
 
-    std::vector<PuzzleSolution> DeductiveSolver::solve(SolveOptions)
+    std::vector<PuzzleSolution> DeductiveSolver::solve(const SolveOptions&)
     {
         // TODO: Implement it! And don't forget to remove GTEST_SKIP() from SolverTests::SetUp() and SolverRealPuzzleTests::SetUp()!
 

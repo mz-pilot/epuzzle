@@ -1,7 +1,7 @@
-#include <locale>
 #include "utils/platform/ConsoleUtils.h"
 
 #ifdef _WIN32
+    #include <locale>
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #endif
