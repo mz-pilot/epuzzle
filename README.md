@@ -614,11 +614,13 @@ ctest --preset=test-lin-release
 #### Запуск анализа кода линтером clang-tidy
 Осуществляется двумя способами:
 - **Автоматически на GitHub** - в рамках `CI Checks (PR & Push)`.
-- **Вручную локально** - на машине разработчика прежде `git push origin`, для этого можно в Linux или WSL:
-  - запускать у себя сборку пресета `linux-tidy`.
-  - или включать при конфигурировании соответствующую опцию:
+- **Вручную локально** - на машине разработчика можно в Linux/WSL использовать пресет `linux-tidy`:
+  - в IDE
+  - либо в терминале:
   ```bash
-  cmake -B build -DEPUZZLE_ENABLE_CLANG_TIDY=ON
+  cd epuzzle
+  cmake --preset=linux-tidy
+  cmake --build --preset=lin-tidy
   ```
 
 Примечание: для линтера используется строгая настройка `WarningsAsErrors`.
