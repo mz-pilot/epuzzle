@@ -60,7 +60,7 @@ jobs:
           ENABLE_TIDY="OFF"
           if [[ "${{ matrix.os }}" == "ubuntu-latest" && "${{ matrix.build_type }}" == "Debug" ]]; then
             ENABLE_TIDY="ON"
-            echo "Clang-tidy analysis enabled"
+            echo "Clang-tidy analysis Enabled"
           fi
 
           cmake -S . -B build -G "Ninja" \

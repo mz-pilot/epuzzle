@@ -574,7 +574,7 @@ wsl --install -d Ubuntu
 ```bash
 # Ubuntu/Debian
 sudo apt update
-sudo apt install build-essential cmake ninja-build git
+sudo apt install build-essential cmake ninja-build git clang clang-tidy clang-format clangd
 ```
 2. **Клонируйте и соберите**:
 ```bash
@@ -614,7 +614,12 @@ ctest --preset=test-lin-release
 #### Запуск анализа кода линтером clang-tidy
 Осуществляется двумя способами:
 - **Автоматически на GitHub** - в рамках `CI Checks (PR & Push)`.
-- **Вручную локально** - на машине разработчика прежде `git push origin`; для этого можно запускать у себя сборку пресета `linux-tidy` в Linux или WSL.
+- **Вручную локально** - на машине разработчика прежде `git push origin`, для этого можно в Linux или WSL:
+  - запускать у себя сборку пресета `linux-tidy`.
+  - или включать при конфигурировании соответствующую опцию:
+  ```bash
+  cmake -B build -DEPUZZLE_ENABLE_CLANG_TIDY=ON
+  ```
 
 Примечание: для линтера используется строгая настройка `WarningsAsErrors`.
 
