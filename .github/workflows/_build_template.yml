@@ -44,7 +44,7 @@ jobs:
 
       - name: 2. (Linux) Install dependencies
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install -y ninja-build
+        run: sudo apt-get install -y ninja-build build-essential clang clang-tidy clang-format clangd
 
 
       - name: 3. Extract Version
