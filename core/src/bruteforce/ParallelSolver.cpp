@@ -6,7 +6,7 @@ namespace epuzzle::details::bruteforce
     namespace
     {
         constexpr std::uint64_t progressCountInterval = 1'000'000;
-        static const auto threadsCount = std::max(1u, std::jthread::hardware_concurrency());
+        const auto threadsCount = std::max(1u, std::jthread::hardware_concurrency());
     }
 
     ParallelSolver::ParallelSolver(SolverContext&& ctx)
@@ -15,7 +15,7 @@ namespace epuzzle::details::bruteforce
     {
     }
 
-    std::vector<PuzzleSolution> ParallelSolver::solve(SolveOptions opts)
+    std::vector<PuzzleSolution> ParallelSolver::solve(const SolveOptions& opts)
     {
         if (m_totalSolutionCandidates == 0)
             return handleNoSolutionCandidates(opts);
@@ -50,7 +50,7 @@ namespace epuzzle::details::bruteforce
     }
 
     // parallel
-    std::vector<PuzzleSolution> ParallelSolver::runWorker(std::stop_token st, utils::AtomicProgressTracker& atomicTracker, SpaceSplitter& spaceSplitter) const
+    std::vector<PuzzleSolution> ParallelSolver::runWorker(std::stop_token st, utils::AtomicProgressTracker& atomicTracker, SpaceSplitter& spaceSplitter) const 
     {
         std::vector<PuzzleSolution> threadResult;
         auto localTracker = atomicTracker.getLocalTracker();
@@ -76,7 +76,7 @@ namespace epuzzle::details::bruteforce
         return threadResult;
     }
 
-    std::vector<PuzzleSolution> ParallelSolver::handleNoSolutionCandidates(const SolveOptions& opts) const
+    std::vector<PuzzleSolution> ParallelSolver::handleNoSolutionCandidates(const SolveOptions& opts) const 
     {
         opts.progressCallback(1, 0);
         opts.progressCallback(1, 1);

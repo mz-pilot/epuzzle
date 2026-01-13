@@ -181,7 +181,7 @@ namespace
         std::uint64_t totalCombinations = 1;
         for (const auto& wheel : odometer)
         {
-            ENSURE(wheel.size() == 0 || totalCombinations <= std::numeric_limits<uint64_t>::max() / wheel.size(),
+            ENSURE(wheel.size() == 0 || totalCombinations <= std::numeric_limits<uint64_t>::max() / wheel.size(),  // NOLINT(readability-container-size-empty)
                 "Too much combinations count for using uint64!");
             totalCombinations *= wheel.size();
         }

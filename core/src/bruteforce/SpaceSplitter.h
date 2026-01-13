@@ -20,7 +20,7 @@ namespace epuzzle::details::bruteforce
 
         std::optional<Chunk> nextChunk()
         {
-            std::lock_guard<std::mutex>lock(m_distributedGuard);
+            const std::lock_guard<std::mutex>lock(m_distributedGuard);
             if (m_distributed >= m_totalItems)
                 return {};
 

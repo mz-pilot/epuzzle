@@ -8,7 +8,7 @@ namespace epuzzle::details::bruteforce
     {
     }
 
-    std::vector<PuzzleSolution> SequentialSolver::solve(SolveOptions opts)
+    std::vector<PuzzleSolution> SequentialSolver::solve(const SolveOptions& opts)
     {
         std::vector<PuzzleSolution> solutions;
         constexpr auto minCountInterval = 1'000'000u;

@@ -56,9 +56,11 @@ namespace utils
         ParallelExecutor(size_t count, ThreadFun fun)
             : m_monitor(count)
         {
+            m_workers.reserve(count);
             for (size_t i = 0; i < count; ++i)
             {
-                auto monitoredFun = [this, fun](std::stop_token st) // copy for each thread
+                // copy for each thread
+                auto monitoredFun = [this, fun](std::stop_token st) // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
                     {
                         try
                         {

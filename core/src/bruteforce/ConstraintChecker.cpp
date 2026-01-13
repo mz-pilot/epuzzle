@@ -40,11 +40,10 @@ namespace
                     {
                         if (const auto* personId = std::get_if<PersonID>(&personVariant))
                             return *personId;
-                        else if (const auto* attribute = std::get_if<Attribute>(&personVariant))
-                            return solutionCandidate.ownerOf(attribute->typeId, attribute->valueId);
-                        else
-                            ENSURE(false, "Need special handler for specified personVariant type!");
-                        return PersonID{};
+
+                        const auto* attribute = std::get_if<Attribute>(&personVariant);
+                        ENSURE(attribute, "Unexpected personVariant real type!");
+                        return solutionCandidate.ownerOf(attribute->typeId, attribute->valueId);
                     };
 
                 const size_t pos1 = solutionCandidate.personPosition(getPersonByVariant(m_params.first), m_params.compareByType);

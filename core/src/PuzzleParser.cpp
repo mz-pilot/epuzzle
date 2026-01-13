@@ -48,7 +48,7 @@ namespace
                             auto readAttr = [&constraintTable](std::string_view name) -> PuzzleDefinition::Attribute
                                 {
                                     PuzzleDefinition::Attribute attr;
-                                    const auto inlineTable = constraintTable[name].as_table();
+                                    const auto* inlineTable = constraintTable[name].as_table();
                                     if (inlineTable && inlineTable->size() == 1)
                                     {
                                         attr.type = inlineTable->cbegin()->first;
@@ -61,12 +61,12 @@ namespace
                             if (type == "fact")
                             {
                                 PuzzleDefinition::Fact fact{ readAttr("first"), readAttr("second") };
-                                if (fact.second.value.length() > 0 && fact.second.value[0] == '!')
+                                if (!fact.second.value.empty() && fact.second.value[0] == '!')
                                 {
                                     fact.secondNegate = true;
                                     fact.second.value.erase(0, 1);
                                 }
-                                data.constraints.push_back(std::move(fact));
+                                data.constraints.emplace_back(std::move(fact));
                             }
                             else if (type == "comparison")
                             {
@@ -76,8 +76,8 @@ namespace
 
                                 const auto relStr = constraintTable["relation"].value_or(""sv);
                                 using Relation = PuzzleDefinition::Comparison::Relation;
-                                Relation rel;
-                                if (relStr == "immediate_left")    rel = Relation::ImmediateLeft;
+                                Relation rel; // NOLINT(cppcoreguidelines-init-variables)
+                                if (relStr == "immediate_left")         rel = Relation::ImmediateLeft;
                                 else if (relStr == "immediate_right")   rel = Relation::ImmediateRight;
                                 else if (relStr == "adjacent")          rel = Relation::Adjacent;
                                 else if (relStr == "before")            rel = Relation::Before;

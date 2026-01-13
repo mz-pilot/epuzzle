@@ -2,7 +2,7 @@
 
 namespace epuzzle::details
 {
-    static_assert(PuzzleSolution::personTypeName == PuzzleDefinition::personTypeName);
+    static_assert(std::string_view(PuzzleSolution::personTypeName) == std::string_view(PuzzleDefinition::personTypeName));
 
     SolutionModel::SolutionModel(size_t attrTypeCount)
         : m_attributes(attrTypeCount)

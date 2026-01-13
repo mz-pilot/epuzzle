@@ -38,8 +38,8 @@ namespace epuzzle::details
             {
                 if (attr.type == PuzzleDefinition::personTypeName)
                     return indexedPerson(attr.value);
-                else
-                    return indexedAttr(attr);
+
+                return indexedAttr(attr);
             };
 
         // PuzzleDefinition::constraints (input DTO)  ->  PuzzleModel::m_constraints (optimized model)

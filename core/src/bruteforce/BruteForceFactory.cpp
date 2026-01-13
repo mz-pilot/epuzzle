@@ -8,13 +8,11 @@ namespace epuzzle::details::bruteforce
     {
         SolverContext context{ std::move(puzzleModel), config.prefilter };
 
-        if (config.execution == SolverConfig::BruteForceConfig::ExecPolicy::Parallel)
-        {
-            return std::make_unique<ParallelSolver>(std::move(context));
-        }
-        else
+        if (config.execution == SolverConfig::BruteForceConfig::ExecPolicy::Sequential)
         {
             return std::make_unique<SequentialSolver>(std::move(context));
         }
+
+        return std::make_unique<ParallelSolver>(std::move(context));
     }
 }

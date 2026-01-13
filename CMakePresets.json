@@ -34,13 +34,20 @@
       "generator": "Ninja",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" },
       "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+    },
+    {
+      "name": "linux-tidy",
+      "displayName": "Linux x64 Clang-Tidy",
+      "inherits": "linux-debug", 
+      "cacheVariables": { "EPUZZLE_ENABLE_CLANG_TIDY": "ON" }
     }
   ],
   "buildPresets": [
     { "name": "win-debug",   "configurePreset": "windows-x64", "configuration": "Debug" },
     { "name": "win-release", "configurePreset": "windows-x64", "configuration": "Release" },
     { "name": "lin-debug",   "configurePreset": "linux-debug" },
-    { "name": "lin-release", "configurePreset": "linux-release" }
+    { "name": "lin-release", "configurePreset": "linux-release" },
+    { "name": "lin-tidy",    "configurePreset": "linux-tidy" }
   ],
   "testPresets": [
     { "name": "test-win-debug",   "configurePreset": "windows-x64", "configuration": "Debug", "output": { "outputOnFailure": true } },

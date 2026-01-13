@@ -22,7 +22,7 @@ namespace
                     constexpr auto namesArr = magic_enum::enum_names<TEnum>();
                     for (auto i : std::views::iota(0u, namesArr.size()))
                     {
-                        str += namesArr[i];
+                        str += namesArr[i]; // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                         if (i < namesArr.size() - 1)
                             str += '|';
                     }
@@ -42,12 +42,12 @@ namespace
         {
             if (const auto optVal = magic_enum::enum_cast<TEnum>(sv))
                 return *optVal;
-            else
-                throw std::runtime_error(std::format("Unexpected option value: {}, expected one of: {}", sv, names<TEnum>()));
+
+            throw std::runtime_error(std::format("Unexpected option value: {}, expected one of: {}", sv, names<TEnum>()));
         }
     };
 
-    enum class PrefilterMode
+    enum class PrefilterMode : std::uint8_t
     {
         Enabled,
         Disabled
@@ -56,7 +56,7 @@ namespace
     constexpr auto appName = epuzzle::Version::projectName;
 } // namespace
 
-    std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[])
+    std::optional<ProgramOptions> getProgramOptions(int argc, char* argv[]) 
     {
         using Method = epuzzle::SolverConfig::SolvingMethod;
         using ExecPolicy = epuzzle::SolverConfig::BruteForceConfig::ExecPolicy;
@@ -81,7 +81,7 @@ namespace
             ("h,help", "Print usage");
 
         const auto parsedOpts = optsManager.parse(argc, argv);
-        if (parsedOpts.count("help") || parsedOpts.arguments().empty())
+        if (parsedOpts.contains("help") || parsedOpts.arguments().empty())
         {
             std::cout << optsManager.help() << "\n";
             std::cout << "Examples: \n";
@@ -103,10 +103,11 @@ namespace
                 << " -p " << EnumHelper::name(PrefilterMode::Disabled)
                 << " -e " << EnumHelper::name(ExecPolicy::Sequential);
 
-            std::cout << std::endl;
+            std::cout << "\n";
             return {};
         }
-        else if (parsedOpts.contains("version") && parsedOpts.arguments().size() == 1)
+
+        if (parsedOpts.contains("version") && parsedOpts.arguments().size() == 1)
         {
             printVersion();
             return {};
@@ -129,6 +130,6 @@ namespace
     void printVersion()
     {
         using ver = epuzzle::Version;
-        std::cout << ver::projectName << " version " << ver::projectVer << std::endl;
+        std::cout << ver::projectName << " version " << ver::projectVer << "\n";
     }
 }

@@ -29,6 +29,17 @@ set(CMAKE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/pdb)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
 
+option(EPUZZLE_ENABLE_CLANG_TIDY "Enable clang-tidy analysis during build" OFF)
+if(EPUZZLE_ENABLE_CLANG_TIDY)
+    find_program(CLANG_TIDY_EXE NAMES "clang-tidy" DOC "Path to clang-tidy executable")
+    if(CLANG_TIDY_EXE)
+        set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+        message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+    else()
+        message(WARNING "clang-tidy not found, but analysis was enabled.")
+    endif()
+endif()
+
 # debug info for all configurations for easy diagnostic, static runtime for MSVC
 set(EPUZZLE_STATIC_RUNTIME OFF)
 if(MSVC)

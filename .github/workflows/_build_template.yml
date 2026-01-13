@@ -44,7 +44,7 @@ jobs:
 
       - name: 2. (Linux) Install dependencies
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install -y ninja-build
+        run: sudo apt-get install -y ninja-build build-essential clang clang-tidy clang-format clangd
 
 
       - name: 3. Extract Version
@@ -57,11 +57,18 @@ jobs:
 
       - name: 4. Configure CMake
         run: |
+          ENABLE_TIDY="OFF"
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" && "${{ matrix.build_type }}" == "Debug" ]]; then
+            ENABLE_TIDY="ON"
+            echo "Clang-tidy analysis Enabled"
+          fi
+
           cmake -S . -B build -G "Ninja" \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
             -DEPUZZLE_VERSION=${{ env.GIT_TAG_VER }} \
             -DEPUZZLE_BUILD_TESTS=ON \
-            -DEPUZZLE_BUILD_APPS=ON
+            -DEPUZZLE_BUILD_APPS=ON \
+            -DEPUZZLE_ENABLE_CLANG_TIDY=$ENABLE_TIDY
 
       - name: 5. Build
         run: cmake --build build --config ${{ matrix.build_type }}

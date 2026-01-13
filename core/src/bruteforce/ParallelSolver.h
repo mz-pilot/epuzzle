@@ -11,10 +11,10 @@ namespace epuzzle::details::bruteforce
     public:
         explicit ParallelSolver(SolverContext&&);
 
-        std::vector<PuzzleSolution> solve(SolveOptions) override;
+        std::vector<PuzzleSolution> solve(const SolveOptions&) override;
 
     private:
-        std::vector<PuzzleSolution> runWorker(std::stop_token st, utils::AtomicProgressTracker&, class SpaceSplitter&) const;
+        std::vector<PuzzleSolution> runWorker(std::stop_token, utils::AtomicProgressTracker&, class SpaceSplitter&) const;
 
         std::vector<PuzzleSolution> handleNoSolutionCandidates(const SolveOptions&) const;
         bool sendProgress(const SolveOptions&, std::uint64_t current) const;

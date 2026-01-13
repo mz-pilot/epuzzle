@@ -8,7 +8,8 @@ namespace epuzzle::tests
 
     TEST(BruteForceTests, SearchSpaceCreateOk)
     {
-        constexpr size_t personCount = 6, attrCount = 6;
+        constexpr size_t personCount = 6;
+        constexpr size_t attrCount = 6;
         std::unique_ptr<SearchSpace> space;
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);
@@ -18,7 +19,8 @@ namespace epuzzle::tests
 
     TEST(BruteForceTests, IterateAllWithSplitterOk)
     {
-        constexpr size_t personCount = 5, attrCount = 4;
+        constexpr size_t personCount = 5;
+        constexpr size_t attrCount = 4;
         std::unique_ptr<SearchSpace> space;
         ASSERT_NO_THROW(space = SearchSpace::create(personCount, attrCount, {}));
         ASSERT_TRUE(space);

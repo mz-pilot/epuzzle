@@ -14,14 +14,12 @@ namespace epuzzle
         using namespace details;
         PuzzleModel puzzleModel{ std::move(puzzleDefinition) };
 
-        if (config.solvingMethod == SolverConfig::SolvingMethod::BruteForce)
-        {
-            return bruteforce::createSolver(config.bruteForce.value(), std::move(puzzleModel));
-        }
-        else
+        if (config.solvingMethod == SolverConfig::SolvingMethod::Deductive)
         {
             return std::make_unique<deductive::DeductiveSolver>(std::move(puzzleModel));
         }
+
+        return bruteforce::createSolver(config.bruteForce.value(), std::move(puzzleModel));
     }
 
 }
