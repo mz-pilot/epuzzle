@@ -58,9 +58,11 @@ jobs:
       - name: 4. Configure CMake
         run: |
           ENABLE_TIDY="OFF"
+          COMPILER_ARGS=""
           if [[ "${{ matrix.os }}" == "ubuntu-latest" && "${{ matrix.build_type }}" == "Debug" ]]; then
             ENABLE_TIDY="ON"
-            echo "Clang-tidy analysis Enabled"
+            COMPILER_ARGS="-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
+            echo "Clang-tidy analysis Enabled with Clang compiler"
           fi
 
           cmake -S . -B build -G "Ninja" \
@@ -68,7 +70,9 @@ jobs:
             -DEPUZZLE_VERSION=${{ env.GIT_TAG_VER }} \
             -DEPUZZLE_BUILD_TESTS=ON \
             -DEPUZZLE_BUILD_APPS=ON \
-            -DEPUZZLE_ENABLE_CLANG_TIDY=$ENABLE_TIDY
+            -DEPUZZLE_ENABLE_CLANG_TIDY=$ENABLE_TIDY \
+            -DEPUZZLE_ENABLE_SANITIZERS=$ENABLE_TIDY \
+            $COMPILER_ARGS
 
       - name: 5. Build
         run: cmake --build build --config ${{ matrix.build_type }}

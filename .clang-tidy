@@ -7,7 +7,6 @@
   readability-*,
   -bugprone-easily-swappable-parameters,
   -bugprone-macro-parentheses,
-  -clang-diagnostic-ignored-gch,
   -cppcoreguidelines-avoid-c-arrays,
   -cppcoreguidelines-avoid-do-while,
   -cppcoreguidelines-avoid-const-or-ref-data-members,
