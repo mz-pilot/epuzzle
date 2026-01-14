@@ -53,7 +53,7 @@ Modern C++20 библиотека и консольная утилита для 
 * Полное покрытие синтетическими задачами 2x2, 2x3, 3x2, 3x3.
 * Тесты с реальными головоломками.
 * Тесты на отмену операции и graceful shutdown.
-* Автоматический анализ кода линтером `clang-tidy`
+* Автоматический анализ кода линтером `clang-tidy` и санитайзерами.
 * `CI/CD` с кроссплатформенным тестированием (см. далее).
 
 ### Инфраструктура
@@ -611,7 +611,7 @@ ctest --preset=test-lin-release
 - **Статическая линковка рантайма** на Windows — `epuzzle.exe` не зависит от MSVC Redist
 
 
-#### Запуск анализа кода линтером clang-tidy
+#### Запуск анализа кода линтером clang-tidy и санитайзерами
 Осуществляется двумя способами:
 - **Автоматически на GitHub** - в рамках `CI Checks (PR & Push)`.
 - **Вручную локально** - на машине разработчика можно в Linux/WSL использовать пресет `linux-tidy`:
@@ -620,7 +620,8 @@ ctest --preset=test-lin-release
   ```bash
   cd epuzzle
   cmake --preset=linux-tidy
-  cmake --build --preset=lin-tidy
+  cmake --build --preset=lin-tidy  # clang-tidy
+  ctest --preset=test-lin-tidy     # sanitizers
   ```
 
 Примечание: для линтера используется строгая настройка `WarningsAsErrors`.

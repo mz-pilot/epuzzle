@@ -39,7 +39,12 @@
       "name": "linux-tidy",
       "displayName": "Linux x64 Clang-Tidy",
       "inherits": "linux-debug", 
-      "cacheVariables": { "EPUZZLE_ENABLE_CLANG_TIDY": "ON" }
+      "cacheVariables": { 
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "EPUZZLE_ENABLE_CLANG_TIDY": "ON", 
+        "EPUZZLE_ENABLE_SANITIZERS": "ON" 
+      }
     }
   ],
   "buildPresets": [
@@ -50,9 +55,10 @@
     { "name": "lin-tidy",    "configurePreset": "linux-tidy" }
   ],
   "testPresets": [
-    { "name": "test-win-debug",   "configurePreset": "windows-x64", "configuration": "Debug", "output": { "outputOnFailure": true } },
-    { "name": "test-win-release", "configurePreset": "windows-x64", "configuration": "Release", "output": { "outputOnFailure": true } },
-    { "name": "test-lin-debug",   "configurePreset": "linux-debug", "output": { "outputOnFailure": true } },
+    { "name": "test-win-debug",   "configurePreset": "windows-x64",   "configuration": "Debug", "output": { "outputOnFailure": true } },
+    { "name": "test-win-release", "configurePreset": "windows-x64",   "configuration": "Release", "output": { "outputOnFailure": true } },
+    { "name": "test-lin-debug",   "configurePreset": "linux-debug",   "output": { "outputOnFailure": true } },
+    { "name": "test-lin-tidy",    "configurePreset": "linux-tidy",    "output": { "outputOnFailure": true } },
     { "name": "test-lin-release", "configurePreset": "linux-release", "output": { "outputOnFailure": true } }
   ]
 }

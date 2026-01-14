@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     {
         platform::setupConsole();
 
-        auto options = cli::getProgramOptions(argc, argv);
+        const auto options = cli::getProgramOptions(argc, argv);
         if (!options)
             return EXIT_SUCCESS;
 
