@@ -1,5 +1,11 @@
 # epuzzle
 
+<div align="right">
+
+**Русский** | [**English**](README.en.md)
+
+</div>
+
 [![CI Checks (PR & Push)](https://github.com/mz-pilot/epuzzle/actions/workflows/ci_pr.yml/badge.svg)](https://github.com/mz-pilot/epuzzle/actions/workflows/ci_pr.yml)
 [![Testing](https://img.shields.io/badge/Testing-Google_Test-4285F4?logo=googletest)](https://google.github.io/googletest/)
 [![clang-tidy](https://img.shields.io/badge/clang--tidy-enabled-blue?logo=llvm)](https://clang.llvm.org/extra/clang-tidy/)
@@ -378,14 +384,14 @@ namespace epuzzle
 struct SolverConfig 
 {
     enum class SolvingMethod : std::uint8_t { BruteForce, Deductive };
-           
+
     struct BruteForceConfig 
     {
         enum class ExecPolicy : std::uint8_t { Sequential, Parallel };
         bool prefilter = true;
         ExecPolicy execution = ExecPolicy::Parallel;
     };
-           
+
     SolvingMethod solvingMethod = SolvingMethod::BruteForce;
     std::optional<BruteForceConfig> bruteForce;
 };
