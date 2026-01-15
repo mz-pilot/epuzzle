@@ -1,0 +1,154 @@
+#
+# Original natural language description: five_ships.txt
+#
+# TOML fromat specification: https://toml.io/en/
+# TOML Validator: https://www.toml-lint.com/
+
+epuzzle_format_version = 1
+
+# person - mandatory attribute:
+person          = ["Греческий", "Английский", "Французский", "Бразильский", "Испанский"]
+
+# next attributes are optional:
+departure_time  = ["5", "6", "7", "8", "9"]
+cargo           = ["кофе", "какао", "рис", "зерно", "чай"]
+funnel_color    = ["чёрный", "синий", "зелёный", "красный", "белый"]
+ship_position   = ["1", "2", "3", "4", "5"]
+destination     = ["Марсель", "Манилы", "Генуя", "Гамбург", "Порт-Саид"]
+
+# сonstraints: 
+#   fact:       second attribute value can start with '!' that means "NOT".
+#   comparison: possible relations: "immediate_left", "immediate_right", "adjacent", "before", "after".
+
+# 1.1 Греческий корабль отчаливает в шесть.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 1.2 Греческий корабль везет кофе.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 2. У корабля, который в середине — черная труба.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 3. Английский корабль отплывает в девять.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 4.1 Французский корабль, у которого синяя труба
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 4.2 Французский корабль пришвартован слева от корабля, который везет кофе.
+[[constraints]]
+type = "comparison"
+first = { house_color = "" }
+compare_by = ""
+relation = ""
+second = { house_color = "" }
+
+# 5. Справа от корабля, на котором груз какао, корабль, который плывет в Марсель.
+[[constraints]]
+type = "comparison"
+first = { house_color = "" }
+compare_by = ""
+relation = ""
+second = { house_color = "" }
+
+# 6. Корабль под бразильским флагом направляется на Манилы.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 7. Рядом с кораблем, на котором рис, — корабль с зеленой трубой.
+[[constraints]]
+type = "comparison"
+first = { house_color = "" }
+compare_by = ""
+relation = ""
+second = { house_color = "" }
+
+# 8. Корабль, плывущий в Геную, отходит в пять.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 9.1 Испанский корабль отплывает в семь.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 9.2 Испанский корабль находится справа от корабля, плывущего в Марсель.
+[[constraints]]
+type = "comparison"
+first = { house_color = "" }
+compare_by = ""
+relation = ""
+second = { house_color = "" }
+
+# 10. Корабль с красной трубой направляется в Гамбург.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 11. Рядом с кораблем, который отчаливает в семь, корабль с белой трубой.
+[[constraints]]
+type = "comparison"
+first = { house_color = "" }
+compare_by = ""
+relation = ""
+second = { house_color = "" }
+
+# 12. На крайнем корабле — зерно ( = Корабль с зерном не из центральных).
+# 12.1 Корабль с зерном не второй
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 12.2 Корабль с зерном не третий
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 12.3 Корабль с зерном не четвертый
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 13. Корабль с черной трубой отплывает в восемь.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }
+
+# 14. Корабль с зерном пришвартован рядом с кораблем, на котором груз риса.
+[[constraints]]
+type = "comparison"
+first = { house_color = "" }
+compare_by = ""
+relation = ""
+second = { house_color = "" }
+
+# 15. Корабль, следующий до Гамбурга, отчаливает в 6.
+[[constraints]]
+type = "fact"
+first = { person = "" }
+second = { house_color = "" }

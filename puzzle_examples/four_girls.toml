@@ -15,7 +15,7 @@ color	= ["pink", "blue", "green", "violet"]
 hobby	= ["art", "sport", "music", "books"]
 
 # сonstraints: 
-#   fact: "person" can only be the first attribute in a "fact"constraint;  second attribute value can start with '!' that means "NOT".
+#   fact:       second attribute value can start with '!' that means "NOT".
 #   comparison: possible relations: "immediate_left", "immediate_right", "adjacent", "before", "after".
 
 # Аня не любит розовый

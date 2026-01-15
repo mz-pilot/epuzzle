@@ -565,10 +565,7 @@ wsl --install -d Ubuntu
    - Добавьте конфигурацию для Linux
 3. **Отлаживайте** код, выполняющийся в WSL, прямо из Visual Studio
 
-Примечание: для аналогичного использования `Debian` в Visual Studio c WSL2 может потребоваться после установки дистрибутива Debian вручную запустить его терминал и установить `rsync`:
-```bash
-sudo apt install -y rsync
-```
+<small>Примечание: для аналогичного использования `Debian` в Visual Studio c WSL2 может потребоваться после установки дистрибутива Debian вручную запустить его терминал и установить `rsync` командой `sudo apt install -y rsync` </small>
 
 </details>
 
