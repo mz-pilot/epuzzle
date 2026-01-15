@@ -1,5 +1,7 @@
 #include "epuzzle/Solver.h"
 
+// NOLINTBEGIN(modernize-use-designated-initializers)
+
 namespace epuzzle::tests
 {
     namespace
@@ -564,3 +566,5 @@ namespace epuzzle::tests
         SolverTests,
         testing::Values(SolverConfig{ Method::Deductive, {} }));
 }
+
+// NOLINTEND(modernize-use-designated-initializers)

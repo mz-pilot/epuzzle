@@ -24,7 +24,7 @@ namespace epuzzle::details::bruteforce
             if (m_distributed >= m_totalItems)
                 return {};
 
-            const Chunk chunk{ m_distributed, std::min(m_chunkSize, m_totalItems - m_distributed) };
+            const Chunk chunk{ .offset = m_distributed, .count = std::min(m_chunkSize, m_totalItems - m_distributed) };
             m_distributed += chunk.count;
             return chunk;
         }

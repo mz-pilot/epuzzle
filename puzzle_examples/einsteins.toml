@@ -17,7 +17,7 @@ beverage        = ["кофе", "чай", "молоко", "апельсиновы
 cigarettes      = ["Old Gold", "Kool", "Chesterfield", "Lucky Strike", "Parliament"]
 
 # сonstraints: 
-#   fact: "person" can only be the first attribute in a "fact"constraint;  second attribute value can start with '!' that means "NOT".
+#   fact:       second attribute value can start with '!' that means "NOT".
 #   comparison: possible relations: "immediate_left", "immediate_right", "adjacent", "before", "after".
 
 # Англичанин живёт в красном доме.

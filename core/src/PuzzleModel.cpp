@@ -31,7 +31,7 @@ namespace epuzzle::details
                 const auto cit = std::ranges::find(values, valueName);
                 ENSURE(cit != values.cend(), "unexpected value name: " << valueName);
 
-                return Attribute{ typeId, AttributeValueID::fromDistance(cit, values.cbegin()) };
+                return Attribute{ .typeId = typeId, .valueId = AttributeValueID::fromDistance(cit, values.cbegin()) };
             };
 
         auto indexedComparable = [indexedPerson, indexedAttr](const PuzzleDefinition::Attribute& attr) -> std::variant<PersonID, Attribute>

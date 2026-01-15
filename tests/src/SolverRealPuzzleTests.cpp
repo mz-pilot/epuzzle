@@ -49,6 +49,14 @@ namespace epuzzle::tests
         EXPECT_TRUE(personHasAttribute(solutions.front(), "Японец", "pet", "зебра"));
     }
 
+    TEST_P(SolverRealPuzzleTests, FiveShipsSolutionCount1Correct)
+    {
+        const auto solutions = solve("five_ships.toml");
+        ASSERT_EQ(solutions.size(), 1);
+        EXPECT_TRUE(personHasAttribute(solutions.front(), "Испанский", "destination", "Порт-Саид"));
+        EXPECT_TRUE(personHasAttribute(solutions.front(), "Французский", "cargo", "чай"));
+    }
+
     TEST_P(SolverRealPuzzleTests, SolveCanceled)
     {
         std::unique_ptr<Solver> solver;
@@ -57,7 +65,7 @@ namespace epuzzle::tests
         ASSERT_TRUE(static_cast<bool>(solver));
         using msec = std::chrono::milliseconds;
         const utils::Stopwatch sw;
-        solver->solve({ msec(500), [](std::uint64_t, std::uint64_t) { return false; } });
+        solver->solve({ .progressInterval = msec(500), .progressCallback = [](std::uint64_t, std::uint64_t) { return false; } });
         const auto elapsedSec = sw.elapsed();
         EXPECT_GE(elapsedSec.count(), 0.5);
         // Let's give it much time, as there may be a debug configuration, a busy machine, etc. 
