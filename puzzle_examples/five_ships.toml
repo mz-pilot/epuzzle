@@ -58,13 +58,13 @@ compare_by = "ship_position"
 relation = "immediate_left"
 second = { cargo = "кофе" }
 
-# 5. Справа от корабля, на котором груз какао, корабль, который плывет в Марсель.
+# 5. Корабль, который плывет в Марсель, справа от корабля, на котором груз какао.
 [[constraints]]
 type = "comparison"
-first = { cargo = "какао" }
+first = { destination = "Марсель" }
 compare_by = "ship_position"
 relation = "immediate_right"
-second = { destination = "Марсель" }
+second = { cargo = "какао" }
 
 # 6. Корабль под бразильским флагом направляется на Манилы.
 [[constraints]]
