@@ -49,6 +49,14 @@ namespace epuzzle::tests
         EXPECT_TRUE(personHasAttribute(solutions.front(), "Японец", "pet", "зебра"));
     }
 
+    TEST_P(SolverRealPuzzleTests, FiveShipsSolutionCount1Correct)
+    {
+        const auto solutions = solve("five_ships.toml");
+        ASSERT_EQ(solutions.size(), 1);
+        EXPECT_TRUE(personHasAttribute(solutions.front(), "Испанский", "destination", "Порт-Саид"));
+        EXPECT_TRUE(personHasAttribute(solutions.front(), "Французский", "cargo", "чай"));
+    }
+
     TEST_P(SolverRealPuzzleTests, SolveCanceled)
     {
         std::unique_ptr<Solver> solver;
