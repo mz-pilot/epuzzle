@@ -23,132 +23,132 @@ destination     = ["Марсель", "Манилы", "Генуя", "Гамбур
 # 1.1 Греческий корабль отчаливает в шесть.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { person = "Греческий" }
+second = { departure_time = "6" }
 
 # 1.2 Греческий корабль везет кофе.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { person = "Греческий" }
+second = { cargo = "кофе" }
 
 # 2. У корабля, который в середине — черная труба.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { ship_position = "3" }
+second = { funnel_color = "чёрный" }
 
 # 3. Английский корабль отплывает в девять.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { person = "Английский" }
+second = { departure_time = "9" }
 
 # 4.1 Французский корабль, у которого синяя труба
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { person = "Французский" }
+second = { funnel_color = "синий" }
 
 # 4.2 Французский корабль пришвартован слева от корабля, который везет кофе.
 [[constraints]]
 type = "comparison"
-first = { house_color = "" }
-compare_by = ""
-relation = ""
-second = { house_color = "" }
+first = { person = "Французский" }
+compare_by = "ship_position"
+relation = "immediate_left"
+second = { cargo = "кофе" }
 
 # 5. Справа от корабля, на котором груз какао, корабль, который плывет в Марсель.
 [[constraints]]
 type = "comparison"
-first = { house_color = "" }
-compare_by = ""
-relation = ""
-second = { house_color = "" }
+first = { cargo = "какао" }
+compare_by = "ship_position"
+relation = "immediate_right"
+second = { destination = "Марсель" }
 
 # 6. Корабль под бразильским флагом направляется на Манилы.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { person = "Бразильский" }
+second = { destination = "Манилы" }
 
 # 7. Рядом с кораблем, на котором рис, — корабль с зеленой трубой.
 [[constraints]]
 type = "comparison"
-first = { house_color = "" }
-compare_by = ""
-relation = ""
-second = { house_color = "" }
+first = { cargo = "рис" }
+compare_by = "ship_position"
+relation = "adjacent"
+second = { funnel_color = "зелёный" }
 
 # 8. Корабль, плывущий в Геную, отходит в пять.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { destination = "Генуя" }
+second = { departure_time = "5" }
 
 # 9.1 Испанский корабль отплывает в семь.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { person = "Испанский" }
+second = { departure_time = "7" }
 
 # 9.2 Испанский корабль находится справа от корабля, плывущего в Марсель.
 [[constraints]]
 type = "comparison"
-first = { house_color = "" }
-compare_by = ""
-relation = ""
-second = { house_color = "" }
+first = { person = "Испанский" }
+compare_by = "ship_position"
+relation = "immediate_right"
+second = { destination = "Марсель" }
 
 # 10. Корабль с красной трубой направляется в Гамбург.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { funnel_color = "красный" }
+second = { destination = "Гамбург" }
 
 # 11. Рядом с кораблем, который отчаливает в семь, корабль с белой трубой.
 [[constraints]]
 type = "comparison"
-first = { house_color = "" }
-compare_by = ""
-relation = ""
-second = { house_color = "" }
+first = { departure_time = "7" }
+compare_by = "ship_position"
+relation = "adjacent"
+second = { funnel_color = "белый" }
 
 # 12. На крайнем корабле — зерно ( = Корабль с зерном не из центральных).
 # 12.1 Корабль с зерном не второй
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { cargo = "зерно" }
+second = { ship_position = "!2" }
 
 # 12.2 Корабль с зерном не третий
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { cargo = "зерно" }
+second = { ship_position = "!3" }
 
 # 12.3 Корабль с зерном не четвертый
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { cargo = "зерно" }
+second = { ship_position = "!4" }
 
 # 13. Корабль с черной трубой отплывает в восемь.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { funnel_color = "чёрный" }
+second = { departure_time = "8" }
 
 # 14. Корабль с зерном пришвартован рядом с кораблем, на котором груз риса.
 [[constraints]]
 type = "comparison"
-first = { house_color = "" }
-compare_by = ""
-relation = ""
-second = { house_color = "" }
+first = { cargo = "зерно" }
+compare_by = "ship_position"
+relation = "adjacent"
+second = { cargo = "рис" }
 
 # 15. Корабль, следующий до Гамбурга, отчаливает в 6.
 [[constraints]]
 type = "fact"
-first = { person = "" }
-second = { house_color = "" }
+first = { destination = "Гамбург" }
+second = { departure_time = "6" }
