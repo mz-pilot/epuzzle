@@ -3,12 +3,13 @@
 [![CI Checks (PR & Push)](https://github.com/mz-pilot/epuzzle/actions/workflows/ci_pr.yml/badge.svg)](https://github.com/mz-pilot/epuzzle/actions/workflows/ci_pr.yml)
 [![Testing](https://img.shields.io/badge/Testing-Google_Test-4285F4?logo=googletest)](https://google.github.io/googletest/)
 [![clang-tidy](https://img.shields.io/badge/clang--tidy-enabled-blue?logo=llvm)](https://clang.llvm.org/extra/clang-tidy/)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/mz-pilot/epuzzle)](https://github.com/mz-pilot/epuzzle/releases)
 
 [![Platforms](https://img.shields.io/badge/Platforms-Windows%20%7C%20Linux-blue)](https://github.com/mz-pilot/epuzzle/actions)
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.cppreference.com/w/cpp/20)
 [![CMake](https://img.shields.io/badge/CMake-≥3.24-064F8C.svg)](https://cmake.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://github.com/mz-pilot/epuzzle/blob/main/LICENSE)
+
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/mz-pilot/epuzzle)](https://github.com/mz-pilot/epuzzle/releases)
 
 
 Modern C++20 библиотека и консольная утилита для решения логических головоломок (таких как [Загадка Эйнштейна](https://ru.wikipedia.org/wiki/Загадка_Эйнштейна) ([Zebra Puzzle](https://en.wikipedia.org/wiki/Zebra_Puzzle)) и аналогичных задач на удовлетворение ограничений). 
@@ -563,6 +564,11 @@ wsl --install -d Ubuntu
    - В выпадающем списке конфигураций выберите "Управление конфигурациями"
    - Добавьте конфигурацию для Linux
 3. **Отлаживайте** код, выполняющийся в WSL, прямо из Visual Studio
+
+Для аналогичного использования Debian в Visual Studio c WSL может потребоваться сначала вручную запустить терминал Debian и установить `rsync`:
+```bash
+sudo apt install -y rsync
+```
 
 </details>
 

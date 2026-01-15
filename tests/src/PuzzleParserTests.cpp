@@ -1,5 +1,7 @@
 #include "epuzzle/PuzzleParser.h"
 
+// NOLINTBEGIN(modernize-use-designated-initializers)
+
 namespace epuzzle::tests
 {
 
@@ -145,3 +147,5 @@ namespace epuzzle::tests
     }
 
 }
+
+// NOLINTEND(modernize-use-designated-initializers)

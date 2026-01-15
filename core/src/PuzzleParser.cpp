@@ -60,7 +60,7 @@ namespace
                             const auto type = constraintTable["type"].value_or(""sv);
                             if (type == "fact")
                             {
-                                PuzzleDefinition::Fact fact{ readAttr("first"), readAttr("second") };
+                                PuzzleDefinition::Fact fact{ .first = readAttr("first"), .second = readAttr("second") };
                                 if (!fact.second.value.empty() && fact.second.value[0] == '!')
                                 {
                                     fact.secondNegate = true;

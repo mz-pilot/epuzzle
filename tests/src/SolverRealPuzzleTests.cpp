@@ -57,7 +57,7 @@ namespace epuzzle::tests
         ASSERT_TRUE(static_cast<bool>(solver));
         using msec = std::chrono::milliseconds;
         const utils::Stopwatch sw;
-        solver->solve({ msec(500), [](std::uint64_t, std::uint64_t) { return false; } });
+        solver->solve({ .progressInterval = msec(500), .progressCallback = [](std::uint64_t, std::uint64_t) { return false; } });
         const auto elapsedSec = sw.elapsed();
         EXPECT_GE(elapsedSec.count(), 0.5);
         // Let's give it much time, as there may be a debug configuration, a busy machine, etc. 

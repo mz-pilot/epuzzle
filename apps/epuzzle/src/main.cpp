@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
         using namespace utils;
         using namespace std::chrono_literals;
-        auto solutions = solver->solve({ 900ms, [](std::uint64_t total, std::uint64_t current)
+        auto solutions = solver->solve({ .progressInterval = 900ms, .progressCallback = [](std::uint64_t total, std::uint64_t current)
             {
                 const double percents = static_cast<double>(current) / static_cast<double>(std::max(1_u64, total)) * 100.0;
                 std::cout << "\rSolving ...  " << std::fixed << std::setprecision(3) << percents << " %   " << std::flush;
