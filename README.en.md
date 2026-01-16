@@ -703,7 +703,7 @@ cdb epuzzle.exe
 
 ## Contact
 
-Contact the author: mailto:mzexe@mail.ru
+Contact the author:  [mzexe@mail.ru](mailto:mzexe@mail.ru)
 
 The project was created as a demonstration of professional skills in modern C++ development. Open for study, use, and forks. Thank you for your interest in the project!
 
