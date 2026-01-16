@@ -619,7 +619,6 @@ ctest --preset=test-lin-release
 #### Build Specifics
 - **Release builds include debug info** - (`/DEBUG` in MSVC, `-g` in GCC/Clang) for easier diagnostics
 - **Frame pointer omission disabled** - (`/Oy-` in MSVC, `-fno-omit-frame-pointer` in GCC/Clang) - also for easier diagnostics
-- **Automatic copying of examples** — during the `epuzzle` build, the `puzzle_examples` folder is copied next to the executable
 - **Static runtime linking** on Windows — `epuzzle.exe` does not depend on MSVC Redist
 
 
