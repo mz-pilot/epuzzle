@@ -176,7 +176,7 @@ epuzzle --file my_puzzle.toml
 
 The distribution includes a **`puzzle_examples`** folder with examples of ready-made puzzles (`.toml` files). Each corresponds to a `.txt` file with a natural language description of the puzzle.
 
-The easiest way to create your own puzzle is to copy one of the example puzzles (`einsteins.toml` or `four_girls.toml`) to your working folder and rewrite it for your own puzzle.
+The easiest way to create your own puzzle is to copy one of the example puzzles (`einsteins.toml`, `five_ships.toml` or other) to your working folder and rewrite it for your own puzzle.
 
 Puzzle examples are provided with comments (comments start with the '#' character). 
 
@@ -190,7 +190,7 @@ epuzzle_format_version = 1
 
 # Attributes (all strings must be unique within an attribute)
 
-# Mandatory attribute - persons
+# Mandatory attribute - person
 person         = ["Englishman", "Spaniard", "Ukrainian", "Norwegian", "Japanese"]
 
 # Optional attributes
@@ -315,7 +315,7 @@ Solution #1:
   house_position  3           4                 2               1           5
   pet             snails      dog               horse           fox         zebra
 ```
-Each column corresponds to one position (e.g., a house in Einstein's riddle). Values in a column are attributes belonging to one person.
+Values in a column are attributes belonging to one person.
 
 </details>
 
@@ -331,11 +331,13 @@ The program displays the approximate location of the error (line, symbol). Check
 #### Large puzzles
 The BruteForce method may require significant memory and time for a large number of combinations. Recommendations:
 - Use `--prefilter Enabled` (enabled by default)
-- For very large tasks, it is preferable to use Deductive solution methods
+- For very large tasks, it is preferable to use Deductive methods
 
 #### File not found
 Ensure the file path is specified correctly. On Windows, use double quotes if the path contains spaces:
-       epuzzle.exe --file "C:\My Puzzles\riddle.toml"
+```cmd
+epuzzle.exe --file "C:\My Puzzles\riddle.toml"
+```
 
 </details>
 
