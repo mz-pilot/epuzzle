@@ -24,7 +24,7 @@ The project demonstrates Modern C++ 20 practices, multithreading, HPC, cross-pla
 
 <details>
 
-<summary><h3> Expand >> Technical Highlights </h3></summary>
+<summary><h3> Tech stack & Practices (expand)</h3></summary>
 
 ### Architecture, patterns, idioms, and type safety
 
@@ -33,7 +33,7 @@ The project demonstrates Modern C++ 20 practices, multithreading, HPC, cross-pla
 * Polymorphism: Solver, `std::variant` + `std::visit`, etc.
 * Strong Typing: IndexedVector + TypedIndex.
 * Invariant checks: `compiletime`, `runtime`, informative exceptions.
-* GoF patterns: Strategy, Factory Method, Iterator, Mediator, etc.
+* GoF patterns: Strategy, Factory Method, Iterator, etc.
 * RAII: `std::unique_ptr`, `std::lock_guard/std::unique_lock`. 
 * Move semantics optimization.
 
@@ -84,6 +84,7 @@ The project demonstrates Modern C++ 20 practices, multithreading, HPC, cross-pla
   * [Project Architecture](#project-architecture)
   * [Build and Development](#build-and-development)
   * [Roadmap](#roadmap)
+* [Contact](#сontact)
 
 ## Quick Start
 
@@ -100,7 +101,7 @@ The project is regularly tested using GitHub Actions and manually.
 ### Installation
 
 <details>
-<summary><h5> Expand >> Installation on Windows</h5></summary>
+<summary><h5> Installation on Windows (expand)</h5></summary>
 
 #### Windows
 1. **Download** the latest release `epuzzle-<version>-Windows-x64.zip` from the [Releases](https://github.com/mz-pilot/epuzzle/releases) page.
@@ -118,7 +119,7 @@ epuzzle.exe --file puzzle_examples\einsteins.toml
 </details>
 
 <details>
-<summary><h5> Expand >> Installation on Linux</h5></summary>
+<summary><h5> Installation on Linux (expand)</h5></summary>
 
 #### Linux (Ubuntu/Debian)
 **Option A — via .deb package (recommended):**
@@ -180,7 +181,7 @@ The easiest way to create your own puzzle is to copy one of the example puzzles 
 Puzzle examples are provided with comments (comments start with the '#' character). 
 
 <details>
-<summary><h4> Expand >> More details on the TOML puzzle format</h4></summary>
+<summary><h4> More details on the TOML puzzle format (expand)</h4></summary>
 
 The puzzle file uses [TOML](https://toml.io/) syntax and has the following structure:
 ```toml
@@ -246,7 +247,7 @@ Available relations:
 The program has a CLI (Command Line Interface) and is controlled by command-line arguments.
 
 <details>
-<summary><h4> Expand >> More details on CLI Arguments</h4></summary>
+<summary><h4> More details on CLI Arguments (expand)</h4></summary>
 
 ```bash
 # Basic syntax
@@ -296,7 +297,7 @@ epuzzle -f test.toml -m BruteForce -p Disabled -e Sequential
 
 
 <details>
-<summary><h4> Expand >> Results Interpretation</h4></summary>
+<summary><h4> Results Interpretation (expand)</h4></summary>
 
 The program outputs:
 1. **Information about the loaded puzzle** — list of attributes and constraints
@@ -319,7 +320,7 @@ Each column corresponds to one position (e.g., a house in Einstein's riddle). Va
 </details>
 
 <details>
-<summary><h4> Expand >> Troubleshooting / Possible Issues</h4></summary>
+<summary><h4> Troubleshooting / Possible Issues (expand)</h4></summary>
 
 #### TOML format errors
 The program displays the approximate location of the error (line, symbol). Check:
@@ -353,7 +354,7 @@ The `epuzzle` project is built on a pragmatic layered architecture separated int
 ![Diagram](docs/images/epuzzle_arch.png)
 
 <details>
-<summary><h4> Expand >> Basic Interfaces</h4></summary>
+<summary><h4> Basic Interfaces (expand)</h4></summary>
 
 #### Solver Interface
 The core logic is built around the abstract `Solver` interface, allowing new solution algorithms to be easily added:
@@ -422,7 +423,7 @@ namespace epuzzle::details
 
 
 <details>
-<summary><h4> Expand >> Parameterized Tests</h4></summary>
+<summary><h4> Parameterized Tests (expand)</h4></summary>
 
 The testing system uses **Google Test** with an emphasis on parameterized test suites, providing maximum coverage and simplifying the verification of new algorithms.
 
@@ -465,7 +466,7 @@ As a result, we get an excellent ecosystem for working on algorithms.
 
 
 <details>
-<summary><h4> Expand >> Multithreaded Architecture</h4></summary>
+<summary><h4> Multithreaded Architecture (expand)</h4></summary>
 
 **Data flow in the parallel solver (BruteForce, Parallel mode):**
 ```text
@@ -489,7 +490,7 @@ On completion: results are merged, exceptions are handled
 
 
 <details>
-<summary><h4> Expand >> Strong Typing</h4></summary>
+<summary><h4> Strong Typing (expand)</h4></summary>
 
 The project actively uses C++20 features to prevent a whole class of errors at compile time.
 
@@ -543,7 +544,7 @@ The system guarantees correctness thanks to checks at the compilation stage.
 The project uses a standard workflow based on Modern CMake, providing simple building and testing on any supported OS. You can clone the repository and experiment with the code using familiar tools.
 
 <details>
-<summary><h4> Expand >> Windows (Visual Studio 2022)</h4></summary>
+<summary><h4> Windows (Visual Studio 2022) (expand)</h4></summary>
 
 1. **Install**:
    - [Visual Studio 2022](https://visualstudio.microsoft.com/)
@@ -577,7 +578,7 @@ wsl --install -d Ubuntu
 
 
 <details>
-<summary><h4> Expand >> Linux</h4></summary>
+<summary><h4> Linux (expand)</h4></summary>
 
 1. **Install dependencies**:
 ```bash
@@ -597,7 +598,7 @@ ctest --preset=test-lin-release
 </details>
 
 <details>
-<summary><h4> Expand >> Alternative IDEs</h4></summary>
+<summary><h4> Alternative IDEs (expand)</h4></summary>
 
 - **Qt Creator (Linux/Windows)** - project opens in Qt Creator as "CMake Project":
 ```
@@ -646,7 +647,7 @@ ctest -V --preset=test-lin-release
 ```
 
 <details>
-<summary><h4> Expand >> Known issue with Google Test adapter in Visual Studio</h4></summary>
+<summary><h4> Known issue with Google Test adapter in Visual Studio (expand)</h4></summary>
 
 **Known issue with Google Test adapter in Visual Studio:**
 When using the Google Test adapter for Visual Studio, tests marked as `GTEST_SKIP()` may erroneously show as failed in Test Explorer. This is a [known issue](https://developercommunity.visualstudio.com/t/googletest-skipped-tests-are-reported-as-failed-in/884416) of Microsoft.
@@ -692,7 +693,17 @@ cdb epuzzle.exe
 - **Deductive solvers** will be developed for efficient solving of large puzzles (6x6 and larger)
 - **Testing of new algorithms** will be conducted including comparison of results with BruteForce
 
+<div align="right"> 
+
+[⬆ Top](#table-of-contents)
+
+</div>
+
 ---
+
+## Contact
+
+Contact the author: mailto:mzexe@mail.ru
 
 The project was created as a demonstration of professional skills in modern C++ development. Open for study, use, and forks. Thank you for your interest in the project!
 
