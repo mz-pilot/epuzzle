@@ -34,7 +34,7 @@ jobs:
         with:
           name: Release ${{ github.ref_name }}
           draft: false
-          prerelease: true
+          prerelease: false
           files: dist/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

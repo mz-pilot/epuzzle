@@ -1,5 +1,11 @@
 # epuzzle
 
+<div align="right">
+
+**Русский** | [**English**](README.en.md)
+
+</div>
+
 [![CI Checks (PR & Push)](https://github.com/mz-pilot/epuzzle/actions/workflows/ci_pr.yml/badge.svg)](https://github.com/mz-pilot/epuzzle/actions/workflows/ci_pr.yml)
 [![Testing](https://img.shields.io/badge/Testing-Google_Test-4285F4?logo=googletest)](https://google.github.io/googletest/)
 [![clang-tidy](https://img.shields.io/badge/clang--tidy-enabled-blue?logo=llvm)](https://clang.llvm.org/extra/clang-tidy/)
@@ -14,11 +20,11 @@
 
 Modern C++20 библиотека и консольная утилита для решения логических головоломок (таких как [Загадка Эйнштейна](https://ru.wikipedia.org/wiki/Загадка_Эйнштейна) ([Zebra Puzzle](https://en.wikipedia.org/wiki/Zebra_Puzzle)) и аналогичных задач на удовлетворение ограничений). 
 
-Проект демонстрирует практики Modern C++ 20, многопоточность, HPC, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на google test и CI/CD pipelines на GitHub Actions.
+Проект демонстрирует практики Modern C++ 20, многопоточность, HPC, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на Google Test, clang-tidy, sanitizers и CI/CD pipelines на GitHub Actions.
 
 <details>
 
-<summary><h3> Развернуть >> Technical Highlights </h3></summary>
+<summary><h3> Технологический стек и практики (развернуть) </h3></summary>
 
 ### Архитектура, паттерны, идиомы и безопасность типов
 
@@ -27,7 +33,7 @@ Modern C++20 библиотека и консольная утилита для 
 * Polymorphism: Solver, `std::variant` + `std::visit`, и др.
 * Strong Typing: IndexedVector + TypedIndex.
 * Проверки инвариантов: `compiletime`, `runtime`, информативные исключения.
-* Паттерны GoF: стратегия, фабричный метод, итератор, посредник и др.
+* Паттерны GoF: стратегия, фабричный метод, итератор и др.
 * RAII: `std::unique_ptr`, `std::lock_guard/std::unique_lock`. 
 * Move semantics optimization.
 
@@ -54,13 +60,13 @@ Modern C++20 библиотека и консольная утилита для 
 * Полное покрытие синтетическими задачами 2x2, 2x3, 3x2, 3x3.
 * Тесты с реальными головоломками.
 * Тесты на отмену операции и graceful shutdown.
-* Автоматический анализ кода линтером `clang-tidy` и санитайзерами.
+* Автоматический анализ кода `clang-tidy` и санитайзерами.
 * `CI/CD` с кроссплатформенным тестированием (см. далее).
 
 ### Инфраструктура
 
 * `Cross-platform Build`: единая система сборки на `Modern CMake` (`Windows`, `Linux`) с автоматическим пакетированием `CPack` (`deb`, `tar.gz`, `zip`).
-* CI/CD: `GitHub Actions workflow` с полным циклом CI/CD и `матрицей сборки` (Windows/MSVC, Linux/GCC).
+* CI/CD: `GitHub Actions workflow` с полным циклом CI/CD и `матрицей сборки` (Windows/MSVC, Linux/GCC/Clang).
 * Версионирование через `Git tags`, `автоматические релизы` и их `Smoke Test`.
 
 </details>
@@ -78,6 +84,7 @@ Modern C++20 библиотека и консольная утилита для 
   * [Архитектура проекта](#архитектура-проекта)
   * [Сборка и разработка](#сборка-и-разработка)
   * [Roadmap](#roadmap)
+* [Контакты](#контакты)
 
 ## Быстрый старт
 
@@ -94,7 +101,7 @@ Modern C++20 библиотека и консольная утилита для 
 ### Установка
 
 <details>
-<summary><h5> Развернуть >> Установка в Windows</h5></summary>
+<summary><h5> Установка в Windows (развернуть)</h5></summary>
 
 #### Windows
 1. **Скачайте** последний релиз `epuzzle-<версия>-Windows-x64.zip` со страницы [Releases](https://github.com/mz-pilot/epuzzle/releases)
@@ -104,7 +111,7 @@ Modern C++20 библиотека и консольная утилита для 
 cd C:\epuzzle
 epuzzle.exe --help
 ```
-4. **Запустите решение тестового пазла**:
+4. **Запустите программу для решения тестового пазла**:
 ```cmd
 epuzzle.exe --file puzzle_examples\einsteins.toml
 ```
@@ -112,7 +119,7 @@ epuzzle.exe --file puzzle_examples\einsteins.toml
 </details>
 
 <details>
-<summary><h5> Развернуть >> Установка в Linux</h5></summary>
+<summary><h5> Установка в Linux (развернуть)</h5></summary>
 
 #### Linux (Ubuntu/Debian)
 **Вариант A — через .deb пакет (рекомендуется):**
@@ -121,7 +128,7 @@ epuzzle.exe --file puzzle_examples\einsteins.toml
 sudo apt update
 sudo apt install ./epuzzle-*.deb
 
-# Запустите решение тестового пазла
+# Запустите программу для решения тестового пазла
 epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 ```
 **Вариант B — через .tar.gz архив:**
@@ -130,7 +137,7 @@ epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 tar -xzf epuzzle-*-Linux-x64.tar.gz
 cd epuzzle-*-Linux-x64
 
-# Запустите решение тестового пазла
+# Запустите программу для решения тестового пазла
 ./bin/epuzzle --file share/epuzzle/puzzle_examples/einsteins.toml
 # Или установите в систему вручную
 ```
@@ -151,7 +158,7 @@ cp /usr/share/epuzzle/puzzle_examples/einsteins.toml ./my_puzzle.toml
 
 2. **Отредактируйте** файл `my_puzzle.toml` в любом текстовом редакторе
 
-3. **Запустите решение пазла**:
+3. **Запустите программу для решения своего пазла**:
 ```bash
 epuzzle --file my_puzzle.toml
 ```
@@ -169,12 +176,12 @@ epuzzle --file my_puzzle.toml
 
 В дистрибутив включена папка **`puzzle_examples`** c примерами готовых пазлов (файлы `.toml`). Каждому соответствует `.txt` файл с описанием головоломки на естественном языке.
 
-Самый простой способ составить свой собственный пазл - скопировать один из пазлов-примеров (`einsteins.toml` или `four_girls.toml`) в рабочую папку и переписать его под свою собственную головоломку.
+Самый простой способ составить свой собственный пазл - скопировать один из пазлов-примеров (`einsteins.toml`, `five_ships.toml` или др.) в рабочую папку и переписать его под свою собственную головоломку.
 
 Примеры пазлов снабжены комментариями (комментарий начинается с символа '#'). 
 
 <details>
-<summary><h4> Развернуть >> Подробнее про TOML-формат пазла</h4></summary>
+<summary><h4> Подробнее про TOML-формат пазла (развернуть)</h4></summary>
 
 Файл пазла использует синтаксис [TOML](https://toml.io/) и имеет следующую структуру:
 ```toml
@@ -183,7 +190,7 @@ epuzzle_format_version = 1
 
 # Атрибуты (все строки должны быть уникальными в пределах атрибута)
 
-# Обязательный атрибут - персонажи
+# Обязательный атрибут - персонаж
 person         = ["Англичанин", "Испанец", "Украинец", "Норвежец", "Японец"]
 
 # Опциональные атрибуты
@@ -240,7 +247,7 @@ second = { house_color = "синий" }
 Программа имеет CLI (Command Line Interface) и управляется аргументами командной строки.
 
 <details>
-<summary><h4> Развернуть >> Подробнее про Аргументы CLI</h4></summary>
+<summary><h4> Подробнее про Аргументы CLI (развернуть)</h4></summary>
 
 ```bash
 # Основной синтаксис
@@ -290,7 +297,7 @@ epuzzle -f test.toml -m BruteForce -p Disabled -e Sequential
 
 
 <details>
-<summary><h4> Развернуть >> Интерпретация результатов</h4></summary>
+<summary><h4> Интерпретация результатов (развернуть)</h4></summary>
 
 Программа выводит:
 1. **Информацию о загруженном пазле** — список атрибутов и условий
@@ -308,12 +315,12 @@ Solution #1:
   house_position  3           4                 2             1         5
   pet             улитки      собака            лошадь        лиса      зебра
 ```
-Каждый столбец соответствует одной позиции (например, дому в загадке Эйнштейна). Значения в столбце — атрибуты, принадлежащие одному персонажу.
+Значения в столбце — атрибуты, принадлежащие одному персонажу.
 
 </details>
 
 <details>
-<summary><h4> Развернуть >> Возможные проблемы и решения</h4></summary>
+<summary><h4> Возможные проблемы и решения (развернуть)</h4></summary>
 
 #### Ошибки формата TOML
 Программа выводит примерное местоположение ошибки (строка, символ). Проверьте:
@@ -324,11 +331,13 @@ Solution #1:
 #### Большие пазлы
 BruteForce метод может потребовать значительного объема памяти и времени при большом количестве комбинаций. Рекомендации:
 - Используйте `--prefilter Enabled` (включен по умолчанию)
-- Для очень больших задач предпочтительнее использовать Deductive методы решения
+- Для очень больших задач предпочтительнее использовать Deductive методы
 
 #### Файл не найден
 Убедитесь, что путь к файлу указан правильно. В Windows используйте двойные кавычки, если путь содержит пробелы:
-       epuzzle.exe --file "C:\My Puzzles\загадка.toml"
+```cmd
+epuzzle.exe --file "C:\My Puzzles\загадка.toml"
+```
 
 </details>
 
@@ -347,7 +356,7 @@ BruteForce метод может потребовать значительног
 ![Схема](docs/images/epuzzle_arch.png)
 
 <details>
-<summary><h4> Развернуть >> Базовые интерфейсы</h4></summary>
+<summary><h4> Базовые интерфейсы (развернуть)</h4></summary>
 
 #### Интерфейс решателя (Solver)
 Ядро логики построено вокруг абстрактного интерфейса `Solver`, что позволяет легко добавлять новые алгоритмы решения:
@@ -378,14 +387,14 @@ namespace epuzzle
 struct SolverConfig 
 {
     enum class SolvingMethod : std::uint8_t { BruteForce, Deductive };
-           
+
     struct BruteForceConfig 
     {
         enum class ExecPolicy : std::uint8_t { Sequential, Parallel };
         bool prefilter = true;
         ExecPolicy execution = ExecPolicy::Parallel;
     };
-           
+
     SolvingMethod solvingMethod = SolvingMethod::BruteForce;
     std::optional<BruteForceConfig> bruteForce;
 };
@@ -416,7 +425,7 @@ namespace epuzzle::details
 
 
 <details>
-<summary><h4> Развернуть >> Параметризованные тесты</h4></summary>
+<summary><h4> Параметризованные тесты (развернуть)</h4></summary>
 
 Система тестирования использует **Google Test** с акцентом на параметризованные тестовые наборы, это даёт максимальное покрытие и упрощает проверку новых алгоритмов.
 
@@ -459,7 +468,7 @@ namespace epuzzle::details
 
 
 <details>
-<summary><h4> Развернуть >> Многопоточная архитектура</h4></summary>
+<summary><h4> Многопоточная архитектура (развернуть)</h4></summary>
 
 **Поток данных в параллельном решателе (BruteForce, режим Parallel):**
 ```text
@@ -483,7 +492,7 @@ namespace epuzzle::details
 
 
 <details>
-<summary><h4> Развернуть >> Строгая типизация</h4></summary>
+<summary><h4> Строгая типизация (развернуть)</h4></summary>
 
 Проект активно использует возможности C++20 для предотвращения целого класса ошибок на этапе компиляции.
 
@@ -537,7 +546,7 @@ assignment[AttributeValueID{}] = PersonID{}; // Ok
 Проект использует стандартный workflow на базе Modern CMake, что обеспечивает простую сборку и запуск тестов на любой поддерживаемой ОС. Вы можете клонировать репозиторий и экспериментировать с кодом, используя привычные инструменты.
 
 <details>
-<summary><h4> Развернуть >> Windows (Visual Studio 2022)</h4></summary>
+<summary><h4> Windows (Visual Studio 2022) (развернуть)</h4></summary>
 
 1. **Установите**:
    - [Visual Studio 2022](https://visualstudio.microsoft.com/)
@@ -571,7 +580,7 @@ wsl --install -d Ubuntu
 
 
 <details>
-<summary><h4> Развернуть >> Linux</h4></summary>
+<summary><h4> Linux (развернуть)</h4></summary>
 
 1. **Установите зависимости**:
 ```bash
@@ -591,7 +600,7 @@ ctest --preset=test-lin-release
 </details>
 
 <details>
-<summary><h4> Развернуть >> Альтернативные среды разработки</h4></summary>
+<summary><h4> Альтернативные среды разработки (развернуть)</h4></summary>
 
 - **Qt Creator (Linux/Windows)** - проект открывается в Qt Creator как "CMake Project":
 ```
@@ -610,7 +619,6 @@ ctest --preset=test-lin-release
 #### Особенности сборки проекта
 - **Релизные сборки включают отладочную информацию** - (`/DEBUG` в MSVC, `-g` в GCC/Clang) для упрощения диагностики
 - **Запрет удаления stack pointer (регистр EBP/RBP)** - (`/Oy-` в MSVC, `-fno-omit-frame-pointer` в GCC/Clang) - также для упрощения диагностики
-- **Автоматическое копирование примеров** — при сборке `epuzzle` папка `puzzle_examples` копируется рядом с исполняемым файлом
 - **Статическая линковка рантайма** на Windows — `epuzzle.exe` не зависит от MSVC Redist
 
 
@@ -640,7 +648,7 @@ ctest -V --preset=test-lin-release
 ```
 
 <details>
-<summary><h4> Развернуть >> Известная проблема с адаптером Google Test в Visual Studio</h4></summary>
+<summary><h4> Известная проблема с адаптером Google Test в Visual Studio (развернуть)</h4></summary>
 
 **Известная проблема с адаптером Google Test в Visual Studio:**
 При использовании адаптера Google Test для Visual Studio тесты, помеченные как `GTEST_SKIP()`, могут ошибочно показываться как проваленные в Test Explorer. Это [известная проблема](https://developercommunity.visualstudio.com/t/googletest-skipped-tests-are-reported-as-failed-in/884416) Microsoft.
@@ -686,7 +694,17 @@ cdb epuzzle.exe
 - **Deductive решатели** будут разрабатываться для эффективного решения больших пазлов (6x6 и более)
 - **Тестирование новых алгоритмов** будет проводиться в том числе со сравнением результатов с BruteForce
 
+<div align="right"> 
+
+[⬆ Наверх](#содержание)
+
+</div>
+
 ---
+
+## Контакты
+
+Связаться с автором: [mzexe@mail.ru](mailto:mzexe@mail.ru)
 
 Проект создан как демонстрация профессиональных навыков в современной C++ разработке. Открыт для изучения, использования и форков. Благодарю за внимание к проекту!
 
