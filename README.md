@@ -20,7 +20,7 @@
 
 Modern C++20 библиотека и консольная утилита для решения логических головоломок (таких как [Загадка Эйнштейна](https://ru.wikipedia.org/wiki/Загадка_Эйнштейна) ([Zebra Puzzle](https://en.wikipedia.org/wiki/Zebra_Puzzle)) и аналогичных задач на удовлетворение ограничений). 
 
-Проект демонстрирует практики Modern C++ 20, многопоточность, HPC, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на google test и CI/CD pipelines на GitHub Actions.
+Проект демонстрирует практики Modern C++ 20, многопоточность, HPC, кроссплатформенную сборку CMake (Windows, Linux), модульные тесты на Google Test, clang-tidy, sanitizers и CI/CD pipelines на GitHub Actions.
 
 <details>
 
@@ -60,13 +60,13 @@ Modern C++20 библиотека и консольная утилита для 
 * Полное покрытие синтетическими задачами 2x2, 2x3, 3x2, 3x3.
 * Тесты с реальными головоломками.
 * Тесты на отмену операции и graceful shutdown.
-* Автоматический анализ кода линтером `clang-tidy` и санитайзерами.
+* Автоматический анализ кода `clang-tidy` и санитайзерами.
 * `CI/CD` с кроссплатформенным тестированием (см. далее).
 
 ### Инфраструктура
 
 * `Cross-platform Build`: единая система сборки на `Modern CMake` (`Windows`, `Linux`) с автоматическим пакетированием `CPack` (`deb`, `tar.gz`, `zip`).
-* CI/CD: `GitHub Actions workflow` с полным циклом CI/CD и `матрицей сборки` (Windows/MSVC, Linux/GCC).
+* CI/CD: `GitHub Actions workflow` с полным циклом CI/CD и `матрицей сборки` (Windows/MSVC, Linux/GCC/Clang).
 * Версионирование через `Git tags`, `автоматические релизы` и их `Smoke Test`.
 
 </details>
@@ -111,7 +111,7 @@ Modern C++20 библиотека и консольная утилита для 
 cd C:\epuzzle
 epuzzle.exe --help
 ```
-4. **Запустите решение тестового пазла**:
+4. **Запустите программу для решения тестового пазла**:
 ```cmd
 epuzzle.exe --file puzzle_examples\einsteins.toml
 ```
@@ -128,7 +128,7 @@ epuzzle.exe --file puzzle_examples\einsteins.toml
 sudo apt update
 sudo apt install ./epuzzle-*.deb
 
-# Запустите решение тестового пазла
+# Запустите программу для решения тестового пазла
 epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 ```
 **Вариант B — через .tar.gz архив:**
@@ -137,7 +137,7 @@ epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 tar -xzf epuzzle-*-Linux-x64.tar.gz
 cd epuzzle-*-Linux-x64
 
-# Запустите решение тестового пазла
+# Запустите программу для решения тестового пазла
 ./bin/epuzzle --file share/epuzzle/puzzle_examples/einsteins.toml
 # Или установите в систему вручную
 ```
@@ -158,7 +158,7 @@ cp /usr/share/epuzzle/puzzle_examples/einsteins.toml ./my_puzzle.toml
 
 2. **Отредактируйте** файл `my_puzzle.toml` в любом текстовом редакторе
 
-3. **Запустите решение пазла**:
+3. **Запустите программу для решения своего пазла**:
 ```bash
 epuzzle --file my_puzzle.toml
 ```

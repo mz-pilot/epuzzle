@@ -20,7 +20,7 @@
 
 Modern C++20 library and console utility for solving logic puzzles (such as [Einstein's Riddle](https://en.wikipedia.org/wiki/Zebra_Puzzle) and similar constraint satisfaction problems). 
 
-The project demonstrates Modern C++ 20 practices, multithreading, HPC, cross-platform CMake build (Windows, Linux), unit tests via Google Test, and CI/CD pipelines on GitHub Actions.
+The project demonstrates Modern C++ 20 practices, multithreading, HPC, cross-platform CMake build (Windows, Linux), unit tests via Google Test, clang-tidy, sanitizers, and CI/CD pipelines on GitHub Actions.
 
 <details>
 
@@ -56,17 +56,17 @@ The project demonstrates Modern C++ 20 practices, multithreading, HPC, cross-pla
 
 ### Testing and Quality
 
-* Parameterized test suites on `GoogleTest` (different algorithms on shared data).
+* Parameterized test suites on `Google Test` (different algorithms on shared data).
 * Full coverage with synthetic puzzles 2x2, 2x3, 3x2, 3x3.
 * Tests with real puzzles.
 * Tests for operation cancellation and graceful shutdown.
-* Automatic code analysis with `clang-tidy` linter and sanitizers.
+* Automatic code analysis with `clang-tidy` and sanitizers.
 * `CI/CD` with cross-platform testing (see below).
 
 ### Infrastructure
 
 * `Cross-platform Build`: unified build system based on `Modern CMake` (`Windows`, `Linux`) with automatic packaging via `CPack` (`deb`, `tar.gz`, `zip`).
-* CI/CD: `GitHub Actions workflow` with full CI/CD cycle and `build matrix` (Windows/MSVC, Linux/GCC).
+* CI/CD: `GitHub Actions workflow` with full CI/CD cycle and `build matrix` (Windows/MSVC, Linux/GCC/Clang).
 * Versioning via `Git tags`, `automatic releases` and their `Smoke Test`.
 
 </details>
@@ -111,7 +111,7 @@ The project is regularly tested using GitHub Actions and manually.
 cd C:\epuzzle
 epuzzle.exe --help
 ```
-4. **Run the test puzzle solution**:
+4. **Run the program to solve the test puzzle**:
 ```cmd
 epuzzle.exe --file puzzle_examples\einsteins.toml
 ```
@@ -128,7 +128,7 @@ epuzzle.exe --file puzzle_examples\einsteins.toml
 sudo apt update
 sudo apt install ./epuzzle-*.deb
 
-# Run the test puzzle solution
+# Run the program to solve the test puzzle
 epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 ```
 **Option B — via .tar.gz archive:**
@@ -137,7 +137,7 @@ epuzzle --file /usr/share/epuzzle/puzzle_examples/einsteins.toml
 tar -xzf epuzzle-*-Linux-x64.tar.gz
 cd epuzzle-*-Linux-x64
 
-# Run the test puzzle solution
+# Run the program to solve the test puzzle
 ./bin/epuzzle --file share/epuzzle/puzzle_examples/einsteins.toml
 # Or install manually to the system
 ```
@@ -158,7 +158,7 @@ cp /usr/share/epuzzle/puzzle_examples/einsteins.toml ./my_puzzle.toml
 
 2. **Edit** the `my_puzzle.toml` file in any text editor.
 
-3. **Run the puzzle solution**:
+3. **Run the program to solve your puzzle**:
 ```bash
 epuzzle --file my_puzzle.toml
 ```
